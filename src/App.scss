@@ -1,0 +1,29 @@
+.layout {
+  .blog-header {
+    height: 7vh;
+    position: sticky;
+    top: 0;
+    left: 0;
+    opacity: 0.8;
+    z-index: 5;
+    overflow: hidden;
+    background-color: $navColor;
+  }
+  .blog-content {
+    min-height: 93vh;
+    padding: 10px 50px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin: 0 auto;
+    .pages {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0;
+      padding: 10px 0;
+    }
+  }
+  .blog-footer {
+    background-color: $footerColor;
+    color: $footerFontColor;
+  }
+}

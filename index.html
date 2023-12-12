@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image" href="/blog-icon.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>心中没有白月光's blog</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  <script>
+    const normal_title = document.title
+    document.addEventListener('visibilitychange',()=>{
+      if (document.visibilityState == 'hidden'){
+        document.title = '客官请留步'
+      }else {
+        document.title = normal_title
+      }
+    })
+
+  </script>
+  </body>
+</html>
