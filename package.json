@@ -11,6 +11,11 @@
     "cc": "node ./scripts/create-component.js",
     "preinstall": "node ./scripts/preinstall.js"
   },
+  "husky":{
+    "hooks":{
+      "pre-commit":"pnpm run lint"
+    }
+  },
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
     "antd": "^5.11.0",
@@ -33,6 +38,7 @@
     "eslint": "^8.45.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
+    "husky": "^8.0.3",
     "sass": "^1.69.5",
     "typescript": "^5.0.2",
     "unplugin-auto-import": "^0.16.7",
