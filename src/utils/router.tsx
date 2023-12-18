@@ -1,11 +1,11 @@
-const Home = lazy(() => import("@/pages/Home/index"));
+const Home = lazy(() => import("@/pages/Home"));
 const Article = lazy(() => import("@/pages/Article/index"));
 const Topic = lazy(() => import("@/pages/Topic/index"));
 const About = lazy(() => import("@/pages/About/index"));
 const TheLink = lazy(() => import("@/pages/TheLink/index"));
 const Message = lazy(() => import("@/pages/Message/index"));
 
-import Router from "@/@types/Router";
+import type { RouterType } from "@/types";
 
 import {
   HomeOutlined,
@@ -15,7 +15,7 @@ import {
   MessageOutlined,
 } from "@ant-design/icons";
 
-const router: Router[] = [
+const routerList: RouterType[] = [
   {
     path: "/",
     element: <Home />,
@@ -61,4 +61,4 @@ const router: Router[] = [
   },
 ];
 
-export default router;
+export default routerList;

@@ -1,4 +1,7 @@
 .layout {
+  height: 100vh;
+  position: relative;
+
   .blog-header {
     height: 7vh;
     position: sticky;
@@ -9,10 +12,12 @@
     overflow: hidden;
     background-color: $navColor;
   }
+
   .blog-content {
     min-height: 93vh;
+    width: 90vw;
     padding: 10px 50px;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     margin: 0 auto;
     .pages {
@@ -22,7 +27,9 @@
       padding: 10px 0;
     }
   }
+
   .blog-footer {
+    height: 50px;
     background-color: $footerColor;
     color: $footerFontColor;
   }

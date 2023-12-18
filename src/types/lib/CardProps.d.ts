@@ -1,7 +1,7 @@
 type CardProps = {
   addClassName: string | string[];
   title: string;
-  ID: number;
+  id: number;
   topping?: boolean;
   createTime?: Date;
   description?: string;

@@ -21,10 +21,10 @@ if (fs.existsSync(componentDirectory)) {
 fs.mkdirSync(componentDirectory);
 
 const componentCode = `//import React from 'react';
-import ${componentName}Style from "./index.module.scss";
+import Style from "./index.module.scss";
 
 export default function ${componentName}() {
-  return <div className={${componentName}Style.${componentName}}>${componentName}</div>;
+  return <div className={Style.${componentName}}>${componentName}</div>;
 }
 `;
 

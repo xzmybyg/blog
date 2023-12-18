@@ -8,9 +8,9 @@ type baseRouter = {
   showOnNav?: boolean;
 };
 
- type Router = baseRouter & {
-   element: React.ReactElement;
-   redirect?: string;
- };
+type RouterType = baseRouter & {
+  element: React.ReactElement;
+  redirect?: string;
+};
 
-export default Router;
+export default RouterType;

@@ -4,21 +4,22 @@ import {
   LinkOutlined,
   WechatOutlined,
 } from "@ant-design/icons";
-import "./Introduction.module.scss";
-
-const content = <img className="wechat" src="/MyWechat.jpg" alt="加载失败" />;
+import Style from "./index.module.scss";
 
 function Wechat() {
+  const WechatContent = (
+    <img className={`${Style.wechat}`} src="/MyWechat.jpg" alt="加载失败" />
+  );
   return (
-    <Popover content={content}>
+    <Popover content={WechatContent}>
       <WechatOutlined />
     </Popover>
   );
 }
 
-const github = "https://github.com/xzmybyg";
-
 function MyGithub() {
+  const github = "https://github.com/xzmybyg";
+
   return (
     <GithubOutlined
       onClick={() => {
@@ -29,16 +30,18 @@ function MyGithub() {
 }
 
 function Introduction() {
+  const IntroductionActions = [
+    <MyGithub key="github" />,
+    <Wechat key="wechat" />,
+    <LinkOutlined key="gitee" />,
+  ];
+
   return (
     <>
       <Card
-        className="side"
+        className="introduction"
         style={{ width: 300 }}
-        actions={[
-          <MyGithub key="github" />,
-          <Wechat key="wechat" />,
-          <LinkOutlined key="gitee" />,
-        ]}
+        actions={IntroductionActions}
       >
         <Space wrap size={16}>
           <Avatar size={64} src={"/blog-icon.jpg"} alt="加载失败" />
@@ -48,7 +51,6 @@ function Introduction() {
         <p>现居：北京</p>
         <p>邮箱：1277215827@qq.com</p>
       </Card>
-      <div className="introduction"></div>
     </>
   );
 }

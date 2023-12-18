@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import AutoImport from "unplugin-auto-import/vite";
+// import Pages from "vite-plugin-pages";
 declare const __dirname: string;
 
 // https://vitejs.dev/config/
@@ -36,11 +37,14 @@ export default defineConfig({
         "./src/pages/**",
         "./src/components/**",
         "./src/utils/**",
-        "./src/@types/**",
+        "./src/types/**",
         "./src/store/**",
       ],
       dts: "src/auto-imports.d.ts",
     }),
+    // Pages({
+    // pagesDir: "src/pages/*/index.tsx",
+    // }),
   ],
   css: {
     preprocessorOptions: {

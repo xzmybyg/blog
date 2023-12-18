@@ -1,38 +1,36 @@
-import HomeStyle from "./Homepage.module.scss";
-import CardProps from "@/@types/CardProps";
 import useStore from "@/store";
+//api引入
+import { getPageArticleList } from "@/apis";
+//type引入
+import type { CardProps } from "@/types";
+//样式引入
+import Style from "./index.module.scss";
 
 const description = "本站使用react+ant Design搭建";
-/**
- * @componet 首页组件
- */
+
 function Home() {
   const { aticleTotal } = useStore();
   const [artList, setArtLIst] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [pageSize] = useState(5);
+
   useEffect(() => {
-    axios
-      .get("/api/article/", {
-        params: {
-          page,
-          pageSize,
-        },
-      })
-      .then(res => {
-        setArtLIst(res.data);
-      });
+    getPageArticleList({ page, pageSize }).then(res => {
+      setArtLIst(res.data);
+      console.log(res.data);
+    });
   }, [page, pageSize]);
+
   return (
-    <div className={`${HomeStyle["homePage"]} 'pages'`}>
-      <Space className={HomeStyle["artcicle-wrap"]} direction="vertical">
+    <div className={`${Style["homePage"]} 'pages'`}>
+      <Space className={Style["artcicle-wrap"]} direction="vertical">
         {artList.map((item: CardProps, i) => {
           return (
-            <Link key={item.title} to={`/topic/${item.ID}`}>
+            <Link key={item.id} to={`/topic/${item.id}`}>
               <ArticleCard
                 addClassName={i % 2 == 1 ? "article-reverse" : ""}
                 key={item.title}
-                ID={item.ID}
+                id={item.id}
                 title={item.title || description}
                 topping={item.topping}
                 label={item.label}
@@ -50,7 +48,7 @@ function Home() {
           }}
         />
       </Space>
-      <div className={HomeStyle.aside}>
+      <div className={Style.aside}>
         <Flex gap="small" vertical>
           <Introduction></Introduction>
           <PublicNotice></PublicNotice>

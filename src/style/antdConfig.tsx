@@ -5,16 +5,20 @@ import { ThemeConfig } from "antd";
 
 const Theme: ThemeConfig = {
   token: {
-    /* here is your global tokens */
+    /* here is global tokens */
     // colorPrimary:'#1890ff',
     lineWidthFocus: 0,
   },
   components: {
     Pagination: {
-      /* here is your component tokens */
+      /* here is component tokens */
       itemActiveBg: "#00c4b6",
       itemBg: "#000",
       itemLinkBg: "#000",
+    },
+    Timeline: {
+      itemPaddingBottom: 50,
+      tailWidth: 5,
     },
   },
 };

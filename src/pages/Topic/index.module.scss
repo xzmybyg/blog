@@ -1,0 +1,27 @@
+.topic {
+  display: flex;
+  justify-content: space-between;
+    position: relative;
+  .topic-wrap {
+    padding: 50px;
+    background-color: #fff;
+    .markdown-body {
+      width: 1000px;
+      h1,h2,h3,h4,h5,h6 {
+        overflow: initial;
+      }
+      pre {
+        width: 800px;
+      }
+    }
+  }
+
+  .markdown-Navbar {
+    width: 200px;
+    height: 500px;
+    margin-left: $content-side-margin;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+  }
+}

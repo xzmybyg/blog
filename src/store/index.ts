@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import Store from "@/@types/Store";
+import Store from "@/types/lib/Store";
 
 // 创建一个store
 const useStore = create<Store>(set => ({

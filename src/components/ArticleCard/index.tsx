@@ -1,21 +1,17 @@
-import cardStyle from "./cardStyle.module.scss";
+import Style from "./index.module.scss";
 import png404 from "@/assets/404.png";
-import CardProps from "@/@types/CardProps";
+import type { CardProps } from "@/types";
 
 function ArticleCard(props: CardProps) {
   const { addClassName } = props;
 
   return (
-    <div
-      className={`${cardStyle.articleCard} ${
-        cardStyle[addClassName as string]
-      }`}
-    >
+    <div className={`${Style.articleCard} ${Style[addClassName as string]}`}>
       <img src={png404} />
-      <div className={cardStyle.articleContent}>
-        <p className={cardStyle.articleTitle}>{props.title || "文章标题"}</p>
+      <div className={Style.articleContent}>
+        <p className={Style.articleTitle}>{props.title || "文章标题"}</p>
         <div>
-          <div className={cardStyle.articleLabel}>
+          <div className={Style.articleLabel}>
             {props.topping ? <Tag color="#87d068">置顶</Tag> : <></>}
             {props.createTime ? <span></span> : <></>}
             {props.label ? (
