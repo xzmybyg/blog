@@ -1,23 +1,29 @@
 import { Timeline } from "antd";
 import useStore from "@/store";
+import dayjs from "dayjs";
 
 function Article() {
-  // const { setTotal, setArticleList, articleList } = useStore();
   const [TimelineList, setTimelineList] = useState([]);
   const [page, setPage] = useState(1);
   const [pageSize] = useState(5);
+  const { aticleTotal } = useStore();
 
   useEffect(() => {
     axios
-      .get("/api/article/", {
+      .get("api/article/", {
         params: {
-          page,
-          pageSize,
+          page: 1,
+          pageSize: aticleTotal,
         },
       })
       .then(res => {
         let resData = res.data.map((item: any) => {
-          return { ...item, children: item.title + item.createDate };
+          return {
+            ...item,
+            children: `${item.title} ${dayjs(item.createDate).format(
+              "YYYY-MM-DD"
+            )}`,
+          };
         });
         setTimelineList(resData);
         console.log(resData, "articleList");
@@ -27,9 +33,9 @@ function Article() {
   return (
     <>
       <div className="Article">
-        {TimelineList.length > 0 && (
+        {/* {TimelineList.length > 0 && (
           <Timeline mode="alternate" items={TimelineList} />
-        )}
+        )} */}
       </div>
     </>
   );

@@ -1,9 +1,9 @@
 * {
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
 }
-.layout {
+body{
+  overflow-x: hidden;
   background: linear-gradient(
     90deg,
     rgba(247, 149, 51, 0.1),
@@ -18,16 +18,11 @@
 }
 // 滚动条样式
 ::-webkit-scrollbar-thumb {
-  background-color: $thumbColor;
+  background-color: map-get($thumb, color);
   border-radius: 10px;
   transition: all 0.2s ease-in-out;
 }
 ::-webkit-scrollbar {
-  width: $thumbWidth;
+  width: map-get($thumb, width);
 }
 
-@media screen and (max-width: $hiddenSomeSize) {
-  .side {
-    display: none;
-  }
-}

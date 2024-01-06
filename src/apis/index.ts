@@ -1,18 +1,7 @@
-import { getPageArticleList, getAllArticleList } from "./lib/article";
-import { getTopic } from "./lib/topic";
-import { login } from "./lib/login";
-import { getInfo } from "./lib/info";
-import { getLinkList } from "./lib/link";
-import { getComment } from "./lib/comment";
-import { getLabelList } from "./lib/label";
-
-export {
-  getPageArticleList,
-  getAllArticleList,
-  getTopic,
-  login,
-  getInfo,
-  getLinkList,
-  getComment,
-  getLabelList,
-};
+export * from "./lib/article";
+export * from "./lib/topic";
+export * from "./lib/user";
+export * from "./lib/info";
+export * from "./lib/link";
+export * from "./lib/comment";
+export * from "./lib/label";

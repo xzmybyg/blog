@@ -1,22 +1,30 @@
-import "./index.scss";
-// import Style from "./index.module.scss";
-import { LoginOutlined } from "@ant-design/icons";
+import { LoginOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import type { RouterType } from "@/types";
+import Style from "./index.module.scss";
+import Login from "@/components/Login";
 
-function Nav() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+function Nav(_prpos: { navlist: RouterType[] }) {
+  const { navDesktop, navMobile, itemWrap, navItem, authorName } = Style;
 
   const navigate = useNavigate();
 
+  const loginRef = useRef<{ openModal: () => void } | null>(null);
+  const callChildMethod = () => {
+    if (loginRef.current) {
+      loginRef.current?.openModal();
+    }
+  };
+
   return (
     <>
-      <div className="nav-normal">
-        <div>心中没有白月光</div>
-        <div className="item-wrap">
-          {router.map(item => {
+      <nav className={navDesktop}>
+        <div className={authorName}>心中没有白月光</div>
+        <div className={itemWrap}>
+          {routerList.map(item => {
             return (
               item.showOnNav != false && (
                 <div
-                  className="nav-item"
+                  className={navItem}
                   key={item.name}
                   onClick={() => {
                     navigate(item.path);
@@ -28,20 +36,17 @@ function Nav() {
               )
             );
           })}
-          <div
-            className="nav-item"
-            onClick={() => {
-              setIsModalOpen(true);
-            }}
-          >
+          <div className={navItem} onClick={callChildMethod}>
             <LoginOutlined />
             登录
           </div>
         </div>
-        {/* <Button className="nav-mini">
-          <UnorderedListOutlined />
-        </Button> */}
-      </div>
+      </nav>
+      <nav className={navMobile}>
+        <div className={authorName}>心中没有白月光</div>
+        <UnorderedListOutlined />
+      </nav>
+      <Login ref={loginRef} />
     </>
   );
 }

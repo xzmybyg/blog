@@ -1,7 +1,5 @@
-import { axiosInstance } from "@/utils";
-
 export function getTopic(id: string) {
-  return axiosInstance.get("/api/topic/", {
+  return axiosInstance.get("/topic", {
     params: {
       id,
     },

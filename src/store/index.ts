@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import Store from "@/types/lib/Store";
+import type { Store,User } from "@/types";
 
 // 创建一个store
 const useStore = create<Store>(set => ({
@@ -9,6 +9,10 @@ const useStore = create<Store>(set => ({
   setArticleList: (value: any[]) => set(() => ({ articleList: value })),
   Notice: "",
   setNotice: (value: string) => set(() => ({ Notice: value })),
+  user: { id: null, username: "", avatar: "" },
+  setUser: (value: User) => set(() => ({ user: value })),
+  token: "",
+  setToken: (value: string) => set(() => ({ token: value })),
 }));
 
 export default useStore;

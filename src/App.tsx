@@ -1,20 +1,22 @@
 import { Suspense } from "react";
 //第三方库
-import { Layout } from "antd";
-// import routes from "~react-pages";
+import { Layout, FloatButton } from "antd";
 
 import useStore from "@/store";
 //api引入
-import { getInfo } from "@/apis";
+import { getInfo, login } from "@/apis";
 //type引入
 import type { RouterType } from "@/types";
 //样式引入
 import "./App.scss";
-
+import {routerList} from "@/utils";
 const { Header, Content, Footer } = Layout;
 
 function App() {
-  const { setTotal, setArticleList, articleList } = useStore();
+  const contentRef = useRef(null);
+
+  const { setTotal, setUser } = useStore();
+  const userInfo = { username: "1277215827", password: "lcyzs" };
 
   useEffect(() => {
     getInfo().then(res => {
@@ -22,12 +24,19 @@ function App() {
     });
   }, []);
 
+  useEffect(() => {
+    login(userInfo).then(res => {
+      setUser(res.data.token);
+      localStorage.setItem("token", res.data.token);
+    });
+  }, []);
+
   return (
     <>
-      <div className="layout">
-        <Header className="blog-header">
-          <Nav></Nav>
-        </Header>
+      <div className="layout" ref={contentRef}>
+        {/* <Header className="blog-header"> */}
+        <Nav navlist={routerList}></Nav>
+        {/* </Header> */}
         <Content className="blog-content">
           <Suspense fallback={<div>Loading...</div>}>
             {/* {useRoutes(routes)} */}
@@ -41,6 +50,7 @@ function App() {
               ))}
             </Routes>
           </Suspense>
+          <FloatButton.BackTop target={() => contentRef?.current || document} />
         </Content>
         <Footer
           className="blog-footer"

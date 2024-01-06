@@ -1,0 +1,34 @@
+.nav {
+  @include flexBetween();
+  background-color: map-get($nav, bcColor);
+  height: map-get($nav,height);
+  color: map-get($nav,color);
+  font-size: 1rem
+}
+.navDesktop {
+  @extend .nav;
+  padding: 0 36px;
+  .itemWrap {
+    display: flex;
+    justify-content: space-evenly;
+    .navItem {
+      color: map-get($nav,color);
+      width: 50px;
+      margin: 0 5px;
+      font-weight: 1200
+    }
+  }
+}
+.navMobile {
+  @extend .nav;
+  padding: 0 20px;
+  display: none;
+}
+@media screen and (max-width: $hiddenSomeSize) {
+  .navDesktop {
+    display: none;
+  }
+  .navMobile{
+    display: flex;
+  }
+}

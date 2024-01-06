@@ -1,8 +1,5 @@
 .homePage {
-  display: flex;
-  justify-content: space-between;
-  .article-wrap {
-    flex: 1;
+  .articleWrap {
   }
   .aside{
     margin-left: $content-side-margin;

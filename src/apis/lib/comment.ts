@@ -1,7 +1,6 @@
-import { axiosInstance } from "@/utils";
 
 export function getComment(id: number) {
-  return axiosInstance.get("/api/comment", {
+  return axiosInstance.get("/comment", {
     params: {
       id,
     },

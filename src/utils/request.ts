@@ -1,16 +1,17 @@
 import { AxiosResponse } from "axios";
+ import useStore from "@/store";
 
-const devBaseUrl = "/";
-const proBaseUrl = "http://localhost:5000";
-const BASE_URL =
-  import.meta.env.MODE === "development" ? devBaseUrl : proBaseUrl;
+ const devBaseUrl = "/api";
+ const proBaseUrl = "http://localhost:5000/";
+ const BASE_URL =
+   import.meta.env.MODE === "development" ? devBaseUrl : proBaseUrl;
 
-const axiosInstance = axios.create({
-  baseURL: BASE_URL, // api的base_url
-  timeout: 10000, // 请求超时时间
-});
+ const axiosInstance = axios.create({
+   baseURL: BASE_URL, // api的base_url
+   timeout: 10000, // 请求超时时间
+ });
 
-let token = localStorage.getItem("token");
+ let token = useStore.getState().token || localStorage.getItem("token");
 axiosInstance.interceptors.request.use(
   config => {
     if (token) {

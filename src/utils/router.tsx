@@ -32,13 +32,6 @@ const routerList: RouterType[] = [
     path: "/topic/:id",
     element: <Topic />,
     name: "话题",
-    children: [
-      {
-        path: "/",
-        element: <Home />,
-        name: "首页",
-      },
-    ],
     showOnNav: false,
   },
   {

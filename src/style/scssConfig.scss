@@ -1,8 +1,11 @@
 // 媒体查询变量
-$miniScreenSize: 768px;
-$mediumScreenSize: 992px;
-$maxiScreenSize: 1200px;
+$mediaSize:(
+  miniScreen: 768px,
+  mediumScreen: 992px,
+  maxiScreen: 1200px,
+);
 $hiddenSomeSize: 960px;
+$hiddenSomeSize: 768px;
 
 // 颜色变量
 $testBgColor: gold;
@@ -10,17 +13,45 @@ $testBgColor: gold;
 $rootFontSize: 16px;
 
 //主题变量
-$thumbColor: #001529;
-$navColor: #001529;
-$navFontColor: #fff;
-$footerColor: #060f17;
-$footerFontColor: #fff;
+$nav: (
+  bcColor: #1f262c,
+  color: #d6dcff,
+  height: 7vh,
+  fontSize: 1rem,
+);
+$footer: (
+  bcColor: #060f17,
+  color: #fff,
+);
+$articleCard: (
+  bcColor: #d6dcff,
+  color: #fff,
+  width: 8px,
+);
 
-$articleCardColor: #001529;
-$articleTitleColor: #001529;
+//滚动条变量
+$thumb: (
+  color: #001529,
+  width: 8px,
+);
 
 //其他变量
-$thumbWidth: 8px;
 $content-side-margin: 30px;
 
 
+//mixin
+@mixin flexBetween($justify: space-between, $align: center) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+@mixin themeColor($bgColor: map-get($nav,color), $color: "initial") {
+  background-color: $bgColor;
+  color: $color;
+}
+
+@mixin pagesLayout(){
+  display: flex;
+  justify-content: center;
+}

@@ -1,8 +1,6 @@
 import "./index.scss";
 
 function Website() {
-  // const [runTime,setRunTime] = useState(new Date())
-
   return (
     <Card className="side" title="网站资讯" style={{ width: 300 }}>
       <Flex justify="space-between">

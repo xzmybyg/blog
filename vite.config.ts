@@ -2,7 +2,6 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import AutoImport from "unplugin-auto-import/vite";
-// import Pages from "vite-plugin-pages";
 declare const __dirname: string;
 
 // https://vitejs.dev/config/
@@ -13,19 +12,23 @@ export default defineConfig({
     AutoImport({
       imports: [
         "react",
-        "react-router",
+        // "react-router",
         "react-router-dom",
         {
           //配置第三方库的自动引入
           antd: [
-            "Button",
-            "Input",
-            "Flex",
             "Space",
+            "Pagination",
+            "Button",
+            "Table",
+            "Form",
+            "Input",
+            "Modal",
+            "Flex",
             "Card",
             "Tag",
-            "Skeleton",
-            "Pagination",
+            "Divider",
+            "message",
           ],
           //import {default as axios} from 'axios'
           //import axios from 'axios'
@@ -39,18 +42,16 @@ export default defineConfig({
         "./src/utils/**",
         "./src/types/**",
         "./src/store/**",
+        "./src/apis/**",
       ],
       dts: "src/auto-imports.d.ts",
     }),
-    // Pages({
-    // pagesDir: "src/pages/*/index.tsx",
-    // }),
   ],
   css: {
     preprocessorOptions: {
       scss: {
         //引入scss全局变量
-        additionalData: `@import "./src/style/scssConfig.scss";`,
+        additionalData: `@import "@/style/scssConfig.scss";`,
       },
     },
   },

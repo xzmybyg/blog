@@ -13,4 +13,4 @@ type RouterType = baseRouter & {
   redirect?: string;
 };
 
-export default RouterType;
+export { RouterType };

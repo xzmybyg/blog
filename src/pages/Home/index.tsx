@@ -3,6 +3,8 @@ import useStore from "@/store";
 import { getPageArticleList } from "@/apis";
 //type引入
 import type { CardProps } from "@/types";
+
+import MoemoArticleCard from "@/components/ArticleCard";
 //样式引入
 import Style from "./index.module.scss";
 
@@ -21,21 +23,24 @@ function Home() {
     });
   }, [page, pageSize]);
 
+  const { homePage, articleWrap, aside } = Style;
+
   return (
-    <div className={`${Style["homePage"]} 'pages'`}>
-      <Space className={Style["artcicle-wrap"]} direction="vertical">
+    <div className={`${homePage} pages`}>
+      <Space className={articleWrap} direction="vertical">
         {artList.map((item: CardProps, i) => {
           return (
             <Link key={item.id} to={`/topic/${item.id}`}>
-              <ArticleCard
-                addClassName={i % 2 == 1 ? "article-reverse" : ""}
-                key={item.title}
+              <MoemoArticleCard
+                key={item.id}
                 id={item.id}
                 title={item.title || description}
+                addClassName={i % 2 == 1 ? "article-reverse" : ""}
                 topping={item.topping}
                 label={item.label}
                 description={item.description}
-              ></ArticleCard>
+                createDate={item.createDate}
+              ></MoemoArticleCard>
             </Link>
           );
         })}
@@ -48,7 +53,7 @@ function Home() {
           }}
         />
       </Space>
-      <div className={Style.aside}>
+      <div className={`aside ${aside}`}>
         <Flex gap="small" vertical>
           <Introduction></Introduction>
           <PublicNotice></PublicNotice>

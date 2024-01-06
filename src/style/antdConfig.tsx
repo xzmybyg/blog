@@ -7,6 +7,8 @@ const Theme: ThemeConfig = {
   token: {
     /* here is global tokens */
     // colorPrimary:'#1890ff',
+    // colorPrimary: "#d6dcff",
+    colorPrimary: "#7e70ea",
     lineWidthFocus: 0,
   },
   components: {
