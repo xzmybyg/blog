@@ -9,8 +9,24 @@ export function getPageArticleList({ page = 1, pageSize = 5 }) {
   });
 }
 
-export function getAllArticleList(id: string) {
-  return axiosInstance.get("/topic", {
+export function getAllArticleList() {
+  return axiosInstance.get("/article/", {
+    params: {
+      allList: true,
+    },
+  });
+}
+
+export function delArticle(id: number) {
+  return axiosInstance.delete("/article/", {
+    params: {
+      id,
+    },
+  });
+}
+
+export function editArticle(id: number) {
+  return axiosInstance.put("/article/", {
     params: {
       id,
     },

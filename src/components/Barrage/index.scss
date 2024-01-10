@@ -1,0 +1,14 @@
+@keyframes slide {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.barrage {
+  position: absolute;
+  white-space: nowrap;
+  animation: slide 5s linear infinite;
+}

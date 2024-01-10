@@ -1,7 +1,8 @@
 export type User = {
   id: number | null;
   username: string;
-  avatar: string;
+  avatar?: string;
+  role: string;
 };
 export type loginParams = {
   username: string;

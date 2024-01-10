@@ -1,6 +1,4 @@
 import { Suspense } from "react";
-//第三方库
-import { Layout, FloatButton } from "antd";
 
 import useStore from "@/store";
 //api引入
@@ -9,12 +7,9 @@ import { getInfo, login } from "@/apis";
 import type { RouterType } from "@/types";
 //样式引入
 import "./App.scss";
-import {routerList} from "@/utils";
-const { Header, Content, Footer } = Layout;
+import { routerList } from "@/utils";
 
 function App() {
-  const contentRef = useRef(null);
-
   const { setTotal, setUser } = useStore();
   const userInfo = { username: "1277215827", password: "lcyzs" };
 
@@ -33,34 +28,30 @@ function App() {
 
   return (
     <>
-      <div className="layout" ref={contentRef}>
-        {/* <Header className="blog-header"> */}
-        <Nav navlist={routerList}></Nav>
-        {/* </Header> */}
-        <Content className="blog-content">
-          <Suspense fallback={<div>Loading...</div>}>
-            {/* {useRoutes(routes)} */}
-            <Routes>
-              {routerList.map((item: RouterType) => (
+      <div className="layout">
+        <Suspense fallback={<Loading />}>
+          <Routes>
+            {routerList.map((item: RouterType) =>
+              item.name !== "管理" ? (
                 <Route
                   key={item.name}
                   path={item.path}
-                  element={item.element}
+                  element={<MyLayout>{item.element}</MyLayout>}
                 ></Route>
-              ))}
-            </Routes>
-          </Suspense>
-          <FloatButton.BackTop target={() => contentRef?.current || document} />
-        </Content>
-        <Footer
-          className="blog-footer"
-          style={{
-            width: "100vw",
-            textAlign: "center",
-          }}
-        >
-          ©2023 Created By 心中没有白月光
-        </Footer>
+              ) : (
+                <Route key={item.name} path={item.path} element={item.element}>
+                  {item.children?.map(child => (
+                    <Route
+                      key={child.path}
+                      path={child.path}
+                      element={child.element}
+                    />
+                  ))}
+                </Route>
+              )
+            )}
+          </Routes>
+        </Suspense>
       </div>
     </>
   );

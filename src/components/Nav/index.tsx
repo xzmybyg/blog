@@ -3,7 +3,7 @@ import type { RouterType } from "@/types";
 import Style from "./index.module.scss";
 import Login from "@/components/Login";
 
-function Nav(_prpos: { navlist: RouterType[] }) {
+function Nav({ navlist = routerList }: { navlist?: RouterType[] }) {
   const { navDesktop, navMobile, itemWrap, navItem, authorName } = Style;
 
   const navigate = useNavigate();
@@ -15,12 +15,40 @@ function Nav(_prpos: { navlist: RouterType[] }) {
     }
   };
 
+  const navbarRef = useRef<HTMLElement | null>(null);
+
+  let lastScrollTop = 0;
+
+  const handleScroll = () => {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    if (navbarRef.current) {
+      if (scrollTop > lastScrollTop) {
+        // 向下滚动
+        navbarRef.current.style.opacity = "0";
+      } else {
+        // 向上滚动
+        navbarRef.current.style.opacity = "1";
+        // navbarRef.current.style.backgroundColor =
+        //   scrollTop > 0 ? "rgba(0, 0, 0, 0.7)" : "transparent";
+        navbarRef.current.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+      }
+    }
+    lastScrollTop = scrollTop;
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <>
-      <nav className={navDesktop}>
+      <nav className={navDesktop} ref={navbarRef}>
         <div className={authorName}>心中没有白月光</div>
         <div className={itemWrap}>
-          {routerList.map(item => {
+          {navlist.map(item => {
             return (
               item.showOnNav != false && (
                 <div

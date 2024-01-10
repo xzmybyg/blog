@@ -1,13 +1,21 @@
-import { Footer } from "antd/es/layout/layout";
-import React from "react";
+import { ReactNode } from "react";
 
-const MyLayout: React.FC = () => {
+import Style from "./index.module.scss";
+
+//第三方库
+import { Layout, FloatButton } from "antd";
+const { Content, Footer } = Layout;
+
+export default function MyLayout({
+  children,
+}: {
+  children: ReactNode | ReactNode[];
+}) {
+  const contentRef = useRef(null);
   return (
-    <div className="layout">
+    <div className={Style.Layout} ref={contentRef}>
       <Nav />
-      <div className="content">
-        <Routes></Routes>
-      </div>
+      <Content className="blog-content">{children}</Content>
       <Footer
         className="blog-footer"
         style={{
@@ -17,8 +25,7 @@ const MyLayout: React.FC = () => {
       >
         ©2023 Created By 心中没有白月光
       </Footer>
+      <FloatButton.BackTop target={() => contentRef?.current || document} />
     </div>
   );
-};
-
-export default MyLayout;
+}

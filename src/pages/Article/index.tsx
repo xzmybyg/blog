@@ -1,41 +1,44 @@
-import { Timeline } from "antd";
-import useStore from "@/store";
 import dayjs from "dayjs";
+import { List } from "antd";
+import { getAllArticleList } from "@/apis";
+import type { Article } from "@/types";
 
 function Article() {
-  const [TimelineList, setTimelineList] = useState([]);
-  const [page, setPage] = useState(1);
-  const [pageSize] = useState(5);
-  const { aticleTotal } = useStore();
+  const [ArticleList, setArticleList] = useState<Article[]>([]);
 
   useEffect(() => {
-    axios
-      .get("api/article/", {
-        params: {
-          page: 1,
-          pageSize: aticleTotal,
-        },
-      })
-      .then(res => {
-        let resData = res.data.map((item: any) => {
-          return {
-            ...item,
-            children: `${item.title} ${dayjs(item.createDate).format(
-              "YYYY-MM-DD"
-            )}`,
-          };
-        });
-        setTimelineList(resData);
-        console.log(resData, "articleList");
-      });
+    getAllArticleList().then(res => {
+      console.log(res.data, "articleList");
+      setArticleList(res.data);
+    });
   }, []);
 
   return (
     <>
-      <div className="Article">
-        {/* {TimelineList.length > 0 && (
-          <Timeline mode="alternate" items={TimelineList} />
-        )} */}
+      <div className="Article pages">
+        <Card style={{ width: "50vw" }} className="listWrap">
+          <List
+            pagination={{ position: "bottom", align: "center" }}
+            itemLayout="horizontal"
+            dataSource={ArticleList}
+            renderItem={item => (
+              <List.Item>
+                <List.Item.Meta
+                  title={<a>{item.title}</a>}
+                  description={dayjs(item.createDate).format("YYYY-MM-DD")}
+                />
+              </List.Item>
+            )}
+          />
+        </Card>
+
+        <div className={`aside`}>
+          <Flex gap="small" vertical>
+            <Introduction></Introduction>
+            {/* <PublicNotice></PublicNotice> */}
+            <LabelCard></LabelCard>
+          </Flex>
+        </div>
       </div>
     </>
   );

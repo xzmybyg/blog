@@ -22,6 +22,9 @@
       @include pagesLayout();
       margin: 0;
       padding: 10px 0;
+      .aside {
+        margin-left: $content-side-margin;;
+      }
     }
   }
 
@@ -35,7 +38,6 @@
 @media screen and (max-width: $hiddenSomeSize) {
   .layout {
     .blog-header {
-      
     }
     .blog-content {
       .pages {

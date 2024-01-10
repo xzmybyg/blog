@@ -7,6 +7,7 @@ import type { CardProps } from "@/types";
 import MoemoArticleCard from "@/components/ArticleCard";
 //样式引入
 import Style from "./index.module.scss";
+import { Link } from "react-router-dom";
 
 const description = "本站使用react+ant Design搭建";
 

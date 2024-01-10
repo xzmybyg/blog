@@ -8,7 +8,7 @@ import { getTopic } from "@/apis";
 //样式引入
 import "github-markdown-css";
 import "markdown-navbar/dist/navbar.css";
-import "react-markdown-navbar/dist/style.css";
+// import "react-markdown-navbar/dist/style.css";
 import Style from "./index.module.scss";
 
 type TopicProps = {
@@ -36,11 +36,12 @@ export default function Topic() {
           children={mdContent}
         />
       </div>
-      <Affix className={`${affixNavbar}`} offsetTop={88}>
+      <Affix className={`${affixNavbar}`} offsetTop={10}>
         <Card className={`${NavbarCard}`}>
           <MarkdownNavbar
             className={`${Navbar} markdown-Navbar`}
             source={mdContent}
+            ordered={false}
           />
         </Card>
       </Affix>
