@@ -1,16 +1,17 @@
+import { Switch } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 
-interface DataType {
-  key: string;
-  id: number;
-  title: string;
-  article: string;
-  banner: string;
-  topping: boolean;
-  createDate: string;
-  hidden: boolean;
-  tags: string[];
+type DataType = {
+  key: string
+  id: number
+  title: string
+  article: string
+  banner: string
+  topping: boolean
+  createTime: string
+  hidden: boolean
+  tags: string[]
 }
 
 export default function AdminTopic() {
@@ -40,15 +41,15 @@ export default function AdminTopic() {
       render: tags => (
         <>
           {tags.map((tag: string) => {
-            let color = tag.length > 5 ? "geekblue" : "green";
+            let color = tag.length > 5 ? "geekblue" : "green"
             if (tag === "loser") {
-              color = "volcano";
+              color = "volcano"
             }
             return (
               <Tag color={color} key={tag}>
                 {tag}
               </Tag>
-            );
+            )
           })}
         </>
       ),
@@ -63,11 +64,22 @@ export default function AdminTopic() {
       title: "置顶",
       dataIndex: "topping",
       key: "topping",
-      render: topping => <>{topping ? "是" : "否"}</>,
+      // render: topping => <>{topping ? "是" : "否"}</>,
+      render: (topping, record) => (
+        <Switch
+          checkedChildren="开启"
+          unCheckedChildren="关闭"
+          checked={topping}
+          onChange={(checked: boolean) => {
+            record.topping = checked
+            setData([...data, record])
+          }}
+        />
+      ),
     },
     {
       title: "创建时间",
-      dataIndex: "createDate",
+      dataIndex: "createTime",
       key: "create_time",
       render: time => <>{dayjs(time).format("YYYY-MM-DD")}</>,
     },
@@ -75,7 +87,18 @@ export default function AdminTopic() {
       title: "隐藏",
       dataIndex: "hidden",
       key: "hidden",
-      render: hidden => <>{hidden ? "是" : "否"}</>,
+      // render: hidden => <>{hidden ? "是" : "否"}</>,
+      render: (hidden, record) => (
+        <Switch
+          checkedChildren="开启"
+          unCheckedChildren="关闭"
+          checked={hidden}
+          onChange={(checked: boolean) => {
+            record.hidden = checked
+            setData([...data, record])
+          }}
+        />
+      ),
     },
     {
       title: "操作",
@@ -83,13 +106,13 @@ export default function AdminTopic() {
       render: (text, record) => (
         <Space>
           <Button onClick={() => setArticle(record)}>编辑</Button>
-          <Button onClick={() => deleteArticle(record)}>删除</Button>
+          <Button onClick={() => delArticle(record)}>删除</Button>
         </Space>
       ),
     },
-  ];
-  const deleteArticle = (record: DataType) => {
-    delArticle(record.id).then(res => {
+  ]
+  const delArticle = (record: DataType) => {
+    deleteArticle(record.id).then(res => {
       console.log(res.data);
     });
   };
@@ -97,8 +120,8 @@ export default function AdminTopic() {
     editArticle(record.id).then(res => {
       console.log(res.data);
     });
-  }
-  const [data, setData] = useState([]);
+  };
+  const [data, setData] = useState<DataType[] | never>([]);
 
   useEffect(() => {
     getAllArticleList().then(res => {

@@ -14,7 +14,7 @@ const Theme: ThemeConfig = {
   components: {
     Pagination: {
       /* here is component tokens */
-      itemActiveBg: "#00c4b6",
+      // itemActiveBg: "#00c4b6",
       itemBg: "#000",
       itemLinkBg: "#000",
     },

@@ -16,9 +16,10 @@
   .itemWrap {
     display: flex;
     justify-content: space-evenly;
+    align-items: center;
     .navItem {
       color: map-get($nav, color);
-      width: 50px;
+      min-width: 50px;
       margin: 0 5px;
       font-weight: 1200;
     }
@@ -28,6 +29,24 @@
   @extend .nav;
   padding: 0 20px;
   display: none;
+
+  .MobileMenu {
+    position: fixed;
+    right: 0;
+    top: map-get($nav, height);
+    height: calc(100vh - 80px);
+    width: 30%;
+    background-color: #00000088;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    .navItem {
+      width: 70%;
+      height: 30px;
+      margin: 0 auto;
+    }
+  }
 }
 
 @media screen and (max-width: $hiddenSomeSize) {

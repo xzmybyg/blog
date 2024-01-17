@@ -22,7 +22,6 @@ function TheLink() {
   useEffect(() => {
     getLinkList().then(res => {
       setLinkList(res.data);
-      console.log(res.data);
     });
   }, []);
 
@@ -107,9 +106,9 @@ function TheLink() {
 
       <div className={`aside ${aside}`}>
         <Flex gap="small" vertical>
-          <Introduction></Introduction>
-          <PublicNotice></PublicNotice>
-          <Website></Website>
+          <BlogAside></BlogAside>
+          <BlogAside.PublicNotice></BlogAside.PublicNotice>
+          <BlogAside.Website></BlogAside.Website>
         </Flex>
       </div>
     </div>

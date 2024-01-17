@@ -7,61 +7,53 @@ import type { CardProps } from "@/types";
 import MoemoArticleCard from "@/components/ArticleCard";
 //样式引入
 import Style from "./index.module.scss";
-import { Link } from "react-router-dom";
+import useRequest from "@/hooks/useRequest"
 
-const description = "本站使用react+ant Design搭建";
+const description = "本站使用react+ant Design搭建"
 
 function Home() {
-  const { aticleTotal } = useStore();
-  const [artList, setArtLIst] = useState<any[]>([]);
-  const [page, setPage] = useState(1);
-  const [pageSize] = useState(5);
+  const { aticleTotal } = useStore()
+  const [page, setPage] = useState(1)
+  const [pageSize] = useState(5)
+  const params = { page, pageSize }
+  const { data: artList } = useRequest(getPageArticleList, params)
 
-  useEffect(() => {
-    getPageArticleList({ page, pageSize }).then(res => {
-      setArtLIst(res.data);
-      console.log(res.data);
-    });
-  }, [page, pageSize]);
-
-  const { homePage, articleWrap, aside } = Style;
+  const { homePage, articleWrap, aside } = Style
 
   return (
     <div className={`${homePage} pages`}>
       <Space className={articleWrap} direction="vertical">
-        {artList.map((item: CardProps, i) => {
+        {artList?.map((item: CardProps, i: number) => {
           return (
-            <Link key={item.id} to={`/topic/${item.id}`}>
-              <MoemoArticleCard
-                key={item.id}
-                id={item.id}
-                title={item.title || description}
-                addClassName={i % 2 == 1 ? "article-reverse" : ""}
-                topping={item.topping}
-                label={item.label}
-                description={item.description}
-                createDate={item.createDate}
-              ></MoemoArticleCard>
-            </Link>
-          );
+            <MoemoArticleCard
+              key={item.id}
+              id={item.id}
+              title={item.title || description}
+              addClassName={i % 2 == 1 ? "article-reverse" : ""}
+              topping={item.topping}
+              label={item.label}
+              description={item.description}
+              createTime={item.createTime}
+            ></MoemoArticleCard>
+          )
         })}
         <Pagination
           current={page}
           defaultPageSize={pageSize}
           total={aticleTotal}
           onChange={(page, _pageSize) => {
-            setPage(page);
+            setPage(page)
           }}
         />
       </Space>
       <div className={`aside ${aside}`}>
         <Flex gap="small" vertical>
-          <Introduction></Introduction>
-          <PublicNotice></PublicNotice>
-          <Website></Website>
+          <BlogAside></BlogAside>
+          <BlogAside.PublicNotice></BlogAside.PublicNotice>
+          <BlogAside.Website></BlogAside.Website>
         </Flex>
       </div>
     </div>
-  );
+  )
 }
 export default Home;

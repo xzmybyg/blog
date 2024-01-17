@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { Store, User } from "@/types";
+import type { Store } from "@/types";
 
 function expire<T extends object>(
   fn: (set: (args: Partial<T>) => void) => T,
@@ -16,7 +16,7 @@ function expire<T extends object>(
     });
 }
 
-// 创建一个store
+// 创建一个store;
 const useStore = create<Store>(
   // persist(
   expire(
@@ -27,10 +27,6 @@ const useStore = create<Store>(
       setArticleList: (value: any[]) => set({ articleList: value }),
       Notice: "",
       setNotice: (value: string) => set({ Notice: value }),
-      user: { id: null, username: "", avatar: "", role: "用户" },
-      setUser: (value: User) => set({ user: value }),
-      token: "",
-      setToken: (value: string) => set({ token: value }),
     }),
     1000 * 60 * 60 * 24 * 7
   )

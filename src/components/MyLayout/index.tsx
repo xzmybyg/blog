@@ -11,6 +11,7 @@ export default function MyLayout({
 }: {
   children: ReactNode | ReactNode[];
 }) {
+  const navgate = useNavigate();
   const contentRef = useRef(null);
   return (
     <div className={Style.Layout} ref={contentRef}>
@@ -25,7 +26,15 @@ export default function MyLayout({
       >
         ©2023 Created By 心中没有白月光
       </Footer>
-      <FloatButton.BackTop target={() => contentRef?.current || document} />
+      <FloatButton.Group shape="circle">
+        <FloatButton
+          tooltip={<div>跳转到后台管理系统</div>}
+          onClick={() => {
+            navgate("/admin");
+          }}
+        />
+        <FloatButton.BackTop visibilityHeight={0} />
+      </FloatButton.Group>
     </div>
   );
 }

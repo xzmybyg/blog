@@ -1,4 +1,6 @@
 .articleCard {
+  outline: none;
+  caret-color: transparent;
   background-color: map-get($articleCard, bcColor);
   width: 100%;
   height: 280px;
@@ -18,6 +20,9 @@
     height: 100%;
   }
   .articleContent {
+    width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
     padding: 0 50px;
     flex: 1;
     .articleTitle {

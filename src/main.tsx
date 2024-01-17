@@ -4,7 +4,7 @@ import App from "./App.tsx";
 import "./index.scss";
 import { BrowserRouter as Router } from "react-router-dom";
 import { ConfigProvider } from "antd";
-import Theme from "./style/antdConfig.js";
+import Theme from "@/styleConfig/antdConfig.js";
 
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

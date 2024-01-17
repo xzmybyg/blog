@@ -2,7 +2,7 @@ import { Suspense } from "react";
 
 import useStore from "@/store";
 //api引入
-import { getInfo, login } from "@/apis";
+// import { getInfo } from "@/apis";
 //type引入
 import type { RouterType } from "@/types";
 //样式引入
@@ -10,19 +10,11 @@ import "./App.scss";
 import { routerList } from "@/utils";
 
 function App() {
-  const { setTotal, setUser } = useStore();
-  const userInfo = { username: "1277215827", password: "lcyzs" };
+  const { setTotal } = useStore();
 
   useEffect(() => {
     getInfo().then(res => {
       setTotal(res.data[0].total_rows);
-    });
-  }, []);
-
-  useEffect(() => {
-    login(userInfo).then(res => {
-      setUser(res.data.token);
-      localStorage.setItem("token", res.data.token);
     });
   }, []);
 

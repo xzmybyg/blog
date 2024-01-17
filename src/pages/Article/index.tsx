@@ -8,10 +8,9 @@ function Article() {
 
   useEffect(() => {
     getAllArticleList().then(res => {
-      console.log(res.data, "articleList");
-      setArticleList(res.data);
-    });
-  }, []);
+      setArticleList(res.data)
+    })
+  }, [])
 
   return (
     <>
@@ -25,7 +24,7 @@ function Article() {
               <List.Item>
                 <List.Item.Meta
                   title={<a>{item.title}</a>}
-                  description={dayjs(item.createDate).format("YYYY-MM-DD")}
+                  description={dayjs(item.createTime).format("YYYY-MM-DD")}
                 />
               </List.Item>
             )}
@@ -34,14 +33,14 @@ function Article() {
 
         <div className={`aside`}>
           <Flex gap="small" vertical>
-            <Introduction></Introduction>
-            {/* <PublicNotice></PublicNotice> */}
-            <LabelCard></LabelCard>
+            <BlogAside></BlogAside>
+            <BlogAside.PublicNotice></BlogAside.PublicNotice>
+            <BlogAside.LabelCard></BlogAside.LabelCard>
           </Flex>
         </div>
       </div>
     </>
-  );
+  )
 }
 
 export default Article;

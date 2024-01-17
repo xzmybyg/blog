@@ -2,31 +2,56 @@
 import ReactMarkdown from "react-markdown";
 import MarkdownNavbar from "markdown-navbar";
 import { Card, Affix } from "antd";
+const { TextArea } = Input
 
 //api引入
-import { getTopic } from "@/apis";
+import { getTopic } from "@/apis"
+
+import CommentList from "@/components/CommentList"
+
 //样式引入
-import "github-markdown-css";
-import "markdown-navbar/dist/navbar.css";
-// import "react-markdown-navbar/dist/style.css";
-import Style from "./index.module.scss";
+import "github-markdown-css"
+import "markdown-navbar/dist/navbar.css"
+import Style from "./index.module.scss"
+import useUserStore from "@/store/user"
 
 type TopicProps = {
-  id: string;
-};
+  id: string
+}
 
 export default function Topic() {
   const { topic, topicWrap, markdownBody, affixNavbar, NavbarCard, Navbar } =
-    Style;
-  const { id } = useParams<TopicProps>();
+    Style
+  const { id } = useParams<TopicProps>()
+  const article_id = parseInt(id as string, 10)
 
-  const [mdContent, setMdContent] = useState("");
+  const { id: user_id } = useUserStore()
+
+  const [mdContent, setMdContent] = useState("")
+  const [commentList, setCommentList] = useState<any[]>([])
 
   useEffect(() => {
-    getTopic(id as string).then(res => {
-      setMdContent(res.data);
-    });
-  }, []);
+    getTopic(article_id).then(res => {
+      setMdContent(res.data)
+    })
+  }, [])
+
+  useEffect(() => {
+    getComment(article_id).then(res => {
+      console.log(res.data, "评论列表")
+
+      setCommentList(res.data)
+    })
+  }, [article_id])
+
+  const handleComment = (values: any) => {
+    if (!user_id) {
+      message.error("请先登录")
+      return
+    }
+    const params = { ...values, article_id, user_id }
+    addComments(params)
+  }
 
   return (
     <div className={`${topic} pages`}>
@@ -35,6 +60,23 @@ export default function Topic() {
           className={`${markdownBody} markdown-body`}
           children={mdContent}
         />
+        <Divider />
+        <div className="handleComment">
+          <h2>评论</h2>
+          <Form onFinish={handleComment}>
+            <Form.Item name="content">
+              <TextArea rows={4} />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                提交评论
+              </Button>
+            </Form.Item>
+          </Form>
+          {commentList.map(item => (
+            <CommentList key={item.comment_id} data={{ ...item, article_id }} />
+          ))}
+        </div>
       </div>
       <Affix className={`${affixNavbar}`} offsetTop={10}>
         <Card className={`${NavbarCard}`}>
@@ -46,5 +88,5 @@ export default function Topic() {
         </Card>
       </Affix>
     </div>
-  );
+  )
 }

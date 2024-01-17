@@ -35,43 +35,41 @@ export default function Admin() {
   const navigate = useNavigate();
 
   return (
-    <div>
+    <Layout style={{ height: "100%" }}>
+      <Sider
+        collapsible
+        collapsed={collapsed}
+        onCollapse={value => setCollapsed(value)}
+      >
+        <div className="demo-logo-vertical" />
+        <Menu
+          theme="dark"
+          defaultSelectedKeys={["1"]}
+          mode="inline"
+          items={Item}
+          onSelect={item => {
+            console.log(item.key);
+            navigate(`/admin/${item.key}`);
+          }}
+        />
+      </Sider>
       <Layout>
-        <Sider
-          collapsible
-          collapsed={collapsed}
-          onCollapse={value => setCollapsed(value)}
-        >
-          <div className="demo-logo-vertical" />
-          <Menu
-            theme="dark"
-            defaultSelectedKeys={["1"]}
-            mode="inline"
-            items={Item}
-            onSelect={item => {
-              console.log(item.key);
-              navigate(`/admin/${item.key}`);
+        {/* <Header style={{ padding: 0 }} /> */}
+        <Content style={{ margin: "0 16px" }}>
+          <Breadcrumb style={{ margin: "16px 0" }}>
+            <Breadcrumb.Item>User</Breadcrumb.Item>
+            <Breadcrumb.Item>Bill</Breadcrumb.Item>
+          </Breadcrumb>
+          <div
+            style={{
+              padding: 24,
+              minHeight: 360,
             }}
-          />
-        </Sider>
-        <Layout>
-          {/* <Header style={{ padding: 0 }} /> */}
-          <Content style={{ margin: "0 16px" }}>
-            <Breadcrumb style={{ margin: "16px 0" }}>
-              <Breadcrumb.Item>User</Breadcrumb.Item>
-              <Breadcrumb.Item>Bill</Breadcrumb.Item>
-            </Breadcrumb>
-            <div
-              style={{
-                padding: 24,
-                minHeight: 360,
-              }}
-            >
-              <Outlet />
-            </div>
-          </Content>
-        </Layout>
+          >
+            <Outlet />
+          </div>
+        </Content>
       </Layout>
-    </div>
+    </Layout>
   );
 }

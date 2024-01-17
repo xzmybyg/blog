@@ -6,6 +6,10 @@ import {
 } from "@ant-design/icons";
 import Style from "./index.module.scss";
 
+import PublicNotice from "./PublicNotice";
+import Website from "./Website";
+import LabelCard from "./LabelCard";
+
 function Wechat() {
   const WechatContent = (
     <img className={`${Style.wechat}`} src="/MyWechat.jpg" alt="加载失败" />
@@ -28,8 +32,7 @@ function MyGithub() {
     />
   );
 }
-
-function Introduction() {
+function BlogAside() {
   const IntroductionActions = [
     <MyGithub key="github" />,
     <Wechat key="wechat" />,
@@ -54,5 +57,8 @@ function Introduction() {
     </>
   );
 }
+BlogAside.PublicNotice = PublicNotice;
+BlogAside.Website = Website;
+BlogAside.LabelCard = LabelCard;
 
-export default Introduction;
+export default BlogAside;
