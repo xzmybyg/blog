@@ -1,4 +1,8 @@
-import { LoginOutlined, UnorderedListOutlined } from "@ant-design/icons"
+import {
+  LoginOutlined,
+  UnorderedListOutlined,
+  UserOutlined,
+} from "@ant-design/icons"
 import type { RouterType } from "@/types"
 import Style from "./index.module.scss"
 import Login from "@/components/Login"
@@ -67,13 +71,13 @@ function Nav({ navlist = routerList }: { navlist?: RouterType[] }) {
               )
             )
           })}
-          {avatar ? (
+          {id ? (
             <div className={navItem}>
               <Popover
                 placement="bottomRight"
                 content={<div onClick={logoutInfo}>退出</div>}
               >
-                <Avatar src={avatar} />
+                <Avatar src={avatar} icon={avatar ? null : <UserOutlined />} />
                 <span>{nickname || username}</span>
               </Popover>
             </div>

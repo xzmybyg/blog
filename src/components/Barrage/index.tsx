@@ -3,7 +3,6 @@ import "./index.scss"
 
 function BarrageComponent({ comments }: { comments: Comment[] }) {
   const [barrages, setBarrages] = useState<Barrage[]>([])
-  let currentCommentIndex = 0 // 添加一个变量来跟踪当前应该显示哪个弹幕
 
   useEffect(() => {
     // 生成所有的弹幕

@@ -33,18 +33,18 @@ function TheLink() {
 
   const submit = (values: FormValues) => {
     applyLink(values)
-      .then(res => {
+      .then(_res => {
         messageApi.open({
           type: "success",
           content: "申请成功，等待审核！",
-        });
+        })
       })
-      .catch(err => {
+      .catch(_err => {
         messageApi.open({
           type: "error",
           content: "申请失败，请重试！",
-        });
-      });
+        })
+      })
   };
 
   return (

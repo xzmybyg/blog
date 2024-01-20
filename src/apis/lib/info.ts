@@ -1,3 +1,3 @@
 export function getInfo() {
-  return axiosInstance.get("/");
+  return axiosInstance.get("/bloginfo")
 }

@@ -4,9 +4,9 @@ import { getPageArticleList } from "@/apis";
 //type引入
 import type { CardProps } from "@/types";
 
-import MoemoArticleCard from "@/components/ArticleCard";
+import { default as ArticleCard } from "@/components/ArticleCard"
 //样式引入
-import Style from "./index.module.scss";
+import Style from "./index.module.scss"
 import useRequest from "@/hooks/useRequest"
 
 const description = "本站使用react+ant Design搭建"
@@ -25,7 +25,7 @@ function Home() {
       <Space className={articleWrap} direction="vertical">
         {artList?.map((item: CardProps, i: number) => {
           return (
-            <MoemoArticleCard
+            <ArticleCard
               key={item.id}
               id={item.id}
               title={item.title || description}
@@ -34,10 +34,11 @@ function Home() {
               label={item.label}
               description={item.description}
               createTime={item.createTime}
-            ></MoemoArticleCard>
+            ></ArticleCard>
           )
         })}
         <Pagination
+          defaultCurrent={1}
           current={page}
           defaultPageSize={pageSize}
           total={aticleTotal}

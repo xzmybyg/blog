@@ -1,13 +1,13 @@
 //第三方库
-import ReactMarkdown from "react-markdown";
-import MarkdownNavbar from "markdown-navbar";
-import { Card, Affix } from "antd";
+import ReactMarkdown from "react-markdown"
+import MarkdownNavbar from "markdown-navbar"
+import { Card, Affix } from "antd"
 const { TextArea } = Input
 
 //api引入
 import { getTopic } from "@/apis"
 
-import CommentList from "@/components/CommentList"
+import { default as CommentList } from "@/components/CommentList"
 
 //样式引入
 import "github-markdown-css"
@@ -38,8 +38,6 @@ export default function Topic() {
 
   useEffect(() => {
     getComment(article_id).then(res => {
-      console.log(res.data, "评论列表")
-
       setCommentList(res.data)
     })
   }, [article_id])
@@ -55,7 +53,7 @@ export default function Topic() {
 
   return (
     <div className={`${topic} pages`}>
-      <div className={`${topicWrap}`}>
+      <div className={topicWrap}>
         <ReactMarkdown
           className={`${markdownBody} markdown-body`}
           children={mdContent}
@@ -78,8 +76,8 @@ export default function Topic() {
           ))}
         </div>
       </div>
-      <Affix className={`${affixNavbar}`} offsetTop={10}>
-        <Card className={`${NavbarCard}`}>
+      <Affix className={affixNavbar} offsetTop={10}>
+        <Card className={NavbarCard}>
           <MarkdownNavbar
             className={`${Navbar} markdown-Navbar`}
             source={mdContent}

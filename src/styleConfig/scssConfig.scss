@@ -1,5 +1,5 @@
 // 媒体查询变量
-$mediaSize:(
+$mediaSize: (
   miniScreen: 768px,
   mediumScreen: 992px,
   maxiScreen: 1200px,
@@ -14,10 +14,12 @@ $rootFontSize: 16px;
 
 //主题变量
 $nav: (
-  bcColor: #1f262c,
-  color: #d6dcff,
+  // bcColor: #1f262c,
+  bcColor: #272936,
+  // color: #d6dcff,
+  color: #9286f5,
   height: 7vh,
-  fontSize: 1rem,
+  fontSize: 1rem
 );
 $footer: (
   bcColor: #060f17,
@@ -38,7 +40,6 @@ $thumb: (
 //其他变量
 $content-side-margin: 30px;
 
-
 //mixin
 @mixin flexBetween($justify: space-between, $align: center) {
   display: flex;
@@ -46,12 +47,34 @@ $content-side-margin: 30px;
   align-items: $align;
 }
 
-@mixin themeColor($bgColor: map-get($nav,color), $color: "initial") {
+@mixin themeColor($bgColor: map-get($nav, color), $color: "initial") {
   background-color: $bgColor;
   color: $color;
 }
 
-@mixin pagesLayout(){
+@mixin pagesLayout() {
   display: flex;
   justify-content: center;
+}
+
+//动画
+.jello {
+  &:hover {
+    // animation: jello 0.5s infinite;
+    animation: jello 0.5s 1;
+  }
+}
+@keyframes jello {
+  0% {
+    transform: scale(1, 1);
+  }
+  25% {
+    transform: scale(0.9, 1.1);
+  }
+  50% {
+    transform: scale(1.2, 0.8);
+  }
+  75% {
+    transform: scale(0.95, 1.05);
+  }
 }

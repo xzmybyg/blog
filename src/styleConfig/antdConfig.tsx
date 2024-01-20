@@ -14,7 +14,7 @@ const Theme: ThemeConfig = {
   components: {
     Pagination: {
       /* here is component tokens */
-      // itemActiveBg: "#00c4b6",
+      itemActiveBg: "#fff",
       itemBg: "#000",
       itemLinkBg: "#000",
     },
@@ -23,6 +23,6 @@ const Theme: ThemeConfig = {
       tailWidth: 5,
     },
   },
-};
+}
 
 export default Theme;

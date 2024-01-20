@@ -1,6 +1,5 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import type { Store } from "@/types";
+import { create } from "zustand"
+import type { Store } from "@/types"
 
 function expire<T extends object>(
   fn: (set: (args: Partial<T>) => void) => T,
@@ -8,17 +7,16 @@ function expire<T extends object>(
 ) {
   return (set: (args: Partial<T>) => void) =>
     fn(args => {
-      set(args);
+      set(args)
       localStorage.setItem(
         "my-blog-store",
         (Date.now() + expiryMilliseconds).toString()
-      );
-    });
+      )
+    })
 }
 
 // 创建一个store;
 const useStore = create<Store>(
-  // persist(
   expire(
     set => ({
       aticleTotal: 0,
@@ -30,8 +28,6 @@ const useStore = create<Store>(
     }),
     1000 * 60 * 60 * 24 * 7
   )
-  // { name: "my-blog-store", getStorage: () => localStorage }
-  // )
-);
+)
 
-export default useStore;
+export default useStore

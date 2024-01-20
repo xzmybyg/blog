@@ -1,11 +1,12 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
-import path from "path";
-import AutoImport from "unplugin-auto-import/vite";
-declare const __dirname: string;
+import { defineConfig } from "vite"
+import react from "@vitejs/plugin-react-swc"
+import path from "path"
+import AutoImport from "unplugin-auto-import/vite"
+declare const __dirname: string
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: "./",
   plugins: [
     react(),
     //自动引入配置
@@ -26,6 +27,7 @@ export default defineConfig({
             "Modal",
             "Flex",
             "Card",
+            "Avatar",
             "Tag",
             "Divider",
             "message",
@@ -65,10 +67,10 @@ export default defineConfig({
     //设置正向代理跨域
     proxy: {
       "/api": {
-        target: "http://127.0.0.1:5000",
+        target: "http://127.0.0.1:80",
         changeOrigin: true,
-        rewrite: path => path.replace(/^\/api/, ""),
+        rewrite: path => path.replace(/^\/api/, "/api"),
       },
     },
   },
-});
+})

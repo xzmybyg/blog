@@ -1,8 +1,26 @@
-.aboutpage{
-    h2{
-        margin-top: 30px;
+#aboutpage {
+  min-height: 85vh;
+  margin-top: 30px;
+  .card {
+    position: relative;
+    .animal_avatars {
+      position: absolute;
+      top: -50px;
+      right: 0px;
+      z-index: 50;
+      width: 100px;
     }
-    ol,ul{
-        margin-left: 50px;
+  }
+  h2 {
+    margin-top: 30px;
+  }
+  ol,
+  ul {
+    margin-left: 50px;
+    font-size: 1rem;
+
+    & > :nth-child(n):not(:last-child) {
+      margin-bottom: 10px;
     }
+  }
 }

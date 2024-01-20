@@ -1,6 +1,6 @@
 import { create } from "zustand"
 import { persist, devtools } from "zustand/middleware"
-import type { User, UserStore } from "@/types"
+import type { UserStore } from "@/types"
 
 const useUserStore = create<UserStore>()(
   devtools(

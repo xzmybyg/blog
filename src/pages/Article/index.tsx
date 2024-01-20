@@ -5,9 +5,16 @@ import type { Article } from "@/types";
 
 function Article() {
   const [ArticleList, setArticleList] = useState<Article[]>([]);
+  const navigate = useNavigate()
+
+  const routerPush = (id: number) => {
+    navigate(`/topic/${id}`)
+  }
 
   useEffect(() => {
     getAllArticleList().then(res => {
+      console.log(res.data)
+
       setArticleList(res.data)
     })
   }, [])
@@ -21,7 +28,7 @@ function Article() {
             itemLayout="horizontal"
             dataSource={ArticleList}
             renderItem={item => (
-              <List.Item>
+              <List.Item onClick={() => routerPush(item.id)}>
                 <List.Item.Meta
                   title={<a>{item.title}</a>}
                   description={dayjs(item.createTime).format("YYYY-MM-DD")}

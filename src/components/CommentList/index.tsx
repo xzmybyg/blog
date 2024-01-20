@@ -6,7 +6,7 @@ import useUserStore from "@/store/user"
 
 const { TextArea } = Input
 
-export default function CommentList({ data }: { data: any }) {
+function CommentList({ data }: { data: any }) {
   const { id: user_id } = useUserStore()
   const {
     comment_id: reply_comment_id,
@@ -32,10 +32,8 @@ export default function CommentList({ data }: { data: any }) {
       message.error("请先登录")
       return
     }
-    console.log(data, "data")
 
     const params = { ...values, user_id, reply_comment_id, reply_user_id }
-    console.log(params, "回复")
     addReply(params)
   }
 
@@ -81,7 +79,10 @@ export default function CommentList({ data }: { data: any }) {
           )}
           <div className="replyWrap">
             {replyList.map((item: any) => (
-              <Reply item={{ ...item, reply_comment_id }} key={item.reply_id} />
+              <MoemoReply
+                item={{ ...item, reply_comment_id }}
+                key={item.reply_id}
+              />
             ))}
           </div>
         </div>
@@ -100,7 +101,7 @@ function Reply({ item }: { item: any }) {
     avatar,
     content,
     createTime,
-    reply_to_userName,
+    reply_to_username,
     reply_to_nickname,
     reply_comment_id,
   } = item
@@ -116,9 +117,8 @@ function Reply({ item }: { item: any }) {
       message.error("请先登录")
       return
     }
-    console.log(item, "item")
+
     const params = { ...values, user_id, reply_comment_id, reply_user_id }
-    console.log(params, "回复")
     addReply(params)
   }
   return (
@@ -145,7 +145,7 @@ function Reply({ item }: { item: any }) {
           </div>
           <div className="content">
             <span style={{ marginRight: 10, color: "blue" }}>
-              {`@${reply_to_nickname || reply_to_userName}`}
+              {`@${reply_to_nickname || reply_to_username}`}
             </span>
             {` ${content}`}
           </div>
@@ -171,3 +171,8 @@ function Reply({ item }: { item: any }) {
     </div>
   )
 }
+
+const MoemoCommentList = memo(CommentList)
+const MoemoReply = memo(Reply)
+
+export default MoemoCommentList
