@@ -52,7 +52,7 @@ export default function Topic() {
   }
 
   return (
-    <div className={`${topic} pages`}>
+    <div id={topic} className={`pages`}>
       <div className={topicWrap}>
         <ReactMarkdown
           className={`${markdownBody} markdown-body`}
@@ -76,7 +76,7 @@ export default function Topic() {
           ))}
         </div>
       </div>
-      <Affix className={affixNavbar} offsetTop={10}>
+      <Affix className={`${affixNavbar} aside`} offsetTop={10}>
         <Card className={NavbarCard}>
           <MarkdownNavbar
             className={`${Navbar} markdown-Navbar`}

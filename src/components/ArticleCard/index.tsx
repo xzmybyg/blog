@@ -26,7 +26,11 @@ function ArticleCard(props: CardProps) {
   }
 
   return (
-    <div className={`${articleCard} ${Style[addClassName as string]}`}>
+    <div
+      className={`${articleCard} ${
+        addClassName && Style[addClassName as string]
+      }`}
+    >
       <img src={png404} onClick={handleNavigate} />
       <div className={articleContent}>
         <p onClick={handleNavigate} className={articleTitle}>

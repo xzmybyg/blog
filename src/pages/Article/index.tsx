@@ -22,7 +22,7 @@ function Article() {
   return (
     <>
       <div className="Article pages">
-        <Card style={{ width: "50vw" }} className="listWrap">
+        <Card className="listWrap">
           <List
             pagination={{ position: "bottom", align: "center" }}
             itemLayout="horizontal"

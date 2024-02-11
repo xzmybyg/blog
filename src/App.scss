@@ -15,15 +15,18 @@
 
   .blog-content {
     min-height: 93vh;
-    padding: 10px 0px;
+    // padding: 10px 0px;
     overflow-x: hidden;
     margin: 0 auto;
     .pages {
       @include pagesLayout();
       margin: 0;
       padding: 10px 0;
+      .ant-card {
+        width: 50vw;
+      }
       .aside {
-        margin-left: $content-side-margin;;
+        margin-left: $content-side-margin;
       }
     }
   }
@@ -41,7 +44,12 @@
     }
     .blog-content {
       .pages {
+        box-sizing: border-box;
         padding: 10px;
+        width: 100%;
+        .ant-card {
+          width: 100%;
+        }
       }
     }
     .aside {

@@ -15,21 +15,22 @@ function TheLink() {
     formWrap,
     notice,
     linkForm,
+    formItem,
     aside,
-  } = Style;
+  } = Style
 
-  const [linkList, setLinkList] = useState([]);
+  const [linkList, setLinkList] = useState([])
   useEffect(() => {
     getLinkList().then(res => {
-      setLinkList(res.data);
-    });
-  }, []);
+      setLinkList(res.data)
+    })
+  }, [])
 
   const gotoLink = (url: string) => {
-    window.open(url, "_blank");
-  };
+    window.open(url, "_blank")
+  }
 
-  const [messageApi, contextHolder] = message.useMessage();
+  const [messageApi, contextHolder] = message.useMessage()
 
   const submit = (values: FormValues) => {
     applyLink(values)
@@ -45,10 +46,10 @@ function TheLink() {
           content: "申请失败，请重试！",
         })
       })
-  };
+  }
 
   return (
-    <div className={`${linkPage} pages`}>
+    <div id={linkPage} className={`pages`}>
       {contextHolder}
       <Card className={content}>
         <h1>友链</h1>
@@ -58,7 +59,7 @@ function TheLink() {
               key={item.id}
               className={linkItem}
               onClick={() => {
-                gotoLink(item.url);
+                gotoLink(item.url)
               }}
             >
               {/* <Skeleton avatar active> */}
@@ -82,19 +83,19 @@ function TheLink() {
           </div>
           <div className={linkForm}>
             <Form onFinish={values => submit(values)}>
-              <Form.Item label="标题" name="title">
+              <Form.Item className={formItem} label="标题" name="title">
                 <Input placeholder="网站名称" />
               </Form.Item>
-              <Form.Item label="描述" name="describe">
+              <Form.Item className={formItem} label="描述" name="describe">
                 <Input placeholder="网站描述" />
               </Form.Item>
-              <Form.Item label="网址" name="url">
+              <Form.Item className={formItem} label="网址" name="url">
                 <Input placeholder="网站地址" />
               </Form.Item>
-              <Form.Item label="头像" name="logo">
+              <Form.Item className={formItem} label="头像" name="logo">
                 <Input placeholder="网站logo" />
               </Form.Item>
-              <Form.Item>
+              <Form.Item className={formItem}>
                 <Button type="primary" htmlType="submit">
                   申请友链
                 </Button>
@@ -112,7 +113,7 @@ function TheLink() {
         </Flex>
       </div>
     </div>
-  );
+  )
 }
 
 export default TheLink;

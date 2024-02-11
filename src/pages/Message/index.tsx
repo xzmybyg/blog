@@ -32,7 +32,7 @@ function Message() {
   }
 
   return (
-    <div className={messagePage}>
+    <div id={messagePage}>
       <div className={sendWrap}>
         留言板
         <Form className={formWarp} onFinish={sendMessage}>
