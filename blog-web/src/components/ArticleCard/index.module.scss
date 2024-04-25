@@ -1,0 +1,79 @@
+.articleCard {
+  outline: none;
+  caret-color: transparent;
+  background-color: map-get($articleCard, bcColor);
+  width: 100%;
+  height: 280px;
+  margin: 0;
+  padding: 0;
+  border-radius: 10px;
+  display: flex;
+  // align-items: center;
+  color: #4c4948;
+  overflow: hidden;
+  &.article-reverse {
+    flex-direction: row-reverse;
+  }
+  img {
+    width: 45%;
+    height: 100%;
+  }
+  .articleContent {
+    width: 300px;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: 50px 50px;
+    flex: 1;
+    .articleTitle {
+      //鼠标悬浮时，鼠标样式为手型
+      cursor: pointer;
+      font-size: 1.5rem;
+      &:hover {
+        color: #9286f5;
+        //下划线
+        text-decoration: underline;
+      }
+    }
+    .articleInfo {
+      width: 100%;
+      .articleLabel {
+        display: flex;
+        margin: 6px 0;
+        margin: 10px 0 15px 0;
+      }
+    }
+    .articleTime {
+      margin: 0 5px;
+      font-size: 1rem;
+      color: #999;
+    }
+    .articleDescription {
+      width: 100%;
+      font-size: 1.1rem;
+      color: #4c4948;
+    }
+  }
+}
+@media screen and (max-width: $hiddenSomeSize) {
+  .articleCard {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 400px;
+    &.article-reverse {
+      flex-direction: column;
+    }
+    img {
+      width: 100%;
+      height: 55%;
+    }
+    .articleContent {
+      width: 100%;
+      overflow: hidden;
+      box-sizing: border-box;
+      padding: 20px 30px;
+      flex: 1;
+      text-overflow: ellipsis;
+    }
+  }
+}

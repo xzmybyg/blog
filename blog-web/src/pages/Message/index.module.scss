@@ -1,0 +1,29 @@
+#messagePage {
+  width: 100%;
+  height: 100vh;
+  background-image: url(/banner.jpg);
+  background-size: cover; // 设置背景图的大小为 cover
+  background-position: center; // 设置背景图的位置为 center
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  .sendWrap {
+    width: 300px;
+    height: 300px;
+    margin: auto;
+    text-align: center;
+    font-size: 30px;
+    .formWarp {
+      margin-top: 20px;
+    }
+  }
+}
+
+@media screen and (max-width: $hiddenSomeSize) {
+  #messagePage {
+    background-position: top right;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+}

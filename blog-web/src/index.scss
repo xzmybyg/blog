@@ -1,0 +1,28 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+body{
+  overflow-x: hidden;
+  background: linear-gradient(
+    90deg,
+    rgba(247, 149, 51, 0.1),
+    rgba(243, 112, 85, 0.1) 15%,
+    rgba(239, 78, 123, 0.1) 30%,
+    rgba(161, 102, 171, 0.1) 44%,
+    rgba(80, 115, 184, 0.1) 58%,
+    rgba(16, 152, 173, 0.1) 72%,
+    rgba(7, 179, 155, 0.1) 86%,
+    rgba(109, 186, 130, 0.1)
+  );
+}
+// 滚动条样式
+::-webkit-scrollbar-thumb {
+  background-color: map-get($thumb, color);
+  border-radius: 10px;
+  transition: all 0.2s ease-in-out;
+}
+::-webkit-scrollbar {
+  width: map-get($thumb, width);
+}
+

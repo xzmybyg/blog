@@ -1,0 +1,59 @@
+.layout {
+  height: 100vh;
+  position: relative;
+
+  .blog-header {
+    height: 7vh;
+    position: sticky;
+    top: 0;
+    left: 0;
+    opacity: 0.8;
+    z-index: 5;
+    overflow: hidden;
+    background-color: map-get($nav, color);
+  }
+
+  .blog-content {
+    min-height: 93vh;
+    // padding: 10px 0px;
+    overflow-x: hidden;
+    margin: 0 auto;
+    .pages {
+      @include pagesLayout();
+      margin: 0;
+      padding: 10px 0;
+      .ant-card {
+        width: 50vw;
+      }
+      .aside {
+        margin-left: $content-side-margin;
+      }
+    }
+  }
+
+  .blog-footer {
+    height: 50px;
+    background-color: map-get($footer, bcColor);
+    color: map-get($footer, color);
+  }
+}
+
+@media screen and (max-width: $hiddenSomeSize) {
+  .layout {
+    .blog-header {
+    }
+    .blog-content {
+      .pages {
+        box-sizing: border-box;
+        padding: 10px;
+        width: 100%;
+        .ant-card {
+          width: 100%;
+        }
+      }
+    }
+    .aside {
+      display: none;
+    }
+  }
+}

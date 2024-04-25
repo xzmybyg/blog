@@ -1,0 +1,47 @@
+#aboutpage {
+  min-height: 85vh;
+  margin-top: 30px;
+  .card {
+    position: relative;
+    width: 50vw;
+    .animal_avatars {
+      position: absolute;
+      top: -50px;
+      right: 0px;
+      z-index: 5;
+      width: 100px;
+    }
+  }
+  .divider {
+    margin-top: 0;
+  }
+  h2 {
+    margin-top: 30px;
+  }
+  ol,
+  ul {
+    margin-left: 50px;
+    font-size: 1rem;
+
+    & > :nth-child(n):not(:last-child) {
+      margin-bottom: 10px;
+    }
+  }
+}
+
+@media screen and (max-width: $hiddenSomeSize) {
+  #aboutpage {
+    .card {
+      width: 100%;
+      .avatar {
+        width: 200px;
+      }
+      .divider {
+        margin-bottom: 5px;
+      }
+      h2 {
+        margin-top: 10px;
+      }
+    }
+  }
+}

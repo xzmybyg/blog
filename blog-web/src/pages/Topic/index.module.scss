@@ -1,0 +1,41 @@
+#topic {
+  position: relative;
+  .topicWrap {
+    width: 50vw;
+    padding: 50px;
+    background-color: #fff;
+    .markdownBody {
+      width: 100%;
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        overflow: initial;
+      }
+    }
+  }
+  .affixNavbar {
+    width: 20vw;
+    margin-left: $content-side-margin;
+    max-height: 50vh;
+    .NavbarCard {
+      width: 300px;
+      height: 500px;
+      overflow: auto;
+    }
+  }
+}
+
+@media screen and (max-width: $hiddenSomeSize) {
+  #topic {
+    .topicWrap {
+      width: 100%;
+      padding: 20px;
+    }
+    .affixNavbar {
+      display: none;
+    }
+  }
+}

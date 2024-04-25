@@ -1,0 +1,32 @@
+.handleComment {
+  h2 {
+    margin-bottom: 10px;
+  }
+  .CommentWrap {
+    display: flex;
+    margin: 10px 0;
+    .avatar {
+      margin-right: 10px;
+    }
+    .contentMain{
+      flex: 1;
+    }
+    .username {
+      color: red;
+      .date {
+        color: #ccc;
+        margin-left: 10px;
+      }
+    }
+    .content {
+      text-indent: 10px;
+      margin: 10px 0;
+    }
+    .replyWrap {
+      .replyItem {
+        display: flex;
+        margin: 20px 0;
+      }
+    }
+  }
+}
