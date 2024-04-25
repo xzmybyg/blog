@@ -1,4 +1,4 @@
 packages:
- - 'blog-web/*'
- - 'blog-admin/*'
- - 'blog-server/*'
+  - 'blog-web/**'
+  - 'blog-server/**'
+  - 'blog-admin/**'
