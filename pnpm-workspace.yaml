@@ -1,0 +1,4 @@
+packages:
+ - 'blog-web/*'
+ - 'blog-admin/*'
+ - 'blog-server/*'
