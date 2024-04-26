@@ -1,13 +1,17 @@
 {
-    "name": "xzmybyg-blog",
-    "description": "一个前端工程师的个人博客",
-    "version": "0.1.0",
-    "private": true,
-    "author": "xzmybyg",
-    "workspaces": ["packages/blog-web", "packages/blog-server"],
-    "devDependencies": {
-        "@types/node": "^20.12.7",
-        "ts-node": "^10.9.2",
-        "typescript": "^5.4.5"
-    }
+  "name": "xzmybyg-blog",
+  "description": "心中没有白月光的个人博客",
+  "version": "0.1.0",
+  "private": true,
+  "author": "xzmybyg",
+  "scripts": {
+    "web": "pnpm --filter blog-web run dev",
+    "server": "pnpm --filter blog-server run dev",
+    "admin": "pnpm --filter blog-admin run dev"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
 }

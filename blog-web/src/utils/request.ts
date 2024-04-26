@@ -8,10 +8,10 @@ const BASE_URL =
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL, // api的base_url
-  timeout: 10000, // 请求超时时间
+  timeout: 5000, // 请求超时时间
 })
 
-let token = useUserStore.getState()?.token || localStorage.getItem("token")
+const token = useUserStore.getState()?.token || localStorage.getItem("token")
 axiosInstance.interceptors.request.use(
   config => {
     if (token) {

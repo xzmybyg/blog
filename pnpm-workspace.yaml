@@ -2,3 +2,5 @@ packages:
   - 'blog-web/**'
   - 'blog-server/**'
   - 'blog-admin/**'
+  - 'blog-components/**'
+  - 'blog-api/**'

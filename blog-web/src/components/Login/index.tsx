@@ -26,7 +26,7 @@ const Login = forwardRef<LoginHandle>((_props, ref) => {
    * 处理表单提交
    */
   const handleSubmit = () => {
-    let sign = haveAccount ? login : register
+    const sign = haveAccount ? login : register
     form.validateFields().then(values => {
       sign(values)
         .then(res => {

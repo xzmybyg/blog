@@ -13,7 +13,6 @@ var linkRouter = require("./routes/link");
 var commentRouter = require("./routes/comment");
 var messageRouter = require("./routes/message");
 var replyRouter = require("./routes/reply");
-const { port } = require('./config/sqlconfig');
 
 var app = express();
 

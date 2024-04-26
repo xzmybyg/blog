@@ -14,6 +14,9 @@
 
 ## 目录结构
 
-前端项目blog-web为前台，blog-admin为后台。
+前端项目
+- blog-web为博客前台
+- blog-admin为后台管理系统
 
-后端项目位于blog-server下。
+后端项目
+- 服务端blog-server下
