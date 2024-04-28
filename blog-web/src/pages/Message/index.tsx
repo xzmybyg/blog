@@ -1,6 +1,5 @@
 // import { useTyped } from "@/hooks"
 import { default as Barrage } from "@/components/Barrage"
-import type { Comment } from "@/types"
 import Style from "./index.module.scss"
 import useUserStore from "@/store/user"
 import { postMessage, getMessage } from "@/apis/lib/message"
@@ -12,7 +11,7 @@ function Message() {
   //   loop: true,
   // })
   const { id } = useUserStore()
-  const [comments, setComments] = useState<Comment[]>([])
+  const [comments, setComments] = useState<TheComment[]>([])
 
   useEffect(() => {
     getMessage().then(res => {

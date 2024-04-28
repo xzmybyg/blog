@@ -3,8 +3,6 @@ import { Suspense } from "react";
 import useStore from "@/store";
 //api引入
 // import { getInfo } from "@/apis";
-//type引入
-import type { RouterType } from "@/types";
 //样式引入
 import "./App.scss";
 import { routerList } from "@/utils";

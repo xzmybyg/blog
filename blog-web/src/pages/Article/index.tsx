@@ -1,7 +1,6 @@
 import dayjs from "dayjs";
 import { List } from "antd";
 import { getAllArticleList } from "@/apis";
-import type { Article } from "@/types";
 
 function Article() {
   const [ArticleList, setArticleList] = useState<Article[]>([]);

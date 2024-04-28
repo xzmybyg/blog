@@ -1,4 +1,4 @@
-export type Store = {
+declare type Store = {
   aticleTotal: number;
   setTotal: (value: number) => void;
   articleList: any[];

@@ -1,4 +1,4 @@
-type baseRouter = {
+declare type baseRouter = {
   path: string;
   icon?: React.ReactElement;
   name: string;
@@ -8,9 +8,9 @@ type baseRouter = {
   showOnNav?: boolean;
 };
 
-type RouterType = baseRouter & {
+declare type RouterType = baseRouter & {
   element: React.ReactElement;
   redirect?: string;
 };
 
-export { RouterType };
+

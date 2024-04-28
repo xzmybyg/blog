@@ -1,5 +1,5 @@
 import { useState, Suspense } from "react";
-import "./App.css";
+import "./App.scss";
 import routerList from "@/utils/router";
 import {
   DesktopOutlined,
@@ -9,9 +9,10 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
+import { JSX } from "react/jsx-runtime";
 
 const { Header, Content, Footer, Sider } = Layout;
-function getItem(label, key, icon, children) {
+function getItem(label: string, key: string, icon: JSX.Element, children?: never[] | undefined) {
   return {
     key,
     icon,

@@ -1,8 +1,6 @@
 //第三方库
 import dayjs from "dayjs"
 import { TagOutlined, PushpinOutlined } from "@ant-design/icons"
-//type引入
-import type { CardProps } from "@/types"
 //样式引入
 import Style from "./index.module.scss"
 

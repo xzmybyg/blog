@@ -1,8 +1,6 @@
 import useStore from "@/store";
 //api引入
 import { getPageArticleList } from "@/apis";
-//type引入
-import type { CardProps } from "@/types";
 
 import { default as ArticleCard } from "@/components/ArticleCard"
 //样式引入
@@ -42,7 +40,7 @@ function Home() {
           current={page}
           defaultPageSize={pageSize}
           total={aticleTotal}
-          onChange={(page, _pageSize) => {
+          onChange={(page) => {
             setPage(page)
           }}
         />

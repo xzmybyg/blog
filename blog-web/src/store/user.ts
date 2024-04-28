@@ -1,11 +1,10 @@
 import { create } from "zustand"
 import { persist, devtools } from "zustand/middleware"
-import type { UserStore } from "@/types"
 
 const useUserStore = create<UserStore>()(
   devtools(
     persist(
-      (set, _get) => ({
+      (set) => ({
         id: null,
         username: "",
         avatar: "",

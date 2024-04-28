@@ -19,20 +19,13 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
     },
     "noImplicitAny": false,
-    "typeRoots": [
-      "./types",
-      "./node_modules/@types"
-    ]
   },
-  "include": ["src", "scripts/create-component.js"],
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
-    }
-  ],
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

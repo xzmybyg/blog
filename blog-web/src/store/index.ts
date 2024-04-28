@@ -1,5 +1,4 @@
 import { create } from "zustand"
-import type { Store } from "@/types"
 
 function expire<T extends object>(
   fn: (set: (args: Partial<T>) => void) => T,

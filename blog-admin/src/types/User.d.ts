@@ -1,4 +1,4 @@
-export type User = {
+declare type User = {
   id: number | null;
   username: string;
   avatar?: string;
@@ -9,14 +9,14 @@ export type User = {
   email?: string;
   token: string;
 };
-export type loginParams = {
+declare type loginParams = {
   username: string;
   password: string;
 };
-export type registerParams = loginParams & {
+declare type registerParams = loginParams & {
   email: string;
 };
-export type UserStore = User & {
+declare type UserStore = User & {
   setId: (value: number | null) => void;
   setUserName: (value: string) => void;
   setAvatar: (value: string) => void;

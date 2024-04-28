@@ -3,7 +3,6 @@ import {
   UnorderedListOutlined,
   UserOutlined,
 } from "@ant-design/icons"
-import type { RouterType } from "@/types"
 import Style from "./index.module.scss"
 import Login from "@/components/Login"
 import useUserStore, { logoutInfo } from "@/store/user"

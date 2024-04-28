@@ -15,5 +15,6 @@ module.exports = {
       { allowConstantExport: true },
     ],
     semi: "off",
+    "@typescript-eslint/no-explicit-any": "off"
   },
 };

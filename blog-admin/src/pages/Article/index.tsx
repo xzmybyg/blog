@@ -1,7 +1,6 @@
 import { Button, Space, Table, Tag } from "antd";
 import { useEffect } from "react";
-// import type { ColumnsType } from "antd/es/table";
-import { getAllArticleList, getPageArticleList } from "@/apis";
+import { getPageArticleList } from "@/apis";
 
 export default function Article() {
   const columns = [
@@ -9,13 +8,13 @@ export default function Article() {
       title: "Id",
       dataIndex: "id",
       key: "id",
-      render: text => <a>{text}</a>,
+      render: (text) => <a>{text}</a>,
     },
     {
       title: "文章标题",
       dataIndex: "title",
       key: "title",
-      render: text => <a>{text}</a>,
+      render: (text) => <a>{text}</a>,
       width: 200,
     },
     {
@@ -27,9 +26,9 @@ export default function Article() {
       title: "label",
       key: "label",
       dataIndex: "label",
-      render: tags => (
+      render: (tags) => (
         <>
-          {tags.map(tag => {
+          {tags.map((tag) => {
             let color = tag.length > 5 ? "geekblue" : "green";
             if (tag === "loser") {
               color = "volcano";
@@ -47,30 +46,30 @@ export default function Article() {
       title: "封面",
       dataIndex: "banner",
       key: "banner",
-      render: banner => <>{banner}</>,
+      render: (banner) => <>{banner}</>,
     },
     {
       title: "置顶",
       dataIndex: "top",
       key: "top",
-      render: topping => <>{topping ? "是" : "否"}</>,
+      render: (topping) => <>{topping ? "是" : "否"}</>,
     },
     {
       title: "创建时间",
       dataIndex: "createDate",
       key: "create_time",
-      render: time => <>{time}</>,
+      render: (time) => <>{time}</>,
     },
     {
       title: "隐藏",
       dataIndex: "hidden",
       key: "hidden",
-      render: hidden => <>{hidden ? "是" : "否"}</>,
+      render: (hidden) => <>{hidden ? "是" : "否"}</>,
     },
     {
       title: "操作",
       key: "action",
-      render: (text, record) => (
+      render: () => (
         <Space>
           <Button>编辑</Button>
           <Button>删除</Button>
@@ -81,7 +80,7 @@ export default function Article() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    getPageArticleList({pageSize:10}).then(res => {
+    getPageArticleList({ pageSize: 10 }).then((res) => {
       console.log(res.data);
       setData(res.data);
     });
@@ -90,7 +89,7 @@ export default function Article() {
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <Table
-        rowKey={record => record.id}
+        rowKey={(record) => record.id}
         columns={columns}
         dataSource={data}
         size="large"

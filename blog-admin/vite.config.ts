@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import react from "@vitejs/plugin-react-swc";
+import path from "path"
 import AutoImport from "unplugin-auto-import/vite";
-import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -10,19 +10,24 @@ export default defineConfig({
     AutoImport({
       imports: [
         "react",
-        "react-router",
+        // "react-router",
         "react-router-dom",
         {
           //配置第三方库的自动引入
           antd: [
-            "Button",
-            "Input",
-            "Flex",
             "Space",
-            "Card",
-            "Tag",
-            "Skeleton",
             "Pagination",
+            "Button",
+            "Table",
+            "Form",
+            "Input",
+            "Modal",
+            "Flex",
+            "Card",
+            "Avatar",
+            "Tag",
+            "Divider",
+            "message",
           ],
           //import {default as axios} from 'axios'
           //import axios from 'axios'
@@ -36,14 +41,16 @@ export default defineConfig({
         "./src/utils/**",
         "./src/types/**",
         "./src/store/**",
+        "./src/apis/**",
       ],
+      dts: "src/auto-imports.d.ts",
     }),
   ],
   css: {
     preprocessorOptions: {
       scss: {
         //引入scss全局变量
-        additionalData: `@import "./src/style/scssConfig.scss";`,
+        additionalData: `@import "@/styleConfig/scssConfig.scss";`,
       },
     },
   },
@@ -54,12 +61,12 @@ export default defineConfig({
     },
   },
   server: {
-    port: 8088,
+    //设置正向代理跨域
     proxy: {
       "/api": {
-        target: "http://127.0.0.1:5000",
+        target: "https://www.xzmybyg.cn/",
         changeOrigin: true,
-        rewrite: path => path.replace(/^\/api/, ""),
+        rewrite: path => path.replace(/^\/api/, "/api"),
       },
     },
   },

@@ -9,7 +9,7 @@ export function getPageArticleList({ page = 1, pageSize = 5 }={}) {
   });
 }
 
-export function getAllArticleList(id) {
+export function getAllArticleList() {
   return axiosInstance.get("/article", {
     params: {
       allList: true,

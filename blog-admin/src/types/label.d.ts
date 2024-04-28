@@ -1,4 +1,4 @@
-export type Label = {
+declare type Label = {
   id: number
   label: string
   color: string

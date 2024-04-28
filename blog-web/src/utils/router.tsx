@@ -6,15 +6,6 @@ const TheLink = lazy(() => import("@/pages/TheLink/index"));
 const Message = lazy(() => import("@/pages/Message/index"));
 const NotFound = lazy(() => import("@/pages/NotFound/index"));
 
-// const Admin = lazy(() => import("@/pages/Admin/index"));
-// const AdminUser = lazy(() => import("@/pages/Admin/User/index"));
-// const AdminLink = lazy(() => import("@/pages/Admin/Link/index"));
-// const AdminComment = lazy(() => import("@/pages/Admin/Comment/index"));
-// const AdminArticle = lazy(() => import("@/pages/Admin/Article/index"));
-// const AdminLabel = lazy(() => import("@/pages/Admin/Label/index"));
-
-import type { RouterType } from "@/types";
-
 import {
   HomeOutlined,
   FileTextOutlined,
