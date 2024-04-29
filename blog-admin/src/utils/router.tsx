@@ -27,6 +27,15 @@ const routerList = [
     },
   },
   {
+    path: "/login",
+    element: <Login />,
+    name: "登录",
+    icon: <PieChartOutlined />,
+    meta: {
+      showOnMenu: true,
+    },
+  },
+  {
     path: "/article",
     element: <Article />,
     name: "文章管理",

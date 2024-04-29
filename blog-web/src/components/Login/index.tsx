@@ -6,7 +6,7 @@ import { login, register } from "@/apis"
 
 interface LoginHandle {
   openModal: () => void
-}
+}setUserInfo
 
 const Login = forwardRef<LoginHandle>((_props, ref) => {
   //是否已有账号

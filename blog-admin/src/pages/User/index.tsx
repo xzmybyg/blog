@@ -77,7 +77,7 @@ export default function User() {
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <Table
-        rowKey={(record) => record.id}
+        rowKey={(record) => record.id || record.username}
         columns={columns}
         dataSource={userList}
         size="large"

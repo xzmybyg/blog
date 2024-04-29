@@ -1,13 +1,17 @@
 import { useState, Suspense } from "react";
 import "./App.scss";
 import routerList from "@/utils/router";
-import { Breadcrumb, Layout, Menu, theme } from "antd";
+import { Breadcrumb, Layout, Menu, Popover, theme } from "antd";
 
 const { Header, Content, Sider } = Layout;
 
 import Loading from "@/pages/Loading";
+import { LoginOutlined, UserOutlined } from "@ant-design/icons";
+
+import useUserStore, { logoutInfo } from "@/store/user";
 
 function App() {
+  const { id, username, nickname, avatar } = useUserStore();
   const navigate = useNavigate();
   const router = useLocation();
   const menuItems = routerList.map((item) => {
@@ -51,6 +55,7 @@ function App() {
         </Sider>
         <Layout>
           <Header
+            className="header"
             style={{
               background: colorBgContainer,
               padding: "5px",
@@ -63,6 +68,25 @@ function App() {
               }}
               items={breadcrumbItem}
             />
+            {id ? (
+              <div>
+                <Popover
+                  placement="bottomRight"
+                  content={<div onClick={logoutInfo}>退出</div>}
+                >
+                  <Avatar
+                    src={avatar}
+                    icon={avatar ? null : <UserOutlined />}
+                  />
+                  <span>{nickname || username}</span>
+                </Popover>
+              </div>
+            ) : (
+              <div>
+                <LoginOutlined />
+                登录
+              </div>
+            )}
           </Header>
           <Content
             style={{

@@ -11,12 +11,12 @@ const axiosInstance = axios.create({
   timeout: 5000, // 请求超时时间
 });
 
-// let token = useStore.getState().token || localStorage.getItem("token");
+const token = useStore.getState().token || localStorage.getItem("token");
 axiosInstance.interceptors.request.use(
   config => {
-    // if (token) {
-    //   config.headers["Authorization"] = token;
-    // }
+    if (token) {
+      config.headers["Authorization"] = token;
+    }
     // 删除重复的请求
     // removePending(config);
     // 如果repeatRequest不配置，那么该请求则不能多次请求
@@ -34,7 +34,7 @@ axiosInstance.interceptors.response.use(
     if (response.status === 200) {
       return response;
     } else {
-      console.error(response.message || response.msg);
+      console.error(response?.data.message || response?.data.msg);
     }
     // 删除重复的请求
     // removePending(response.config);
