@@ -76,5 +76,14 @@ export default defineConfig((mode: ConfigEnv) => {
         },
       },
     },
+    build:{
+      minify: 'terser', // 启用后 terserOptions 配置才有效
+			terserOptions: {
+				compress: {
+					drop_console: true, // 生产环境时移除console
+					drop_debugger: true,
+				},
+			},
+    }
   };
 });

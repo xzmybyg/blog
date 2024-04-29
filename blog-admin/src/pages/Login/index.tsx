@@ -12,8 +12,6 @@ export default function Login() {
     form.validateFields().then((values) => {
       sign(values)
         .then((res) => {
-          console.log(res);
-
           setUserInfo(res.data);
           message.success(haveAccount ? "登录成功" : "注册成功");
           values = { username: values.username, password: values.password };

@@ -5,7 +5,6 @@ export default function User() {
   useEffect(() => {
     getUserList().then((res) => {
       setUserList(res.data);
-      console.log(res);
     });
   }, []);
   const columns = [

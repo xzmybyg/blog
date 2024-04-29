@@ -32,6 +32,7 @@
     "react-markdown": "^9.0.0",
     "react-router-dom": "^6.18.0",
     "source-map-explorer": "^2.5.3",
+    "terser": "^5.30.4",
     "typed.js": "^2.1.0",
     "zustand": "^4.4.7"
   },

@@ -19,6 +19,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.18.0",
     "sass": "^1.69.5",
+    "terser": "^5.30.4",
     "unplugin-auto-import": "^0.16.7",
     "zustand": "^4.4.7"
   },

@@ -4,8 +4,6 @@ export default function Label() {
   const [labelList, setLabelList] = useState<Label[]>([]);
   useEffect(() => {
     getLabelList().then((res) => {
-      console.log(res.data);
-
       setLabelList(res.data);
     });
   }, []);

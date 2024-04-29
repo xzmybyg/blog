@@ -2,7 +2,7 @@ import axios from "axios";
 import useStore from "@/store";
 
 const devBaseUrl = "/api";
-const proBaseUrl = "http://localhost:5000/";
+const proBaseUrl = "/";
 const BASE_URL =
   process.env.NODE_ENV === "development" ? devBaseUrl : proBaseUrl;
 

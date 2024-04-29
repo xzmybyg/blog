@@ -84,7 +84,6 @@ export default function Article() {
 
   useEffect(() => {
     getPageArticleList({ pageSize: 10 }).then((res) => {
-      console.log(res.data);
       setData(res.data);
     });
   }, []);
@@ -94,7 +93,6 @@ export default function Article() {
 
   const showModal = (article: Article) => {
     setCurrentArticle(article);
-    console.log(article);
 
     setIsModalOpen(true);
   };

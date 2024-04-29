@@ -12,8 +12,6 @@ function Article() {
 
   useEffect(() => {
     getAllArticleList().then(res => {
-      console.log(res.data)
-
       setArticleList(res.data)
     })
   }, [])

@@ -5,7 +5,6 @@ export default function Comment() {
   useEffect(() => {
     getCommentList().then((res) => {
       setCommentList(res.data);
-      console.log(res.data);
     });
   }, []);
 
