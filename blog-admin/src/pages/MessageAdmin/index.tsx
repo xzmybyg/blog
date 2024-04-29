@@ -1,12 +1,13 @@
 import dayjs from "dayjs";
 
-export default function TheLink() {
-  const [linkList, setLinkList] = useState<Link[]>([]);
+export default function MessageAdmin() {
+  const [messageList, setMessageList] = useState<Message[]>([]);
   useEffect(() => {
-    getLinkList().then((res) => {
-      setLinkList(res.data);
+    getMessageList().then((res) => {
+      setMessageList(res.data);
     });
   }, []);
+
   const columns = [
     {
       title: "id",
@@ -15,38 +16,20 @@ export default function TheLink() {
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "标题",
-      dataIndex: "title",
-      key: "title",
+      title: "用户id",
+      dataIndex: "user_id",
+      key: "user_id",
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "链接",
-      dataIndex: "url",
-      key: "url",
+      title: "内容",
+      dataIndex: "content",
+      key: "content",
       render: (text) => <a>{text}</a>,
-    },
-    {
-      title: "状态",
-      dataIndex: "state",
-      key: "state",
-      render: (state) => <>{state === 1 ? "通过" : "待审核"}</>,
-    },
-    {
-      title: "描述",
-      dataIndex: "desc",
-      key: "desc",
-      render: (text) => <a>{text}</a>,
-    },
-    {
-      title: "图标",
-      dataIndex: "icon",
-      key: "icon",
-      render: (icon) => <>{icon}</>,
     },
     {
       title: "创建时间",
-      dataIndex: "createDate",
+      dataIndex: "createTime",
       key: "create_time",
       render: (time) => <>{dayjs(time).format("YYYY-MM-DD")}</>,
     },
@@ -61,12 +44,13 @@ export default function TheLink() {
       ),
     },
   ];
+
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <Table
         rowKey={(record) => record.id}
         columns={columns}
-        dataSource={linkList}
+        dataSource={messageList}
         size="large"
         style={{ fontSize: "18px", lineHeight: "2" }}
       />

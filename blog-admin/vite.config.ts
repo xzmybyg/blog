@@ -1,73 +1,78 @@
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv, ConfigEnv } from "vite";
 import react from "@vitejs/plugin-react-swc";
-import path from "path"
+import path from "path";
 import AutoImport from "unplugin-auto-import/vite";
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [
-    react(),
-    AutoImport({
-      imports: [
-        "react",
-        // "react-router",
-        "react-router-dom",
-        {
-          //配置第三方库的自动引入
-          antd: [
-            "Space",
-            "Pagination",
-            "Button",
-            "Table",
-            "Form",
-            "Input",
-            "Modal",
-            "Flex",
-            "Card",
-            "Avatar",
-            "Tag",
-            "Divider",
-            "message",
-          ],
-          //import {default as axios} from 'axios'
-          //import axios from 'axios'
-          axios: [["default", "axios"]],
+export default defineConfig((mode: ConfigEnv) => {
+  const env = loadEnv(mode.mode, process.cwd());
+  return {
+    plugins: [
+      react(),
+      AutoImport({
+        imports: [
+          "react",
+          // "react-router",
+          "react-router-dom",
+          {
+            //配置第三方库的自动引入
+            antd: [
+              "Space",
+              "Pagination",
+              "Button",
+              "Table",
+              "Form",
+              "Input",
+              "Modal",
+              "Flex",
+              "Card",
+              "Avatar",
+              "Tag",
+              "Divider",
+              "message",
+              "Switch",
+            ],
+            //import {default as axios} from 'axios'
+            //import axios from 'axios'
+            axios: [["default", "axios"]],
+          },
+        ],
+        //配置本地目录支持自动引入
+        dirs: [
+          "./src/pages/**",
+          "./src/components/**",
+          "./src/utils/**",
+          "./src/types/**",
+          "./src/store/**",
+          "./src/apis/**",
+        ],
+        dts: "src/types/auto-imports.d.ts",
+      }),
+    ],
+    css: {
+      preprocessorOptions: {
+        scss: {
+          //引入scss全局变量
+          additionalData: `@import "@/styleConfig/scssConfig.scss";`,
         },
-      ],
-      //配置本地目录支持自动引入
-      dirs: [
-        "./src/pages/**",
-        "./src/components/**",
-        "./src/utils/**",
-        "./src/types/**",
-        "./src/store/**",
-        "./src/apis/**",
-      ],
-      dts: "src/auto-imports.d.ts",
-    }),
-  ],
-  css: {
-    preprocessorOptions: {
-      scss: {
-        //引入scss全局变量
-        additionalData: `@import "@/styleConfig/scssConfig.scss";`,
       },
     },
-  },
-  resolve: {
-    //路径映射
-    alias: {
-      "@": path.resolve(__dirname, "src"),
-    },
-  },
-  server: {
-    //设置正向代理跨域
-    proxy: {
-      "/api": {
-        target: "https://www.xzmybyg.cn/",
-        changeOrigin: true,
-        rewrite: path => path.replace(/^\/api/, "/api"),
+    resolve: {
+      //路径映射
+      alias: {
+        "@": path.resolve(__dirname, "src"),
       },
     },
-  },
+    server: {
+      port: env.VITE_PORT as unknown as number,
+      //设置正向代理跨域
+      proxy: {
+        "/api": {
+          target: env.VITE_API_URL,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, "/api"),
+        },
+      },
+    },
+  };
 });

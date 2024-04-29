@@ -51,44 +51,6 @@ const routerList: RouterType[] = [
     icon: <MessageOutlined />,
     name: "留言",
   },
-  // {
-  //   path: "/admin/",
-  //   element: <Admin />,
-  //   name: "管理",
-  //   showOnNav: false,
-  //   children: [
-  //     {
-  //       path: "article",
-  //       element: <AdminArticle />,
-  //       name: "文章管理",
-  //     },
-  //     {
-  //       path: "topic/:id",
-  //       element: <Topic />,
-  //       name: "话题管理",
-  //     },
-  //     {
-  //       path: "user",
-  //       element: <AdminUser />,
-  //       name: "用户管理",
-  //     },
-  //     {
-  //       path: "link",
-  //       element: <AdminLink />,
-  //       name: "友链管理",
-  //     },
-  //     {
-  //       path: "comment",
-  //       element: <AdminComment />,
-  //       name: "留言管理",
-  //     },
-  //     {
-  //       path: "label",
-  //       element: <AdminLabel />,
-  //       name: "标签管理",
-  //     },
-  //   ],
-  // },
   {
     path: "*",
     element: <NotFound />,

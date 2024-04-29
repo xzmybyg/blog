@@ -16,3 +16,20 @@ export function getAllArticleList() {
     },
   });
 }
+
+export function addArticle(data) {
+  return axiosInstance.post("/article", data);
+}
+
+export function deleteArticle(id) {
+  return axiosInstance.delete("/article", {
+    params: {
+      id,
+    },
+  });
+}
+
+export function updateArticle(data) {
+  return axiosInstance.put("/article", data);
+}
+

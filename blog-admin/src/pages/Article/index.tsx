@@ -1,11 +1,12 @@
 import { Button, Space, Table, Tag } from "antd";
 import { useEffect } from "react";
 import { getPageArticleList } from "@/apis";
+import dayjs from "dayjs";
 
 export default function Article() {
   const columns = [
     {
-      title: "Id",
+      title: "id",
       dataIndex: "id",
       key: "id",
       render: (text) => <a>{text}</a>,
@@ -23,22 +24,12 @@ export default function Article() {
       key: "article",
     },
     {
-      title: "label",
+      title: "标签",
       key: "label",
       dataIndex: "label",
       render: (tags) => (
         <>
-          {tags.map((tag) => {
-            let color = tag.length > 5 ? "geekblue" : "green";
-            if (tag === "loser") {
-              color = "volcano";
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag}
-              </Tag>
-            );
-          })}
+          <Tag key={tags}>{tags}</Tag>
         </>
       ),
     },
@@ -52,19 +43,31 @@ export default function Article() {
       title: "置顶",
       dataIndex: "top",
       key: "top",
-      render: (topping) => <>{topping ? "是" : "否"}</>,
+      render: (topping) => (
+        <Switch
+          checkedChildren="是"
+          unCheckedChildren="否"
+          defaultChecked={topping}
+        />
+      ),
     },
     {
       title: "创建时间",
       dataIndex: "createDate",
       key: "create_time",
-      render: (time) => <>{time}</>,
+      render: (time) => <>{dayjs(time).format("YYYY-MM-DD")}</>,
     },
     {
       title: "隐藏",
       dataIndex: "hidden",
       key: "hidden",
-      render: (hidden) => <>{hidden ? "是" : "否"}</>,
+      render: (hidden) => (
+        <Switch
+          checkedChildren="显示"
+          unCheckedChildren="隐藏"
+          defaultChecked={hidden}
+        />
+      ),
     },
     {
       title: "操作",
@@ -77,7 +80,7 @@ export default function Article() {
       ),
     },
   ];
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<Article[]>([]);
 
   useEffect(() => {
     getPageArticleList({ pageSize: 10 }).then((res) => {

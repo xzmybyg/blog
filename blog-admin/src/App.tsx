@@ -1,42 +1,32 @@
 import { useState, Suspense } from "react";
 import "./App.scss";
 import routerList from "@/utils/router";
-import {
-  DesktopOutlined,
-  FileOutlined,
-  PieChartOutlined,
-  TeamOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
-import { JSX } from "react/jsx-runtime";
 
 const { Header, Content, Footer, Sider } = Layout;
-function getItem(label: string, key: string, icon: JSX.Element, children?: never[] | undefined) {
-  return {
-    key,
-    icon,
-    children,
-    label,
-  };
-}
 
-const items = [
-  getItem("文章管理", "1", <PieChartOutlined />),
-  getItem("Topic", "2", <DesktopOutlined />),
-  getItem("用户管理", "3", <UserOutlined />, [
-  ]),
-  getItem("友链管理", "4", <TeamOutlined />, [
-  ]),
-  getItem("标签管理", "5", <FileOutlined />),
-];
+import Loading from "@/pages/Loading";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const navigate = useNavigate();
+  const router = useLocation();
+  const menuItems = routerList.map((item) => {
+    if (item.meta?.showOnMenu === false) return null;
+    return {
+      key: item.path,
+      icon: item.icon,
+      label: item.name,
+    };
+  });
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  const breadcrumbItem = [
+    { title: routerList.find((item) => item.path === router.pathname)?.name },
+  ];
+
   return (
     <>
       <Layout
@@ -47,25 +37,41 @@ function App() {
         <Sider
           collapsible
           collapsed={collapsed}
-          onCollapse={value => setCollapsed(value)}
+          onCollapse={(value) => setCollapsed(value)}
         >
-          <div className="demo-logo-vertical" />
           <Menu
             theme="dark"
             defaultSelectedKeys={["1"]}
             mode="inline"
-            items={items}
+            items={menuItems}
+            onClick={(item) => {
+              navigate(item.key);
+            }}
           />
         </Sider>
         <Layout>
+          <Header
+            style={{
+              background: colorBgContainer,
+              padding: "5px",
+              borderRadius: borderRadiusLG,
+            }}
+          >
+            <Breadcrumb
+              style={{
+                margin: "16px 0",
+              }}
+              items={breadcrumbItem}
+            />
+          </Header>
           <Content
             style={{
               margin: "0 16px",
             }}
           >
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<Loading />}>
               <Routes>
-                {routerList.map(item => (
+                {routerList.map((item) => (
                   <Route
                     key={item.path}
                     path={item.path}

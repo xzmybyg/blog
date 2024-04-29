@@ -1,9 +1,9 @@
 const sqlconfig = {
     host:'localhost',
     user:'root',
-    password:'xzmybyg.127721',
+    password:'mysqlpass',
     port:3306,
-    database:'blogdata'
+    database:'blog'
 }
 
 module.exports = sqlconfig

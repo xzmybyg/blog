@@ -66,4 +66,20 @@ router.put("/", function (req, res, next) {
   //TODO: 更新用户信息
 });
 
+router.get("/usersList", function (req, res, next) {
+  db.query(
+    `SELECT 
+    id,userName,role,avatar,nickname,commentLimit,email
+    FROM user`,
+    (err, data, _field) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send("Server error");
+      } else {
+        res.send(data);
+      }
+    }
+  );
+});
+
 module.exports = router;

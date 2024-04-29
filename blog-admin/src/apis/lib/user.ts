@@ -1,5 +1,3 @@
-import { loginParams, registerParams } from "@/types";
-
 export function login({ username, password }: loginParams) {
   return axiosInstance.get("/users", {
     params: {
@@ -16,5 +14,23 @@ export function register({ username, password, email }: registerParams) {
       password,
       email,
     },
+  });
+}
+
+export function getUserList() {
+  return axiosInstance.get("/users/usersList");
+}
+
+export function deleteUser(id: number) {
+  return axiosInstance.delete("/users", {
+    params: {
+      id,
+    },
+  });
+}
+
+export function updateUser(params: registerParams) {
+  return axiosInstance.put("/users", {
+    params,
   });
 }

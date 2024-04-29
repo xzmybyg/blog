@@ -1,5 +1,5 @@
 declare type User = {
-  id: number | null;
+  id: number;
   username: string;
   avatar?: string;
   role: string;

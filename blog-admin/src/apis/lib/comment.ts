@@ -6,3 +6,23 @@ export function getComment(id: number) {
     },
   });
 }
+
+export function getCommentList() {
+  return axiosInstance.get("/comment/commentList");
+}
+
+export function addComment(data) {
+  return axiosInstance.post("/comment", data);
+}
+
+export function deleteComment(id) {
+  return axiosInstance.delete("/comment", {
+    params: {
+      id,
+    },
+  });
+}
+
+export function updateComment(data) {
+  return axiosInstance.put("/comment", data);
+}
