@@ -6,6 +6,7 @@ import Label from "@/pages/Label";
 import Comment from "@/pages/Comment";
 import MessageAdmin from "@/pages/MessageAdmin";
 import NotFound from "@/pages/NotFound";
+import AddArticle from "@/pages/Article/AddArticle";
 import {
   DesktopOutlined,
   FileOutlined,
@@ -29,6 +30,16 @@ const routerList = [
     path: "/article",
     element: <Article />,
     name: "文章管理",
+    icon: <PieChartOutlined />,
+    meta: {
+      showOnMenu: true,
+    },
+    children: [],
+  },
+  {
+    path: "/addArticle",
+    element: <AddArticle />,
+    name: "新建文章",
     icon: <PieChartOutlined />,
     meta: {
       showOnMenu: true,

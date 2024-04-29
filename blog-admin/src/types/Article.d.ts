@@ -5,6 +5,10 @@ declare type Article = {
   createTime?: Date;
   topping?: boolean;
   label?: string[];
+  banner?: string;
+  hidden?: boolean;
+  article?: string;
+  
 };
 
 declare type CardProps = Article & {

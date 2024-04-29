@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 
 export default function Comment() {
-  const [commentList, setCommentList] = useState<any[]>([]);
+  const [commentList, setCommentList] = useState<CommentAdmin[]>([]);
   useEffect(() => {
     getCommentList().then((res) => {
       setCommentList(res.data);

@@ -3,7 +3,7 @@ import "./App.scss";
 import routerList from "@/utils/router";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content, Sider } = Layout;
 
 import Loading from "@/pages/Loading";
 
