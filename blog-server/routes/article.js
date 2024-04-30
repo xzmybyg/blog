@@ -60,8 +60,7 @@ router.post("/",checkToken, function (req, res, _next) {
 //删除文章
 router.delete("/", checkToken, function (req, res, _next) {
   // 从查询参数中获取文章 ID
-  const { id } = req.body;
-
+  const { id } = req.query;
   // 创建 SQL 查询
   const sql = `
   DELETE FROM article 
