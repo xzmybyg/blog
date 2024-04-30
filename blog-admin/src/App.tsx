@@ -44,7 +44,6 @@ function App() {
           onCollapse={(value) => setCollapsed(value)}
         >
           <Menu
-            theme="dark"
             defaultSelectedKeys={["1"]}
             mode="inline"
             items={menuItems}
@@ -64,7 +63,7 @@ function App() {
           >
             <Breadcrumb
               style={{
-                margin: "16px 0",
+                margin: "5px 10px",
               }}
               items={breadcrumbItem}
             />
@@ -82,7 +81,7 @@ function App() {
                 </Popover>
               </div>
             ) : (
-              <div>
+              <div onClick={()=>{navigate('/login')}}>
                 <LoginOutlined />
                 登录
               </div>
@@ -90,7 +89,7 @@ function App() {
           </Header>
           <Content
             style={{
-              margin: "0 16px",
+              margin: "5px 16px",
             }}
           >
             <Suspense fallback={<Loading />}>

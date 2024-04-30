@@ -6,9 +6,24 @@ import { ConfigProvider } from "antd";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <Router>
-    <ConfigProvider theme={{}}>
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: "#aaa8fb",
+        },
+        components: {
+          Layout: {
+            siderBg: "#aaa8fb",
+            triggerBg: "#aaa8fb",
+          },
+          Menu: {
+            itemBg: "#aaa8fb",
+            itemColor: "#fff",
+          }
+        },
+      }}
+    >
       <App />
     </ConfigProvider>
   </Router>
 );
-
