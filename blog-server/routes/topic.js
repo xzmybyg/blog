@@ -21,13 +21,13 @@ router.get("/", function (req, res, next) {
 
 router.post("/", function (req, res, _next) {
   const { fileName, content } = req.body;
-  // console.log(content, fileName);
+  
   const dir = "public/article";
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
   }
   const filePath = path.join(__dirname, "../public/article/", `${fileName}.md`);
-  // console.log(filePath);
+  
   fs.writeFile(filePath, content, err => {
     if (err) {
       console.error(err);

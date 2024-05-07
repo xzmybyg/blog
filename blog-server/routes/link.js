@@ -22,7 +22,7 @@ router.post("/", function (req, res, _next) {
     describe,
     logo,// 创建日期，默认为当前日期
   } = req.body.params;
-  // console.log(title, url, describe, logo);
+  
   if (!title || !url) {
     return res.status(400).send("Incorrect fields");
   }

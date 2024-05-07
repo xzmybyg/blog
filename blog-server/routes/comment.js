@@ -76,7 +76,6 @@ router.post("/", function (req, res, _next) {
     content,
     createTime = new Date(),
   } = req.body.params;
-  console.log(req.body);
   const sql = `INSERT INTO comment (user_id, article_id, content, createTime) VALUES (?, ?, ?, ?)`;
   db.query(sql, [user_id, article_id, content, createTime], (err, result) => {
     if (err) {
