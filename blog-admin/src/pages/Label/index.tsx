@@ -31,8 +31,8 @@ export default function Label() {
     },
     {
       title: "创建时间",
-      dataIndex: "createDate",
-      key: "create_time",
+      dataIndex: "createTime",
+      key: "createTime",
       render: (time) => <>{dayjs(time).format("YYYY-MM-DD")}</>,
     },
     {

@@ -45,9 +45,9 @@ export default function TheLink() {
       render: (icon) => <>{icon}</>,
     },
     {
-      title: "创建时间",
-      dataIndex: "createDate",
-      key: "create_time",
+      title: "申请时间",
+      dataIndex: "applyTime",
+      key: "applyTime",
       render: (time) => <>{dayjs(time).format("YYYY-MM-DD")}</>,
     },
     {
