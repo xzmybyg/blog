@@ -4,7 +4,7 @@ declare type Article = {
   description?: string;
   createTime?: Date;
   topping?: boolean;
-  label?: string[];
+  label?: string[]|string;
   banner?: string;
   hidden?: boolean;
   article?: string;

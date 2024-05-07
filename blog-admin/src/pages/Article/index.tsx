@@ -41,13 +41,25 @@ export default function Article() {
     },
     {
       title: "置顶",
-      dataIndex: "top",
-      key: "top",
-      render: (topping) => (
+      dataIndex: "topping",
+      key: "topping",
+      render: (topping, record) => (
         <Switch
           checkedChildren="是"
           unCheckedChildren="否"
-          defaultChecked={topping}
+          checked={topping}
+          onChange={(checked) => {
+            updateArticle({
+              id: record.id,
+              topping: checked,
+            }).then(() => {
+              setData(
+                data.map((item) =>
+                  item.id === record.id ? { ...item, topping: checked } : item
+                )
+              );
+            });
+          }}
         />
       ),
     },
@@ -61,11 +73,23 @@ export default function Article() {
       title: "隐藏",
       dataIndex: "hidden",
       key: "hidden",
-      render: (hidden) => (
+      render: (hidden, record) => (
         <Switch
           checkedChildren="显示"
           unCheckedChildren="隐藏"
-          defaultChecked={hidden}
+          checked={hidden}
+          onChange={(checked) => {
+            updateArticle({
+              id: record.id,
+              hidden: checked,
+            }).then(() => {
+              setData(
+                data.map((item) =>
+                  item.id === record.id ? { ...item, hidden: checked } : item
+                )
+              );
+            });
+          }}
         />
       ),
     },
@@ -98,6 +122,10 @@ export default function Article() {
   };
 
   const handleOk = () => {
+    updateArticle(currentArticle).then((res) => {
+      console.log(res);
+    });
+
     setIsModalOpen(false);
   };
 
@@ -132,25 +160,71 @@ export default function Article() {
       >
         <Form labelCol={{ span: 4 }}>
           <Form.Item label="文章标题">
-            <Input value={currentArticle?.title} />
+            <Input
+              value={currentArticle?.title}
+              onChange={(e) =>
+                setCurrentArticle({
+                  ...(currentArticle as Article),
+                  title: e.target.value,
+                })
+              }
+            />
           </Form.Item>
           <Form.Item label="文章内容">
-            <Input.TextArea value={currentArticle?.article} />
+            <Input.TextArea
+              value={currentArticle?.article}
+              onChange={(e) =>
+                setCurrentArticle({
+                  ...(currentArticle as Article),
+                  article: e.target.value,
+                })
+              }
+            />
           </Form.Item>
           <Form.Item label="标签">
-            <Input value={currentArticle?.label} />
+            <Input
+              value={currentArticle?.label}
+              onChange={(e) =>
+                setCurrentArticle({
+                  ...(currentArticle as Article),
+                  label: e.target.value,
+                })
+              }
+            />
           </Form.Item>
           <Form.Item label="文章描述">
-            <Input.TextArea value={currentArticle?.description} />
+            <Input.TextArea
+              value={currentArticle?.description}
+              onChange={(e) =>
+                setCurrentArticle({
+                  ...(currentArticle as Article),
+                  description: e.target.value,
+                })
+              }
+            />
           </Form.Item>
           <Form.Item label="封面">
-            <Input value={currentArticle?.banner} />
+            <Input
+              value={currentArticle?.banner}
+              onChange={(e) =>
+                setCurrentArticle({
+                  ...(currentArticle as Article),
+                  banner: e.target.value,
+                })
+              }
+            />
           </Form.Item>
           <Form.Item label="置顶">
             <Switch
               checkedChildren="是"
               unCheckedChildren="否"
               defaultChecked={currentArticle?.topping}
+              onChange={(checked) =>
+                setCurrentArticle({
+                  ...(currentArticle as Article),
+                  topping: checked,
+                })
+              }
             />
           </Form.Item>
           <Form.Item label="隐藏">
@@ -158,6 +232,12 @@ export default function Article() {
               checkedChildren="显示"
               unCheckedChildren="隐藏"
               defaultChecked={currentArticle?.hidden}
+              onChange={(checked) =>
+                setCurrentArticle({
+                  ...(currentArticle as Article),
+                  hidden: checked,
+                })
+              }
             />
           </Form.Item>
         </Form>
