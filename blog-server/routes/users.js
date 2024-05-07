@@ -69,7 +69,7 @@ router.put("/", function (req, res, next) {
 router.get("/usersList", function (req, res, next) {
   db.query(
     `SELECT 
-    id,userName,role,avatar,nickname,commentLimit,email
+    id,userName,role,avatar,nickname,commentLimit,email,createTime
     FROM user`,
     (err, data, _field) => {
       if (err) {
