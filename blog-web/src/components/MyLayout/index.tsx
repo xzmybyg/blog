@@ -7,7 +7,7 @@ import { Layout, FloatButton } from "antd"
 const { Content, Footer } = Layout
 
 export default function MyLayout({ children }: { children: ReactNode | ReactNode[] }) {
-  const navgate = useNavigate()
+  // const navgate = useNavigate()
   const contentRef = useRef(null)
   return (
     <div className={Style.Layout} ref={contentRef}>
@@ -32,7 +32,7 @@ export default function MyLayout({ children }: { children: ReactNode | ReactNode
         <FloatButton
           tooltip={<div>跳转到后台管理系统</div>}
           onClick={() => {
-            navgate("/admin")
+            window.location.href = import.meta.env.VITE_ADMIN_URL;
           }}
         />
         <FloatButton.BackTop visibilityHeight={0} />
