@@ -5,7 +5,7 @@ const articleDataProcessing = require("../utils/articleDataProcessing");
 const checkToken = require("../middleware/checkToken");
 
 //获取文章列表
-router.get("/",  function (req, res, _next) {
+router.get("/", function (req, res, _next) {
   const { page, pageSize, allList } = req.query;
 
   let sql = allList
@@ -13,9 +13,7 @@ router.get("/",  function (req, res, _next) {
     ORDER BY topping DESC`
     : `SELECT * FROM article 
     ORDER BY topping DESC 
-    LIMIT ${pageSize} OFFSET ${
-        (page - 1) * pageSize
-      }`;
+    LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize}`;
 
   db.query(sql, (err, data, _field) => {
     if (err) {
@@ -29,7 +27,7 @@ router.get("/",  function (req, res, _next) {
 });
 
 //新增文章
-router.post("/",checkToken, function (req, res, _next) {
+router.post("/", checkToken, function (req, res, _next) {
   // 从请求体中获取数据
   const {
     title, // 标题
@@ -83,13 +81,24 @@ router.delete("/", checkToken, function (req, res, _next) {
 router.put("/", checkToken, function (req, res, _next) {
   // 从请求体中获取文章 ID 和新的文章数据
   const { id, ...fields } = req.body;
+  fields.topping = fields.topping ? 1 : 0;
+  fields.hidden = fields.hidden ? 1 : 0;
+  if (Array.isArray(fields.label)) {
+    fields.label = fields.label.join(",");
+  }
 
   // 创建 SQL 查询的 SET 部分
   const setParts = [];
   const values = [];
   for (const [key, value] of Object.entries(fields)) {
-    setParts.push(`${key} = ?`);
-    values.push(value);
+    if (key === "createTime") {
+      setParts.push(`${key} =FROM_UNIXTIME(?)`);
+      const date = new Date(value);
+      values.push(Math.floor(date.getTime() / 1000));
+    } else {
+      setParts.push(`${key} = ?`);
+      values.push(value);
+    }
   }
 
   // 如果没有接收到任何字段，返回错误
@@ -98,8 +107,8 @@ router.put("/", checkToken, function (req, res, _next) {
   }
 
   // 创建 SQL 查询
-  const sql = `UPDATE article 
-  SET ${setParts.join(", ")} 
+  const sql = `UPDATE article
+  SET ${setParts.join(", ")}
   WHERE id = ?`;
 
   // 添加文章 ID 到参数列表
