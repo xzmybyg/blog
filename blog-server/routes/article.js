@@ -12,6 +12,7 @@ router.get("/", function (req, res, _next) {
     ? `SELECT * FROM article 
     ORDER BY topping DESC`
     : `SELECT * FROM article 
+    WHERE hidden = 0
     ORDER BY topping DESC 
     LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize}`;
 
