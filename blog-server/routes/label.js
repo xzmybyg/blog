@@ -30,14 +30,31 @@ router.post("/", function (req, res, _next) {
       console.error(err);
       res.status(500).send("Server error");
     } else {
-      res.status(201).send("Label created");
+      // 获取刚刚插入的标签的 ID
+      db.query("SELECT LAST_INSERT_ID() as id", (err, result) => {
+        if (err) {
+          console.error(err);
+          res.status(500).send("Server error");
+        } else {
+          const id = result[0].id;
+          // 使用刚刚插入的标签的 ID 来查询标签的信息
+          db.query("SELECT * FROM label WHERE id = ?", [id], (err, result) => {
+            if (err) {
+              console.error(err);
+              res.status(500).send("Server error");
+            } else {
+              res.status(201).send(result[0]); // 返回刚刚插入的标签的信息
+            }
+          });
+        }
+      });
     }
   });
 });
 
 router.delete("/", function (req, res, _next) {
   // 从查询参数中获取标签 ID
-  const { id } = req.body;
+  const { id } = req.query;
 
   // 创建 SQL 查询
   const sql = `DELETE FROM label WHERE id = ?`;
@@ -63,8 +80,14 @@ router.put("/", function (req, res, _next) {
   const setParts = [];
   const values = [];
   for (const [key, value] of Object.entries(fields)) {
-    setParts.push(`${key} = ?`);
-    values.push(value);
+    if (key === "createTime") {
+      setParts.push(`${key} =FROM_UNIXTIME(?)`);
+      const date = new Date(value);
+      values.push(Math.floor(date.getTime() / 1000));
+    } else {
+      setParts.push(`${key} = ?`);
+      values.push(value);
+    }
   }
 
   // 如果没有接收到任何字段，返回错误
