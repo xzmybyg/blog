@@ -32,4 +32,17 @@ router.post("/", function (req, res, _next) {
   });
 });
 
+router.delete("/", function (req, res, _next) {
+  const { id } = req.query;
+  const sql = `DELETE FROM message WHERE id = ?`;
+  db.query(sql, [id], (err, _result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send("Server error");
+    } else {
+      res.status(200).send("Message deleted");
+    }
+  });
+});
+
 module.exports = router;
