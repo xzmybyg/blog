@@ -8,6 +8,8 @@ declare type User = {
   role: string;
   email?: string;
   token: string;
+
+  commentLimit?: boolean;
 };
 declare type loginParams = {
   username: string;

@@ -29,8 +29,6 @@ export function deleteUser(id: number) {
   });
 }
 
-export function updateUser(params: registerParams) {
-  return axiosInstance.put("/users", {
-    params,
-  });
+export function updateUser(data) {
+  return axiosInstance.put("/users", data);
 }
