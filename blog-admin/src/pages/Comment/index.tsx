@@ -48,10 +48,9 @@ export default function Comment() {
     {
       title: "操作",
       key: "action",
-      render: () => (
+      render: (record) => (
         <Space size="middle">
-          <a>编辑</a>
-          <a>删除</a>
+          <Button onClick={()=>{handleDeleteComment(record.comment_id)}} danger>删除</Button>
         </Space>
       ),
     },
@@ -85,10 +84,9 @@ export default function Comment() {
       {
         title: "操作",
         key: "action",
-        render: () => (
+        render: (record) => (
           <Space size="middle">
-            <a>编辑</a>
-            <a>删除</a>
+            <Button onClick={()=>{handleDeleteReply(record.reply_id)}} danger>删除</Button>
           </Space>
         ),
       },
@@ -101,6 +99,23 @@ export default function Comment() {
         pagination={false}
       />
     );
+  };
+
+  const handleDeleteComment = (id) => {
+    deleteComment(id).then(() => {
+      setCommentList(commentList.filter((item) => item.comment_id !== id));
+    });
+  };
+
+  const handleDeleteReply = (id) => {
+    deleteReply(id).then(() => {
+      setCommentList(
+        commentList.map((item) => {
+          item.replyList = item.replyList.filter((reply) => reply.reply_id !== id);
+          return item;
+        })
+      );
+    });
   };
 
   return (

@@ -1,4 +1,3 @@
-
 export function getComment(id: number) {
   return axiosInstance.get("/comment", {
     params: {
@@ -25,4 +24,12 @@ export function deleteComment(id) {
 
 export function updateComment(data) {
   return axiosInstance.put("/comment", data);
+}
+
+export function deleteReply(id: number) {
+  return axiosInstance.delete("/reply", {
+    params: {
+      id,
+    },
+  });
 }
