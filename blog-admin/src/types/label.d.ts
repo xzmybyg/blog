@@ -1,6 +1,6 @@
 declare type Label = {
-  id: number
-  label: string
-  color: string
-  createTime: Date
-}
+  id: number | null;
+  label: string;
+  color: string;
+  createTime?: Date;
+};
