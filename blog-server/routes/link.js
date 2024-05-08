@@ -14,15 +14,27 @@ router.get("/", function (req, res, _next) {
   });
 });
 
+router.get("/all", function (req, res, _next) {
+  const sql = `SELECT * FROM link`;
+
+  db.query(sql, (err, data, _field) => {
+    if (err) {
+      console.error(err);
+    } else {
+      res.send(data);
+    }
+  });
+});
+
 router.post("/", function (req, res, _next) {
   // 从请求体中获取标签
   const {
     title,
     url,
     describe,
-    logo,// 创建日期，默认为当前日期
+    logo, // 创建日期，默认为当前日期
   } = req.body.params;
-  
+
   if (!title || !url) {
     return res.status(400).send("Incorrect fields");
   }
@@ -42,7 +54,7 @@ router.post("/", function (req, res, _next) {
 
 router.delete("/", function (req, res, _next) {
   // 从查询参数中获取标签 ID
-  const { id } = req.body;
+  const { id } = req.query;
 
   // 创建 SQL 查询
   const sql = `DELETE FROM link WHERE id = ?`;
