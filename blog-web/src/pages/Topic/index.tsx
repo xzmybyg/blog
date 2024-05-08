@@ -31,13 +31,13 @@ export default function Topic() {
   const [commentList, setCommentList] = useState<any[]>([])
 
   useEffect(() => {
-    getTopic(article_id).then(res => {
+    getTopic(article_id).then((res) => {
       setMdContent(res.data)
     })
   }, [])
 
   useEffect(() => {
-    getComment(article_id).then(res => {
+    getComment(article_id).then((res) => {
       setCommentList(res.data)
     })
   }, [article_id])
@@ -48,7 +48,12 @@ export default function Topic() {
       return
     }
     const params = { ...values, article_id, user_id }
-    addComments(params)
+    addComments(params).then(() => {
+      message.success("评论成功")
+      getComment(article_id).then((res) => {
+        setCommentList(res.data)
+      })
+    })
   }
 
   return (
@@ -71,7 +76,7 @@ export default function Topic() {
               </Button>
             </Form.Item>
           </Form>
-          {commentList.map(item => (
+          {commentList.map((item) => (
             <CommentList key={item.comment_id} data={{ ...item, article_id }} />
           ))}
         </div>
