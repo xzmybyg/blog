@@ -21,3 +21,4 @@ public
 *.sw?
 
 utils/key.js
+config/sqlconfig.js
