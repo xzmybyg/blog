@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 export default function TheLink() {
   const [linkList, setLinkList] = useState<Link[]>([]);
   useEffect(() => {
-    getLinkList().then((res) => {
+    getAllLinkList().then((res) => {
       setLinkList(res.data);
     });
   }, []);
@@ -12,13 +12,13 @@ export default function TheLink() {
       title: "id",
       dataIndex: "id",
       key: "id",
-      render: (text) => <a>{text}</a>,
+      render: (text) => <>{text}</>,
     },
     {
       title: "标题",
       dataIndex: "title",
       key: "title",
-      render: (text) => <a>{text}</a>,
+      render: (text) => <>{text}</>,
     },
     {
       title: "链接",
@@ -30,7 +30,21 @@ export default function TheLink() {
       title: "状态",
       dataIndex: "state",
       key: "state",
-      render: (state) => <>{state === 1 ? "通过" : "待审核"}</>,
+      render: (state) => {
+        let text, color;
+        if (state === 0) {
+          text = "待审核";
+          color = "warning";
+        } else if (state === 1) {
+          text = "已通过";
+          color = "success";
+        } else {
+          text = "已拒绝";
+          color = "error";
+        }
+
+        return <Tag color={color}>{text}</Tag>;
+      },
     },
     {
       title: "描述",
@@ -53,14 +67,65 @@ export default function TheLink() {
     {
       title: "操作",
       key: "action",
-      render: () => (
+      render: (record) => (
         <Space size="middle">
-          <a>编辑</a>
-          <a>删除</a>
+          <Button onClick={() => handleAdopt(record.id)}>通过</Button>
+          <Button onClick={() => handleRefuse(record.id)}>拒绝</Button>
+          <Button onClick={() => handleDeleteLink(record.id)} danger>
+            删除
+          </Button>
         </Space>
       ),
     },
   ];
+
+  const handleAdopt = (id: number) => {
+    updateLink({ id, state: 1 })
+      .then(() => {
+        message.success("通过");
+        setLinkList(
+          linkList.map((item) => {
+            if (item.id === id) {
+              item.state = 1;
+            }
+            return item;
+          })
+        );
+      })
+      .catch(() => {
+        message.error("操作失败");
+      });
+  };
+
+  const handleRefuse = (id: number) => {
+    updateLink({ id, state: 2 })
+      .then(() => {
+        message.success("已拒绝");
+        setLinkList(
+          linkList.map((item) => {
+            if (item.id === id) {
+              item.state = 0;
+            }
+            return item;
+          })
+        );
+      })
+      .catch(() => {
+        message.error("操作失败");
+      });
+  };
+
+  const handleDeleteLink = (id: number) => {
+    deleteLink(id)
+      .then(() => {
+        message.success("删除成功");
+        setLinkList(linkList.filter((item) => item.id !== id));
+      })
+      .catch(() => {
+        message.error("删除失败");
+      });
+  };
+
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <Table

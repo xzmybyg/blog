@@ -1,6 +1,9 @@
-
 export function getLinkList() {
   return axiosInstance.get("/link");
+}
+
+export function getAllLinkList() {
+  return axiosInstance.get("/link/all");
 }
 
 export type FormValues = {
@@ -25,8 +28,6 @@ export function deleteLink(id: number) {
   });
 }
 
-export function updateLink(params: FormValues) {
-  return axiosInstance.put("/link", {
-    params,
-  });
+export function updateLink(data) {
+  return axiosInstance.put("/link", data);
 }
