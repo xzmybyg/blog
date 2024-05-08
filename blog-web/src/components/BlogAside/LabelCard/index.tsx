@@ -1,4 +1,3 @@
-import { Label } from "@/types";
 import Meta from "antd/es/card/Meta";
 
 export default function LabelCard() {

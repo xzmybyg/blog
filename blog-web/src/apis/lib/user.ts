@@ -1,5 +1,3 @@
-import { loginParams, registerParams } from "@/types";
-
 export function login({ username, password }: loginParams) {
   return axiosInstance.get("/users", {
     params: {
