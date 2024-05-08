@@ -6,7 +6,13 @@ import useUserStore from "@/store/user"
 
 const { TextArea } = Input
 
-function CommentList({ data }: { data: any }) {
+function CommentList({
+  data,
+  onDataUpdate,
+}: {
+  data: any
+  onDataUpdate: () => void
+}) {
   const { id: user_id } = useUserStore()
   const {
     comment_id: reply_comment_id,
@@ -34,7 +40,10 @@ function CommentList({ data }: { data: any }) {
     }
 
     const params = { ...values, user_id, reply_comment_id, reply_user_id }
-    addReply(params)
+    addReply(params).then(() => {
+      message.success("回复成功")
+      onDataUpdate()
+    })
   }
 
   return (
@@ -82,6 +91,7 @@ function CommentList({ data }: { data: any }) {
               <MoemoReply
                 item={{ ...item, reply_comment_id }}
                 key={item.reply_id}
+                onDataUpdate={onDataUpdate}
               />
             ))}
           </div>
@@ -91,7 +101,7 @@ function CommentList({ data }: { data: any }) {
   )
 }
 
-function Reply({ item }: { item: any }) {
+function Reply({ item, onDataUpdate }: { item: any; onDataUpdate: () => void }) {
   const { id: user_id } = useUserStore()
   const {
     user_id: reply_user_id,
@@ -119,7 +129,10 @@ function Reply({ item }: { item: any }) {
     }
 
     const params = { ...values, user_id, reply_comment_id, reply_user_id }
-    addReply(params)
+    addReply(params).then(() => {
+      message.success("回复成功")
+      onDataUpdate()
+    })
   }
   return (
     <div>

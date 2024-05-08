@@ -56,6 +56,12 @@ export default function Topic() {
     })
   }
 
+  const handleDataUpdate = () => {
+    getComment(article_id).then((res) => {
+      setCommentList(res.data)
+    })
+  }
+
   return (
     <div id={topic} className={`pages`}>
       <div className={topicWrap}>
@@ -77,7 +83,11 @@ export default function Topic() {
             </Form.Item>
           </Form>
           {commentList.map((item) => (
-            <CommentList key={item.comment_id} data={{ ...item, article_id }} />
+            <CommentList
+              key={item.comment_id}
+              data={{ ...item, article_id }}
+              onDataUpdate={handleDataUpdate}
+            />
           ))}
         </div>
       </div>
