@@ -36,14 +36,19 @@ export default function MessageAdmin() {
     {
       title: "操作",
       key: "action",
-      render: () => (
+      render: (record) => (
         <Space size="middle">
-          <a>编辑</a>
-          <a>删除</a>
+          <Button onClick={() => handleDelete(record.id)}>删除</Button>
         </Space>
       ),
     },
   ];
+
+  const handleDelete = (id) => {
+    deleteMessage(id).then(() => {
+      setMessageList(messageList.filter((item) => item.id !== id));
+    });
+  };
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
