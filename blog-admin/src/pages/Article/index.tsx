@@ -1,7 +1,7 @@
-import { Button, Space, Table, Tag } from "antd";
-import { useEffect } from "react";
-import { getPageArticleList } from "@/apis";
-import dayjs from "dayjs";
+import { Button, Select, Space, Table, Tag } from "antd"
+import { useEffect } from "react"
+import { getPageArticleList } from "@/apis"
+import dayjs from "dayjs"
 
 export default function Article() {
   const columns = [
@@ -57,8 +57,8 @@ export default function Article() {
                 data.map((item) =>
                   item.id === record.id ? { ...item, topping: checked } : item
                 )
-              );
-            });
+              )
+            })
           }}
         />
       ),
@@ -87,8 +87,8 @@ export default function Article() {
                 data.map((item) =>
                   item.id === record.id ? { ...item, hidden: checked } : item
                 )
-              );
-            });
+              )
+            })
           }}
         />
       ),
@@ -103,41 +103,50 @@ export default function Article() {
         </Space>
       ),
     },
-  ];
-  const [data, setData] = useState<Article[]>([]);
+  ]
+  const [data, setData] = useState<Article[]>([])
 
   useEffect(() => {
     getPageArticleList({ pageSize: 10 }).then((res) => {
-      setData(res.data);
-    });
-  }, []);
+      setData(res.data)
+    })
+  }, [])
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentArticle, setCurrentArticle] = useState<Article | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [currentArticle, setCurrentArticle] = useState<Article | null>(null)
 
   const showModal = (article: Article) => {
-    setCurrentArticle(article);
+    setCurrentArticle(article)
 
-    setIsModalOpen(true);
-  };
+    setIsModalOpen(true)
+  }
 
   const handleOk = () => {
     updateArticle(currentArticle).then((res) => {
-      console.log(res);
-    });
+      console.log(res)
+    })
 
-    setIsModalOpen(false);
-  };
+    setIsModalOpen(false)
+  }
 
   const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+    setIsModalOpen(false)
+  }
 
   const delArticle = (id: number) => {
     deleteArticle(id).then((res) => {
-      console.log(res);
-    });
-  };
+      console.log(res)
+    })
+  }
+
+  useEffect(() => {
+    getArticleFiles().then((res) => {
+      console.log(res)
+      setArticleFileList(res.data)
+    })
+  }, [])
+
+  const [articleFileList, setArticleFileList] = useState<string[]>([])
 
   return (
     <div>
@@ -170,13 +179,18 @@ export default function Article() {
               }
             />
           </Form.Item>
-          <Form.Item label="文章内容">
-            <Input.TextArea
+          <Form.Item label="文章文件">
+            <Select
+              placeholder="新建文章"
               value={currentArticle?.article}
+              options={articleFileList.map((item) => ({
+                label: item,
+                value: item,
+              }))}
               onChange={(e) =>
                 setCurrentArticle({
                   ...(currentArticle as Article),
-                  article: e.target.value,
+                  article: e,
                 })
               }
             />
@@ -243,5 +257,5 @@ export default function Article() {
         </Form>
       </Modal>
     </div>
-  );
+  )
 }
