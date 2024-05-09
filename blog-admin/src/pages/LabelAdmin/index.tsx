@@ -1,7 +1,7 @@
 import { ColorPicker } from "antd";
 import dayjs from "dayjs";
 
-export default function Label() {
+export default function LabelAdmin() {
   const [labelList, setLabelList] = useState<Label[]>([]);
   useEffect(() => {
     getLabelList().then((res) => {

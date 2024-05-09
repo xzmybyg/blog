@@ -2,6 +2,7 @@ import useUserStore from "@/store/user"
 import "./index.scss"
 import { LoginOutlined, UserOutlined } from "@ant-design/icons"
 import { Breadcrumb, Layout, Popover, theme } from "antd"
+import routes from "@/router/routes"
 const { Header } = Layout
 
 export default function AdminHeader() {
@@ -13,7 +14,7 @@ export default function AdminHeader() {
   } = theme.useToken()
 
   const breadcrumbItem = [
-    { title: routerList.find((item) => item.path === router.pathname)?.name },
+    { title: routes.find((item) => item.path === router.pathname)?.name },
   ]
 
   return (
