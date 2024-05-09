@@ -19,6 +19,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           Menu: {
             itemBg: "#aaa8fb",
             itemColor: "#fff",
+            itemSelectedColor: "#000",
           }
         },
       }}
