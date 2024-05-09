@@ -6,7 +6,7 @@ import Label from "@/pages/Label";
 import Comment from "@/pages/Comment";
 import MessageAdmin from "@/pages/MessageAdmin";
 import NotFound from "@/pages/NotFound";
-import AddArticle from "@/pages/Article/AddArticle";
+import AddArticle from "@/pages/Article/AddArticle/AddArticle";
 import {
   DesktopOutlined,
   FileOutlined,
