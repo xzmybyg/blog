@@ -38,7 +38,7 @@ export default function AdminLayout({ children }) {
           onCollapse={(value) => setCollapsed(value)}
         >
           <Menu
-            defaultSelectedKeys={["1"]}
+            selectedKeys={[location.pathname]}
             mode="inline"
             items={menuItems}
             onClick={(item) => {
