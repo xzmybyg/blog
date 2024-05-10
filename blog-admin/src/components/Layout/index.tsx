@@ -25,6 +25,17 @@ export default function AdminLayout({ children }) {
   })
   const [collapsed, setCollapsed] = useState(false)
 
+  const openKeys = (menuList: any[]) => {
+    const openKeys: string[] = []
+
+    menuList.forEach((item) => {
+      if (item?.children?.length > 0) {
+        openKeys.push(item.key)
+      }
+    })
+    return openKeys
+  }
+
   return (
     <>
       <Layout
@@ -41,6 +52,7 @@ export default function AdminLayout({ children }) {
             selectedKeys={[location.pathname]}
             mode="inline"
             items={menuItems}
+            openKeys={openKeys(menuItems)}
             onClick={(item) => {
               navigate(item.key)
             }}
