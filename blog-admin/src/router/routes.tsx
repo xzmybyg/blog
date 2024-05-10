@@ -50,6 +50,7 @@ const routes = [
     name: "文章管理",
     icon: "icon-wenzhang",
     component: SecondRoute, //这样只是导入A组件，并非执行  <A/> 这样才算调用执行
+    // component: lazy(() => import("@/components/SecondRoute")), //这样只是导入A组件，并非执行  <A/> 这样才算调用执行
     meta: {
       showOnMenu: true,
       level: 1,
@@ -112,7 +113,7 @@ const routes = [
     name: "登录",
     icon: "icon-denglu1",
     meta: {
-      showOnMenu: true,
+      showOnMenu: false,
     },
   },
   {
