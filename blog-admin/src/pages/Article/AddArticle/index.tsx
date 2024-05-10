@@ -42,6 +42,10 @@ export default function AddArticle() {
 
   const [article, setArticle] = useState("")
 
+  // const handleTestUploadQiniu = ()=>{
+  //   UploadArticleQiniu({fileName:article})
+  // }
+
   return (
     <div id="addArticle">
       <Form>

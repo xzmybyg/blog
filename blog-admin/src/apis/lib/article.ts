@@ -39,3 +39,7 @@ export function uploadArticleFile(data) {
 export function getArticleFiles() {
   return axiosInstance.get("/article/articles")
 }
+
+export function UploadArticleQiniu(data) {
+  return axiosInstance.post("/qiniu", data)
+}
