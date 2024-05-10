@@ -1,6 +1,5 @@
 import useUserStore from "@/store/user"
 import "./index.scss"
-import { LoginOutlined, UserOutlined } from "@ant-design/icons"
 import { Breadcrumb, Layout, Popover, theme } from "antd"
 import routes from "@/router/routes"
 const { Header } = Layout
@@ -38,7 +37,7 @@ export default function AdminHeader() {
             placement="bottomRight"
             content={<div onClick={logoutInfo}>退出</div>}
           >
-            <Avatar src={avatar} icon={avatar ? null : <UserOutlined />} />
+            <Avatar src={avatar} icon={avatar ? null : <i className="iconfont icon-tuichu" />} />
             <span>{nickname || username}</span>
           </Popover>
         </div>
@@ -48,7 +47,7 @@ export default function AdminHeader() {
             navigate("/login")
           }}
         >
-          <LoginOutlined />
+          <i className="iconfont icon-denglu1" />
           登录
         </div>
       )}

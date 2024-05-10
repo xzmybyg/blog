@@ -4,21 +4,12 @@ import { lazy } from "react"
 
 import SecondRoute from "@/components/SecondRoute"
 
-import {
-  DesktopOutlined,
-  FileOutlined,
-  HomeOutlined,
-  PieChartOutlined,
-  TeamOutlined,
-  UserOutlined,
-} from "@ant-design/icons"
-
 //文章版块的二级路由
 const articleRoutes = [
   {
     path: "/article/",
     name: "文章列表",
-    icon: <DesktopOutlined />,
+    icon: "icon-liebiao",
     component: lazy(
       () => import(/* webpackChunkName:"Article" */ "@/pages/Article")
     ),
@@ -29,7 +20,7 @@ const articleRoutes = [
   {
     path: "/article/addArticle",
     name: "添加文章",
-    icon: <PieChartOutlined />,
+    icon: "icon-bianjiwenzhang_huaban",
     component: lazy(
       () =>
         import(/* webpackChunkName:"Article" */ "@/pages/Article/AddArticle")
@@ -45,13 +36,13 @@ const routes = [
   {
     path: "/",
     name: "首页",
-    icon: <HomeOutlined />,
+    icon: "icon-shouye",
     component: lazy(() => import("@/pages/Home")), //由于遇到Navigate直接跳转，所以要用函数包起来，等匹配的时候执行
   },
   {
     path: "/article",
     name: "文章管理",
-    icon: <PieChartOutlined />,
+    icon: "icon-wenzhang",
     component: SecondRoute, //这样只是导入A组件，并非执行  <A/> 这样才算调用执行
     meta: {},
     children: articleRoutes,
@@ -59,14 +50,14 @@ const routes = [
   {
     path: "/user",
     name: "用户管理",
-    icon: <DesktopOutlined />,
+    icon: "icon-yonghuguanli",
     component: lazy(() => import("@/pages/User")), // 单独打包一个JS 按需导入 懒加载
     meta: {},
   },
   {
     path: "/link",
     name: "友链管理",
-    icon: <UserOutlined />,
+    icon: "icon-lianjie",
     component: lazy(() => import("@/pages/TheLink")), // 单独打包一个JS 按需导入 懒加载
     meta: {},
   },
@@ -74,7 +65,7 @@ const routes = [
     path: "/label",
     component: lazy(() => import("@/pages/LabelAdmin")),
     name: "标签管理",
-    icon: <TeamOutlined />,
+    icon: "icon-biaoqian",
     meta: {
       showOnMenu: true,
     },
@@ -83,7 +74,7 @@ const routes = [
     path: "/comment",
     component: lazy(() => import("@/pages/Comment")),
     name: "评论管理",
-    icon: <FileOutlined />,
+    icon: "icon-liuyan",
     meta: {
       showOnMenu: true,
     },
@@ -92,7 +83,7 @@ const routes = [
     path: "/message",
     component: lazy(() => import("@/pages/MessageAdmin")),
     name: "留言管理",
-    icon: <FileOutlined />,
+    icon: "icon-liuyan",
     meta: {
       showOnMenu: true,
     },
@@ -101,7 +92,7 @@ const routes = [
     path: "/login",
     component: lazy(() => import("@/pages/Login")),
     name: "登录",
-    icon: <PieChartOutlined />,
+    icon: "icon-denglu1",
     meta: {
       showOnMenu: true,
     },
