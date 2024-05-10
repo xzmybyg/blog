@@ -9,6 +9,7 @@ import {
 } from "react-router-dom"
 //路由懒加载 需要Suspense组件配合才能实现
 import { Suspense } from "react"
+import AdminLayout from "@/components/Layout"
 
 /* 统一渲染的组件：在这里可以做一些事情，「例如权限/登录态校验，传递路由信息的属性...」 */
 const Element = function Element(props) {
@@ -21,12 +22,25 @@ const Element = function Element(props) {
 
   //最后要把Component进行渲染
   return (
-    <Component
-      navigate={navigate}
-      location={location}
-      params={params}
-      usp={usp}
-    />
+    <>
+      {props.name === "登录" || props.meta.level > 1 ? (
+        <Component
+          navigate={navigate}
+          location={location}
+          params={params}
+          usp={usp}
+        />
+      ) : (
+        <AdminLayout>
+          <Component
+            navigate={navigate}
+            location={location}
+            params={params}
+            usp={usp}
+          />
+        </AdminLayout>
+      )}
+    </>
   )
 }
 

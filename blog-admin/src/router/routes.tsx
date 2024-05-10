@@ -15,6 +15,7 @@ const articleRoutes = [
     ),
     meta: {
       showOnMenu: true,
+      level: 2,
     },
   },
   {
@@ -27,6 +28,7 @@ const articleRoutes = [
     ), ///* webpackChunkName:"Article" */3个组件打包在一起
     meta: {
       showOnMenu: true,
+      level: 2,
     },
   },
 ]
@@ -38,13 +40,20 @@ const routes = [
     name: "首页",
     icon: "icon-shouye",
     component: lazy(() => import("@/pages/Home")), //由于遇到Navigate直接跳转，所以要用函数包起来，等匹配的时候执行
+    meta: {
+      showOnMenu: true,
+      level: 1,
+    },
   },
   {
     path: "/article",
     name: "文章管理",
     icon: "icon-wenzhang",
     component: SecondRoute, //这样只是导入A组件，并非执行  <A/> 这样才算调用执行
-    meta: {},
+    meta: {
+      showOnMenu: true,
+      level: 1,
+    },
     children: articleRoutes,
   },
   {
@@ -52,14 +61,20 @@ const routes = [
     name: "用户管理",
     icon: "icon-yonghuguanli",
     component: lazy(() => import("@/pages/User")), // 单独打包一个JS 按需导入 懒加载
-    meta: {},
+    meta: {
+      showOnMenu: true,
+      level: 1,
+    },
   },
   {
     path: "/link",
     name: "友链管理",
     icon: "icon-lianjie",
     component: lazy(() => import("@/pages/TheLink")), // 单独打包一个JS 按需导入 懒加载
-    meta: {},
+    meta: {
+      showOnMenu: true,
+      level: 1,
+    },
   },
   {
     path: "/label",
@@ -68,6 +83,7 @@ const routes = [
     icon: "icon-biaoqian",
     meta: {
       showOnMenu: true,
+      level: 1,
     },
   },
   {
@@ -77,6 +93,7 @@ const routes = [
     icon: "icon-liuyan",
     meta: {
       showOnMenu: true,
+      level: 1,
     },
   },
   {
@@ -86,6 +103,7 @@ const routes = [
     icon: "icon-liuyan",
     meta: {
       showOnMenu: true,
+      level: 1,
     },
   },
   {
