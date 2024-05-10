@@ -10,7 +10,7 @@ router.get("/", function (req, res, next) {
   const { username, password } = req.query;
   db.query(
     `SELECT 
-    id,userName,role,avatar,nickname,commentLimit,email
+    id,username,role,avatar,nickname,commentLimit,email
     FROM user
     WHERE username='${username}' AND password='${password}'`,
     (err, data, _field) => {

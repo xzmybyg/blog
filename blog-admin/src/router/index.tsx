@@ -11,14 +11,26 @@ import {
 import { Suspense } from "react"
 import AdminLayout from "@/components/Layout"
 
+import useUserStore from "@/store/user"
+
 /* 统一渲染的组件：在这里可以做一些事情，「例如权限/登录态校验，传递路由信息的属性...」 */
 const Element = function Element(props) {
   const { component: Component } = props
+  const { id, username, token } = useUserStore()
+
   //特殊事情： 把路由信息先获取到，最后基于属性传递给组件「这样只要是基于<Route>匹配渲染的组件「不管是类组件还是函数组件」都可以基于属性获取到路由信息」
   const navigate = useNavigate(),
     location = useLocation(),
     params = useParams(),
     [usp] = useSearchParams()
+
+  useEffect(() => {
+    console.log(id, username, token)
+
+    if (!id) {
+      navigate("/login")
+    }
+  }, [id, username])
 
   //最后要把Component进行渲染
   return (

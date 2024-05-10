@@ -51,11 +51,11 @@ declare type CommentAdmin = {
     nickname: string;
     reply_id: number;
     reply_to_nickname: string;
-    reply_to_userName: string;
+    reply_to_username: string;
     reply_to_user_id: number;
-    userName: string;
+    username: string;
     user_id: number;
-    userName: string;
+    username: string;
     user_id: number;
   }[];
 };

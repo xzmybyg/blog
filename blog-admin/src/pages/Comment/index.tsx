@@ -29,8 +29,8 @@ export default function Comment() {
     },
     {
       title: "评论用户",
-      dataIndex: "userName",
-      key: "userName",
+      dataIndex: "username",
+      key: "username",
       render: (text) => <a>{text}</a>,
     },
     {
@@ -65,8 +65,8 @@ export default function Comment() {
       },
       {
         title: "回复用户",
-        dataIndex: "userName",
-        key: "userName",
+        dataIndex: "username",
+        key: "username",
         render: (text) => <a>{text}</a>,
       },
       {

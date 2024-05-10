@@ -14,7 +14,7 @@ function transformData(data) {
         like: cur.like,
         createTime: cur.createTime,
         user_id: cur.user_id,
-        userName: cur.userName,
+        username: cur.username,
         avatar: cur.avatar,
         nickname: cur.user_nickName,
         replyList: [],
@@ -30,11 +30,11 @@ function transformData(data) {
       content: cur.reply_content,
       createTime: cur.reply_createTime,
       user_id: cur.reply_user_id,
-      userName: cur.reply_userName,
+      username: cur.reply_username,
       avatar: cur.reply_userAvatar,
       nickname: cur.reply_userNickName,
       reply_to_user_id: cur.reply_to_user_id,
-      reply_to_userName: cur.reply_to_userName,
+      reply_to_username: cur.reply_to_username,
       reply_to_nickname: cur.reply_to_nickname,
     });
     return acc;
@@ -44,13 +44,13 @@ function transformData(data) {
 router.get("/", function (req, res, _next) {
   const { id } = req.query;
 
-  // const sql = `SELECT c.*, u.id, u.userName,u.avatar FROM comment c LEFT JOIN user u ON u.id = c.user_id WHERE c.article_id = ?;`;
+  // const sql = `SELECT c.*, u.id, u.username,u.avatar FROM comment c LEFT JOIN user u ON u.id = c.user_id WHERE c.article_id = ?;`;
   const sql = `select 
   comment.id,comment.content,comment.like,comment.createTime,
-  user.id user_id,user.userName,user.avatar,user.nickname user_nickName,
+  user.id user_id,user.username,user.avatar,user.nickname user_nickName,
   reply.id reply_id,reply.content reply_content,reply.createTime reply_createTime,
-  replyUser.id reply_user_id, replyUser.userName reply_userName, replyUser.avatar reply_userAvatar, replyUser.nickname reply_userNickName,
-  replyTo.id reply_to_user_id, replyTo.userName reply_to_userName,replyTo.nickname reply_to_nickname,replyTo.avatar reply_to_userAvatar, replyTo.nickname reply_to_userNickName
+  replyUser.id reply_user_id, replyUser.username reply_username, replyUser.avatar reply_userAvatar, replyUser.nickname reply_userNickName,
+  replyTo.id reply_to_user_id, replyTo.username reply_to_username,replyTo.nickname reply_to_nickname,replyTo.avatar reply_to_userAvatar, replyTo.nickname reply_to_userNickName
   from comment 
   left join user on user.id = comment.user_id 
   left join reply on comment.id = reply.reply_comment_id 
@@ -124,10 +124,10 @@ router.delete("/", function (req, res, _next) {
 router.get("/commentList", function (req, res, _next) {
   const sql = `select 
   comment.id,comment.content,comment.like,comment.createTime,comment.article_id,
-  user.id user_id,user.userName,user.avatar,user.nickname user_nickName,
+  user.id user_id,user.username,user.avatar,user.nickname user_nickName,
   reply.id reply_id,reply.content reply_content,reply.createTime reply_createTime,
-  replyUser.id reply_user_id, replyUser.userName reply_userName, replyUser.avatar reply_userAvatar, replyUser.nickname reply_userNickName,
-  replyTo.id reply_to_user_id, replyTo.userName reply_to_userName,replyTo.nickname reply_to_nickname,replyTo.avatar reply_to_userAvatar, replyTo.nickname reply_to_userNickName,
+  replyUser.id reply_user_id, replyUser.username reply_username, replyUser.avatar reply_userAvatar, replyUser.nickname reply_userNickName,
+  replyTo.id reply_to_user_id, replyTo.username reply_to_username,replyTo.nickname reply_to_nickname,replyTo.avatar reply_to_userAvatar, replyTo.nickname reply_to_userNickName,
   comment_article.id comment_to_article_id, comment_article.title comment_to_article_title
   from comment 
   left join user on user.id = comment.user_id 
