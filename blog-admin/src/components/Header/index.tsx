@@ -12,9 +12,26 @@ export default function AdminHeader() {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken()
 
-  const breadcrumbItem = [
-    { title: routes.find((item) => item.path === router.pathname)?.name },
-  ]
+  const getBreadcrumbItems = (currentPath: string): { title: string }[] => {
+    const pathnames = currentPath.split("/").filter((x) => x)
+
+    const breadcrumbItems: { title: string }[] = []
+    let list = routes
+
+    for (let i = 0; i < pathnames.length; i++) {
+      const routePath = "/" + pathnames.slice(0, i + 1).join("/")
+      const route = list.find((route) => route.path === routePath)
+
+      if (route) {
+        breadcrumbItems.push({ title: route.name })
+        if (route.children) {
+          list = route.children
+        }
+      }
+    }
+
+    return breadcrumbItems
+  }
 
   return (
     <Header
@@ -29,7 +46,7 @@ export default function AdminHeader() {
         style={{
           margin: "5px 10px",
         }}
-        items={breadcrumbItem}
+        items={getBreadcrumbItems(router.pathname)}
       />
       {id ? (
         <div>
@@ -37,7 +54,10 @@ export default function AdminHeader() {
             placement="bottomRight"
             content={<div onClick={logoutInfo}>退出</div>}
           >
-            <Avatar src={avatar} icon={avatar ? null : <i className="iconfont icon-tuichu" />} />
+            <Avatar
+              src={avatar}
+              icon={avatar ? null : <i className="iconfont icon-tuichu" />}
+            />
             <span>{nickname || username}</span>
           </Popover>
         </div>
