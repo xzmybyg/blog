@@ -2,7 +2,7 @@ var express = require("express")
 var router = express.Router()
 const db = require("../utils/mysqlUtils")
 const articleDataProcessing = require("../utils/articleDataProcessing")
-const checkToken = require("../middleware/checkToken")
+const checkRole = require("../middleware/checkRole")
 const fs = require("fs")
 const path = require('path');
 
@@ -30,7 +30,7 @@ router.get("/", function (req, res, _next) {
 })
 
 //新增文章
-router.post("/", checkToken, function (req, res, _next) {
+router.post("/", checkRole, function (req, res, _next) {
   // 从请求体中获取数据
   const {
     title, // 标题
@@ -59,7 +59,7 @@ router.post("/", checkToken, function (req, res, _next) {
 })
 
 //删除文章
-router.delete("/", checkToken, function (req, res, _next) {
+router.delete("/", checkRole, function (req, res, _next) {
   // 从查询参数中获取文章 ID
   const { id } = req.query
   // 创建 SQL 查询
@@ -81,7 +81,7 @@ router.delete("/", checkToken, function (req, res, _next) {
 })
 
 //修改文章
-router.put("/", checkToken, function (req, res, _next) {
+router.put("/", checkRole, function (req, res, _next) {
   // 从请求体中获取文章 ID 和新的文章数据
   const { id, ...fields } = req.body
   fields.topping = fields.topping ? 1 : 0
@@ -130,7 +130,8 @@ router.put("/", checkToken, function (req, res, _next) {
   })
 })
 
-router.post("/upload", checkToken, function (req, res, _next) {
+//上传文章
+router.post("/upload", checkRole, function (req, res, _next) {
   // 从请求体中获取文章 ID 和新的文章数据
   const { title, content } = req.body
 
@@ -144,6 +145,7 @@ router.post("/upload", checkToken, function (req, res, _next) {
   })
 })
 
+//获取已有文章列表
 router.get("/articles", function (req, res, _next) {
   const articlePath = path.join(process.cwd(), './public/article');
 

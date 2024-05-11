@@ -1,12 +1,12 @@
-var express = require("express");
-var router = express.Router();
-const db = require("../utils/mysqlUtils");
+var express = require("express")
+var router = express.Router()
+const db = require("../utils/mysqlUtils")
+const checkRole = require("../middleware/checkRole")
+const checkToken = require("../middleware/checkToken")
 
 function transformData(data) {
   return data.reduce((acc, cur) => {
-    let commentIndex = acc.findIndex(
-      (comment) => comment.comment_id === cur.id
-    );
+    let commentIndex = acc.findIndex((comment) => comment.comment_id === cur.id)
     if (commentIndex === -1) {
       acc.push({
         comment_id: cur.id,
@@ -21,10 +21,10 @@ function transformData(data) {
         article_id: cur.article_id,
         comment_to_article_id: cur.comment_to_article_id,
         comment_to_article_title: cur.comment_to_article_title,
-      });
-      commentIndex = acc.length - 1;
+      })
+      commentIndex = acc.length - 1
     }
-    if (!cur.reply_id) return acc;
+    if (!cur.reply_id) return acc
     acc[commentIndex].replyList.push({
       reply_id: cur.reply_id,
       content: cur.reply_content,
@@ -36,13 +36,13 @@ function transformData(data) {
       reply_to_user_id: cur.reply_to_user_id,
       reply_to_username: cur.reply_to_username,
       reply_to_nickname: cur.reply_to_nickname,
-    });
-    return acc;
-  }, []);
+    })
+    return acc
+  }, [])
 }
 
 router.get("/", function (req, res, _next) {
-  const { id } = req.query;
+  const { id } = req.query
 
   // const sql = `SELECT c.*, u.id, u.username,u.avatar FROM comment c LEFT JOIN user u ON u.id = c.user_id WHERE c.article_id = ?;`;
   const sql = `select 
@@ -56,31 +56,31 @@ router.get("/", function (req, res, _next) {
   left join reply on comment.id = reply.reply_comment_id 
   left join user replyUser on reply.user_id = replyUser.id
   left join user replyTo on reply.reply_user_id = replyTo.id
-  where comment.article_id = ?;`;
+  where comment.article_id = ?;`
 
   db.query(sql, [id], (err, data, _field) => {
     if (err) {
-      console.error(err);
+      console.error(err)
     } else {
-      const dataList = transformData(data);
-      res.send(dataList);
+      const dataList = transformData(data)
+      res.send(dataList)
       // res.send(data);
     }
-  });
-});
+  })
+})
 
-router.post("/", function (req, res, _next) {
+router.post("/", checkToken, function (req, res, _next) {
   const {
     user_id,
     article_id,
     content,
     createTime = new Date(),
-  } = req.body.params;
-  const sql = `INSERT INTO comment (user_id, article_id, content, createTime) VALUES (?, ?, ?, ?)`;
+  } = req.body.params
+  const sql = `INSERT INTO comment (user_id, article_id, content, createTime) VALUES (?, ?, ?, ?)`
   db.query(sql, [user_id, article_id, content, createTime], (err, result) => {
     if (err) {
-      console.error(err);
-      res.status(500).send("Server error");
+      console.error(err)
+      res.status(500).send("Server error")
     } else {
       const data = {
         id: result.insertId,
@@ -88,38 +88,38 @@ router.post("/", function (req, res, _next) {
         article_id,
         content,
         createTime,
-      };
-      res.status(200).send(data);
+      }
+      res.status(200).send(data)
     }
-  });
+  })
   // res.send("ok");
-});
+})
 
 router.put("/", function (req, res, _next) {
-  const { id, like } = req.body.params;
-  const sql = `UPDATE comment SET like = ? WHERE id = ?`;
+  const { id, like } = req.body.params
+  const sql = `UPDATE comment SET like = ? WHERE id = ?`
   db.query(sql, [like, id], (err, _result) => {
     if (err) {
-      console.error(err);
-      res.status(500).send("Server error");
+      console.error(err)
+      res.status(500).send("Server error")
     } else {
-      res.status(200).send("ok");
+      res.status(200).send("ok")
     }
-  });
-});
+  })
+})
 
-router.delete("/", function (req, res, _next) {
-  const { id } = req.query;
-  const sql = `DELETE FROM comment WHERE id = ?`;
+router.delete("/", checkRole, function (req, res, _next) {
+  const { id } = req.query
+  const sql = `DELETE FROM comment WHERE id = ?`
   db.query(sql, [id], (err, _result) => {
     if (err) {
-      console.error(err);
-      res.status(500).send("Server error");
+      console.error(err)
+      res.status(500).send("Server error")
     } else {
-      res.status(200).send("ok");
+      res.status(200).send("ok")
     }
-  });
-});
+  })
+})
 
 router.get("/commentList", function (req, res, _next) {
   const sql = `select 
@@ -134,15 +134,15 @@ router.get("/commentList", function (req, res, _next) {
   left join reply on comment.id = reply.reply_comment_id 
   left join user replyUser on reply.user_id = replyUser.id
   left join user replyTo on reply.reply_user_id = replyTo.id
-  left join article comment_article on article_id = comment_article.id;`;
+  left join article comment_article on article_id = comment_article.id;`
   db.query(sql, (err, data, _field) => {
     if (err) {
-      console.error(err);
+      console.error(err)
     } else {
-      const dataList = transformData(data);
-      res.send(dataList);
+      const dataList = transformData(data)
+      res.send(dataList)
     }
-  });
-});
+  })
+})
 
-module.exports = router;
+module.exports = router

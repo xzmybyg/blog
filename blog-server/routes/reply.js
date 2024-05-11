@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 const db = require("../utils/mysqlUtils");
+const checkRole = require("../middleware/checkRole");
 
 router.post("/", function (req, res, _next) {
   const {
@@ -29,7 +30,7 @@ router.post("/", function (req, res, _next) {
   );
 });
 
-router.delete("/", function (req, res, _next) {
+router.delete("/",checkRole, function (req, res, _next) {
   const { id } = req.query;
 
   const sql = `DELETE FROM reply WHERE id = ?`;
