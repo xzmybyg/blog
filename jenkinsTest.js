@@ -1,1 +1,1 @@
-const test = "jenkins"
+const test = "jenkinsTEST"
