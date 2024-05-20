@@ -5,12 +5,21 @@
   "private": true,
   "author": "xzmybyg",
   "scripts": {
+    "prepare": "husky install",
     "web": "pnpm --filter blog-web run dev",
     "server": "pnpm --filter blog-server run dev",
-    "admin": "pnpm --filter blog-admin run dev"
+    "admin": "pnpm --filter blog-admin run dev",
+    "lint": "eslint --ext .ts,.tsx,js,.json --max-warnings 0 .",
+    "__eslint__comment__": "https://eslint.org/docs/user-guide/configuring/configuration-files#configuration-comments",
+    "format": "prettier --config .prettierrc --write .",
+    "__comment__": "https://prettier.io/docs/en/options.html"
   },
   "devDependencies": {
     "@types/node": "^20.12.7",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-prettier": "^5.1.3",
+    "husky": "^8.0.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   }
