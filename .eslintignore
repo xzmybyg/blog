@@ -5,3 +5,4 @@ pnpm-lock.yaml
 blog-server/
 **/iconfont/
 **/dist/
+./blog-components/
