@@ -66,20 +66,26 @@ router.delete("/", checkRole, function (req, res, next) {
 
 router.put("/", checkToken, function (req, res, next) {
   //TODO: 更新用户信息
-  const { id, ...fields } = req.body
+  const { ...fields } = req.body
+  const { id, role } = req.user
+  const isAdmin = role === 'admin';
 
   // 创建 SQL 查询的 SET 部分
   const setParts = []
   const values = []
   for (const [key, value] of Object.entries(fields)) {
-    if (key === "createTime") {
-      setParts.push(`${key} =FROM_UNIXTIME(?)`)
-      const date = new Date(value)
-      values.push(Math.floor(date.getTime() / 1000))
-    } else {
+    if (!isAdmin && !['nickname', 'avatar', 'password'].includes(key)) {
+      continue;
+    }
+
+    // if (key === "createTime") {
+    //   setParts.push(`${key} =FROM_UNIXTIME(?)`)
+    //   const date = new Date(value)
+    //   values.push(Math.floor(date.getTime() / 1000))
+    // } else {
       setParts.push(`${key} = ?`)
       values.push(value)
-    }
+    // }
   }
 
   // 如果没有接收到任何字段，返回错误
