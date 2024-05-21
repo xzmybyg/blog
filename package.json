@@ -10,9 +10,7 @@
     "server": "pnpm --filter blog-server run dev",
     "admin": "pnpm --filter blog-admin run dev",
     "lint": "eslint --ext .ts,.tsx,js,.json --max-warnings 0 .",
-    "__eslint__comment__": "https://eslint.org/docs/user-guide/configuring/configuration-files#configuration-comments",
-    "format": "prettier --config .prettierrc --write .",
-    "__comment__": "https://prettier.io/docs/en/options.html"
+    "format": "prettier --config .prettierrc --write ."
   },
   "devDependencies": {
     "@types/node": "^20.12.7",
