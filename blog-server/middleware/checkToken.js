@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken")
-const key = require("../utils/key")
+const key = require("../config/key")
 
 const checkToken = (req, res, next) => {
   const token = req.get("Authorization")
