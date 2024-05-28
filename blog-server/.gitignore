@@ -23,3 +23,4 @@ public
 utils/key.js
 config/sqlconfig.js
 config/qiniuconfig.js
+config/key.js
