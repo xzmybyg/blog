@@ -1,9 +1,9 @@
-import "./index.scss"
+import './index.scss'
 
 function About() {
   return (
     <div id="aboutpage" className="pages">
-      <Card className="card" style={{ position: "relative" }}>
+      <Card className="card" style={{ position: 'relative' }}>
         <img className="animal_avatars" src="/animal_avatars.png" alt="" />
 
         <Avatar
@@ -11,7 +11,7 @@ function About() {
           src="/blog-icon.jpg"
           size={{ xs: 40, sm: 40, md: 40, lg: 64, xl: 80, xxl: 100 }}
           style={{
-            boxShadow: "0 0 5px rgba(0, 0, 0, 0.5)",
+            boxShadow: '0 0 5px rgba(0, 0, 0, 0.5)',
           }}
         />
         <h2>关于我</h2>

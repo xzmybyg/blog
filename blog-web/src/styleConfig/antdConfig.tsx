@@ -1,4 +1,4 @@
-import { ThemeConfig } from "antd";
+import { ThemeConfig } from 'antd'
 /**
  * @desc antd主题配置
  */
@@ -8,15 +8,15 @@ const Theme: ThemeConfig = {
     /* here is global tokens */
     // colorPrimary:'#1890ff',
     // colorPrimary: "#d6dcff",
-    colorPrimary: "#7e70ea",
+    colorPrimary: '#7e70ea',
     lineWidthFocus: 0,
   },
   components: {
     Pagination: {
       /* here is component tokens */
-      itemActiveBg: "#fff",
-      itemBg: "#000",
-      itemLinkBg: "#000",
+      itemActiveBg: '#fff',
+      itemBg: '#000',
+      itemLinkBg: '#000',
     },
     Timeline: {
       itemPaddingBottom: 50,
@@ -25,4 +25,4 @@ const Theme: ThemeConfig = {
   },
 }
 
-export default Theme;
+export default Theme

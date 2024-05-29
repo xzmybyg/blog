@@ -1,21 +1,21 @@
 // import { Suspense } from "react";
 
-import useStore from "@/store";
+import useStore from '@/store'
 //api引入
 // import { getInfo } from "@/apis";
 //样式引入
-import "./App.scss";
+import './App.scss'
 // import { routerList } from "@/utils";
-import RouterView from "@/router"
+import RouterView from '@/router'
 
 function App() {
-  const { setTotal } = useStore();
+  const { setTotal } = useStore()
 
   useEffect(() => {
-    getInfo().then(res => {
-      setTotal(res.data[0].total_rows);
-    });
-  }, []);
+    getInfo().then((res) => {
+      setTotal(res.data[0].total_rows)
+    })
+  }, [])
 
   return (
     <>
@@ -46,7 +46,7 @@ function App() {
       </div> */}
       <RouterView />
     </>
-  );
+  )
 }
 
-export default App;
+export default App

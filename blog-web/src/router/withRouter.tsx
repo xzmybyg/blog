@@ -7,13 +7,6 @@ export const withRouter = function withRouter(Component) {
       params = useParams(),
       [usp] = useSearchParams()
 
-    return (
-      <Component
-        navigate={navigate}
-        location={location}
-        params={params}
-        usp={usp}
-      />
-    )
+    return <Component navigate={navigate} location={location} params={params} usp={usp} />
   }
 }

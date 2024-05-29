@@ -42,7 +42,7 @@ function Home() {
         </div>
         <div className={`${jump}`}>
           <Button
-          type='text'
+            type="text"
             icon={<DownOutlined />}
             onClick={() => {
               window.location.hash = ''

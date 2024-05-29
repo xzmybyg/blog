@@ -1,15 +1,12 @@
-import {
-  UnorderedListOutlined,
-} from "@ant-design/icons"
-import Style from "./index.module.scss"
-import Login from "@/components/Login"
-import useUserStore, { logoutInfo } from "@/store/user"
-import { Avatar, Popover } from "antd"
-import routes from "@/router/routes"
+import { UnorderedListOutlined } from '@ant-design/icons'
+import Style from './index.module.scss'
+import Login from '@/components/Login'
+import useUserStore, { logoutInfo } from '@/store/user'
+import { Avatar, Popover } from 'antd'
+import routes from '@/router/routes'
 
 function Nav({ navlist = routes }) {
-  const { navDesktop, navMobile, itemWrap, navItem, authorName, MobileMenu } =
-    Style
+  const { navDesktop, navMobile, itemWrap, navItem, authorName, MobileMenu } = Style
   const { id, username, nickname, avatar } = useUserStore()
   const [MobileMenuVisible, setMobileMenuVisible] = useState(false)
 
@@ -31,20 +28,20 @@ function Nav({ navlist = routes }) {
     if (navbarRef.current) {
       if (scrollTop > lastScrollTop) {
         // 向下滚动
-        navbarRef.current.style.opacity = "0"
+        navbarRef.current.style.opacity = '0'
       } else {
         // 向上滚动
-        navbarRef.current.style.opacity = "1"
-        navbarRef.current.style.backgroundColor = "rgba(0, 0, 0, 0.7)"
+        navbarRef.current.style.opacity = '1'
+        navbarRef.current.style.backgroundColor = 'rgba(0, 0, 0, 0.7)'
       }
     }
     lastScrollTop = scrollTop
   }
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll)
+    window.addEventListener('scroll', handleScroll)
     return () => {
-      window.removeEventListener("scroll", handleScroll)
+      window.removeEventListener('scroll', handleScroll)
     }
   }, [])
 
@@ -53,7 +50,7 @@ function Nav({ navlist = routes }) {
       <nav className={navDesktop} ref={navbarRef}>
         <div className={authorName}>心中没有白月光</div>
         <div className={itemWrap}>
-          {navlist.map(item => {
+          {navlist.map((item) => {
             return (
               item.showOnNav != false && (
                 <div
@@ -71,10 +68,7 @@ function Nav({ navlist = routes }) {
           })}
           {id ? (
             <div className={navItem}>
-              <Popover
-                placement="bottomRight"
-                content={<div onClick={logoutInfo}>退出</div>}
-              >
+              <Popover placement="bottomRight" content={<div onClick={logoutInfo}>退出</div>}>
                 <Avatar src={avatar} icon={avatar ? null : <i className="iconfont icon-denglu1" />} />
                 <span>{nickname || username}</span>
               </Popover>
@@ -89,9 +83,7 @@ function Nav({ navlist = routes }) {
       </nav>
       <nav className={navMobile}>
         <div className={authorName}>心中没有白月光</div>
-        <UnorderedListOutlined
-          onClick={() => setMobileMenuVisible(!MobileMenuVisible)}
-        />
+        <UnorderedListOutlined onClick={() => setMobileMenuVisible(!MobileMenuVisible)} />
         {MobileMenuVisible && (
           <div className={MobileMenu}>
             {avatar ? (
@@ -105,7 +97,7 @@ function Nav({ navlist = routes }) {
                 登录
               </div>
             )}
-            {navlist.map(item => {
+            {navlist.map((item) => {
               return (
                 item.showOnNav != false && (
                   <div

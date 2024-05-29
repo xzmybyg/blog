@@ -1,32 +1,32 @@
-import { Button, Select, Space, Table, Tag } from "antd"
-import { useEffect } from "react"
-import { getPageArticleList } from "@/apis"
-import dayjs from "dayjs"
+import { Button, Select, Space, Table, Tag } from 'antd'
+import { useEffect } from 'react'
+import { getPageArticleList } from '@/apis'
+import dayjs from 'dayjs'
 
 export default function Article() {
   const columns = [
     {
-      title: "id",
-      dataIndex: "id",
-      key: "id",
+      title: 'id',
+      dataIndex: 'id',
+      key: 'id',
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "文章标题",
-      dataIndex: "title",
-      key: "title",
+      title: '文章标题',
+      dataIndex: 'title',
+      key: 'title',
       render: (text) => <a>{text}</a>,
       width: 200,
     },
     {
-      title: "文章内容",
-      dataIndex: "article",
-      key: "article",
+      title: '文章内容',
+      dataIndex: 'article',
+      key: 'article',
     },
     {
-      title: "标签",
-      key: "label",
-      dataIndex: "label",
+      title: '标签',
+      key: 'label',
+      dataIndex: 'label',
       render: (tags) => (
         <>
           <Tag key={tags}>{tags}</Tag>
@@ -34,15 +34,15 @@ export default function Article() {
       ),
     },
     {
-      title: "封面",
-      dataIndex: "banner",
-      key: "banner",
+      title: '封面',
+      dataIndex: 'banner',
+      key: 'banner',
       render: (banner) => <>{banner}</>,
     },
     {
-      title: "置顶",
-      dataIndex: "topping",
-      key: "topping",
+      title: '置顶',
+      dataIndex: 'topping',
+      key: 'topping',
       render: (topping, record) => (
         <Switch
           checkedChildren="是"
@@ -53,26 +53,22 @@ export default function Article() {
               id: record.id,
               topping: checked,
             }).then(() => {
-              setData(
-                data.map((item) =>
-                  item.id === record.id ? { ...item, topping: checked } : item
-                )
-              )
+              setData(data.map((item) => (item.id === record.id ? { ...item, topping: checked } : item)))
             })
           }}
         />
       ),
     },
     {
-      title: "创建时间",
-      dataIndex: "createTime",
-      key: "createTime",
-      render: (time) => <>{dayjs(time).format("YYYY-MM-DD")}</>,
+      title: '创建时间',
+      dataIndex: 'createTime',
+      key: 'createTime',
+      render: (time) => <>{dayjs(time).format('YYYY-MM-DD')}</>,
     },
     {
-      title: "隐藏",
-      dataIndex: "hidden",
-      key: "hidden",
+      title: '隐藏',
+      dataIndex: 'hidden',
+      key: 'hidden',
       render: (hidden, record) => (
         <Switch
           checkedChildren="显示"
@@ -83,19 +79,15 @@ export default function Article() {
               id: record.id,
               hidden: checked,
             }).then(() => {
-              setData(
-                data.map((item) =>
-                  item.id === record.id ? { ...item, hidden: checked } : item
-                )
-              )
+              setData(data.map((item) => (item.id === record.id ? { ...item, hidden: checked } : item)))
             })
           }}
         />
       ),
     },
     {
-      title: "操作",
-      key: "action",
+      title: '操作',
+      key: 'action',
       render: (record) => (
         <Space>
           <Button onClick={() => showModal(record)}>编辑</Button>
@@ -150,13 +142,13 @@ export default function Article() {
 
   return (
     <div>
-      <div style={{ width: "100%", height: "100%" }}>
+      <div style={{ width: '100%', height: '100%' }}>
         <Table
           rowKey={(record) => record.id}
           columns={columns}
           dataSource={data}
           size="large"
-          style={{ fontSize: "18px", lineHeight: "2" }}
+          style={{ fontSize: '18px', lineHeight: '2' }}
         />
       </div>
       <Modal

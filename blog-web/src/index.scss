@@ -2,7 +2,7 @@
   margin: 0;
   padding: 0;
 }
-body{
+body {
   overflow-x: hidden;
   background: linear-gradient(
     90deg,
@@ -25,4 +25,3 @@ body{
 ::-webkit-scrollbar {
   width: map-get($thumb, width);
 }
-

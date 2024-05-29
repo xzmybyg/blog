@@ -1,14 +1,14 @@
-const jwt = require("jsonwebtoken")
-const key = require("../config/key")
+const jwt = require('jsonwebtoken')
+const key = require('../config/key')
 
 const checkToken = (req, res, next) => {
-  const token = req.get("Authorization")
+  const token = req.get('Authorization')
 
-  if (!token) res.status(401).send("Unauthorized")
+  if (!token) res.status(401).send('Unauthorized')
 
   jwt.verify(token, key, (err, decoded) => {
     if (err) {
-      res.status(401).send("Unauthorized")
+      res.status(401).send('Unauthorized')
     } else {
       req.user = decoded
       next()

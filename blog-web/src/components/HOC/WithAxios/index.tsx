@@ -1,18 +1,15 @@
-import { AxiosResponse } from "axios";
+import { AxiosResponse } from 'axios'
 
-const WithAxios = <T,>(
-  Component: React.FC<{ data: T | null }>,
-  fn: () => Promise<AxiosResponse<any>>
-) => {
-  const [data, setData] = useState<T | null>(null);
+const WithAxios = <T,>(Component: React.FC<{ data: T | null }>, fn: () => Promise<AxiosResponse<any>>) => {
+  const [data, setData] = useState<T | null>(null)
 
   useEffect(() => {
     fn().then((res: any) => {
-      setData(res.data);
-    });
-  }, []);
+      setData(res.data)
+    })
+  }, [])
 
-  return <Component data={data} />;
-};
+  return <Component data={data} />
+}
 
-export default WithAxios;
+export default WithAxios

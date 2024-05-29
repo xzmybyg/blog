@@ -18,30 +18,29 @@
         font-size: 2rem;
         font-weight: 700;
         em {
-          background: linear-gradient(to right,#757cd9, #7c45d9);
+          background: linear-gradient(to right, #757cd9, #7c45d9);
           background-clip: text;
           -webkit-text-fill-color: transparent;
         }
         .typed {
         }
-        
       }
-      .Social_links{
+      .Social_links {
         display: flex;
         // justify-content: space-evenly;
         // align-items: center;
         gap: 20px;
-        .icon_gitee{
+        .icon_gitee {
           color: red;
         }
       }
     }
-    .jump{
+    .jump {
       position: absolute;
       bottom: 10%;
       left: 50%;
       transform: translateX(-50%);
-      .ant-btn{
+      .ant-btn {
         background: #9286f5;
         color: #fff;
         border: none;
@@ -49,7 +48,7 @@
         padding: 0 20px;
         font-size: 1.5rem;
         font-weight: 700;
-        &:hover{
+        &:hover {
           background: #7c45d9;
         }
       }

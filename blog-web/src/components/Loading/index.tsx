@@ -1,4 +1,4 @@
-import "./index.scss";
+import './index.scss'
 
 export default function Loading() {
   return (
@@ -15,5 +15,5 @@ export default function Loading() {
         <div className="loading-next-box-item"></div>
       </div>
     </div>
-  );
+  )
 }

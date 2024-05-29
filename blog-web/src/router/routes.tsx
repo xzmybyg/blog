@@ -2,13 +2,13 @@
 import SecondRoute from '@/components/SecondRoute'
 import adminRoutes from './adminroutes'
 
-const routes = [
+const routes: RouterType[] = [
   {
     path: '/',
     component: lazy(() => import('@/pages/Home')),
     name: '首页',
     icon: 'icon-shouye',
-    meta:{
+    meta: {
       fontend: true,
     },
   },
@@ -17,7 +17,7 @@ const routes = [
     component: lazy(() => import('@/pages/Article')),
     name: '文章',
     icon: 'icon-wenzhang',
-    meta:{
+    meta: {
       fontend: true,
     },
   },
@@ -26,7 +26,7 @@ const routes = [
     component: lazy(() => import('@/pages/Topic')),
     name: '话题',
     showOnNav: false,
-    meta:{
+    meta: {
       fontend: true,
     },
   },
@@ -35,7 +35,7 @@ const routes = [
     component: lazy(() => import('@/pages/About')),
     name: '关于',
     icon: 'icon-denglu1',
-    meta:{
+    meta: {
       fontend: true,
     },
   },
@@ -44,7 +44,7 @@ const routes = [
     component: lazy(() => import('@/pages/TheLink')),
     name: '友链',
     icon: 'icon-lianjie',
-    meta:{
+    meta: {
       fontend: true,
     },
   },
@@ -53,7 +53,7 @@ const routes = [
     component: lazy(() => import('@/pages/Message')),
     name: '留言',
     icon: 'icon-liuyan',
-    meta:{
+    meta: {
       fontend: true,
     },
   },
@@ -73,7 +73,7 @@ const routes = [
     component: lazy(() => import('@/pages/NotFound')),
     name: '404',
     showOnNav: false,
-    meta:{
+    meta: {
       fontend: true,
     },
   },

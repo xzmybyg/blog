@@ -1,12 +1,13 @@
 @font-face {
-  font-family: "iconfont"; /* Project id 4530597 */
-  src: url('iconfont.woff2?t=1715304275206') format('woff2'),
-       url('iconfont.woff?t=1715304275206') format('woff'),
-       url('iconfont.ttf?t=1715304275206') format('truetype');
+  font-family: 'iconfont'; /* Project id 4530597 */
+  src:
+    url('iconfont.woff2?t=1715304275206') format('woff2'),
+    url('iconfont.woff?t=1715304275206') format('woff'),
+    url('iconfont.ttf?t=1715304275206') format('truetype');
 }
 
 .iconfont {
-  font-family: "iconfont" !important;
+  font-family: 'iconfont' !important;
   font-size: 16px;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
@@ -14,82 +15,81 @@
 }
 
 .icon-yonghuguanli:before {
-  content: "\e656";
+  content: '\e656';
 }
 
 .icon-lianjie:before {
-  content: "\e600";
+  content: '\e600';
 }
 
 .icon-shouye:before {
-  content: "\e612";
+  content: '\e612';
 }
 
 .icon-liebiao:before {
-  content: "\e62d";
+  content: '\e62d';
 }
 
 .icon-24gl-tags2:before {
-  content: "\e87c";
+  content: '\e87c';
 }
 
 .icon-tianjia:before {
-  content: "\e622";
+  content: '\e622';
 }
 
 .icon-liuyan:before {
-  content: "\e69f";
+  content: '\e69f';
 }
 
 .icon-weixin1:before {
-  content: "\e62c";
+  content: '\e62c';
 }
 
 .icon-qqdenglu1:before {
-  content: "\e64e";
+  content: '\e64e';
 }
 
 .icon-riqi:before {
-  content: "\e660";
+  content: '\e660';
 }
 
 .icon-zhucedenglu:before {
-  content: "\e734";
+  content: '\e734';
 }
 
 .icon-tuichu:before {
-  content: "\e60d";
+  content: '\e60d';
 }
 
 .icon-wenzhang:before {
-  content: "\e67d";
+  content: '\e67d';
 }
 
 .icon-denglu1:before {
-  content: "\e611";
+  content: '\e611';
 }
 
 .icon-bianji:before {
-  content: "\e637";
+  content: '\e637';
 }
 
 .icon-biaoqian:before {
-  content: "\e61e";
+  content: '\e61e';
 }
 
 .icon-github:before {
-  content: "\f1b4";
+  content: '\f1b4';
 }
 
 .icon-bianjiwenzhang_huaban:before {
-  content: "\e62e";
+  content: '\e62e';
 }
 
 .icon-gitee:before {
-  content: "\e615";
+  content: '\e615';
 }
 
 .icon-shanchu:before {
-  content: "\e621";
+  content: '\e621';
 }
-

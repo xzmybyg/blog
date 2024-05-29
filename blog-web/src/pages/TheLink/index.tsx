@@ -1,33 +1,23 @@
-import { getLinkList, applyLink } from "@/apis";
-import type { FormValues } from "@/apis/lib/link";
+import { getLinkList, applyLink } from '@/apis'
+import type { FormValues } from '@/apis/lib/link'
 
-import { Avatar } from "antd";
-const { Meta } = Card;
+import { Avatar } from 'antd'
+const { Meta } = Card
 
-import Style from "./index.module.scss";
+import Style from './index.module.scss'
 
 function TheLink() {
-  const {
-    linkPage,
-    listWrap,
-    linkItem,
-    content,
-    formWrap,
-    notice,
-    linkForm,
-    formItem,
-    aside,
-  } = Style
+  const { linkPage, listWrap, linkItem, content, formWrap, notice, linkForm, formItem, aside } = Style
 
   const [linkList, setLinkList] = useState([])
   useEffect(() => {
-    getLinkList().then(res => {
+    getLinkList().then((res) => {
       setLinkList(res.data)
     })
   }, [])
 
   const gotoLink = (url: string) => {
-    window.open(url, "_blank")
+    window.open(url, '_blank')
   }
 
   const [messageApi, contextHolder] = message.useMessage()
@@ -36,14 +26,14 @@ function TheLink() {
     applyLink(values)
       .then(() => {
         messageApi.open({
-          type: "success",
-          content: "申请成功，等待审核！",
+          type: 'success',
+          content: '申请成功，等待审核！',
         })
       })
       .catch(() => {
         messageApi.open({
-          type: "error",
-          content: "申请失败，请重试！",
+          type: 'error',
+          content: '申请失败，请重试！',
         })
       })
   }
@@ -63,11 +53,7 @@ function TheLink() {
               }}
             >
               {/* <Skeleton avatar active> */}
-              <Meta
-                avatar={<Avatar src={item.logo} />}
-                title={item.title}
-                description={item.describe}
-              />
+              <Meta avatar={<Avatar src={item.logo} />} title={item.title} description={item.describe} />
               {/* </Skeleton> */}
             </Card>
           ))}
@@ -82,7 +68,7 @@ function TheLink() {
             <p>头像：https://www.xzmybyg.com/logo.png</p>
           </div>
           <div className={linkForm}>
-            <Form onFinish={values => submit(values)}>
+            <Form onFinish={(values) => submit(values)}>
               <Form.Item className={formItem} label="标题" name="title">
                 <Input placeholder="网站名称" />
               </Form.Item>
@@ -116,4 +102,4 @@ function TheLink() {
   )
 }
 
-export default TheLink;
+export default TheLink

@@ -1,7 +1,7 @@
-import MdEditor from "for-editor"
+import MdEditor from 'for-editor'
 
 export default function AddArticle() {
-  const [markdown, setMarkdown] = useState("")
+  const [markdown, setMarkdown] = useState('')
 
   const handleChange = (value) => {
     setMarkdown(value)
@@ -11,10 +11,10 @@ export default function AddArticle() {
     console.log(value, article)
     uploadArticleFile({ content: value, title: article })
       .then(() => {
-        message.success("上传成功")
+        message.success('上传成功')
       })
       .catch(() => {
-        message.error("上传失败")
+        message.error('上传失败')
       })
   }
 
@@ -40,7 +40,7 @@ export default function AddArticle() {
     subfield: true, // 单双栏模式
   }
 
-  const [article, setArticle] = useState("")
+  const [article, setArticle] = useState('')
 
   // const handleTestUploadQiniu = ()=>{
   //   UploadArticleQiniu({fileName:article})
@@ -50,16 +50,12 @@ export default function AddArticle() {
     <div id="addArticle">
       <Form>
         <Form.Item label="文章标题">
-          <Input
-            type="text"
-            value={article}
-            onChange={(e) => setArticle(e.target.value)}
-          />
+          <Input type="text" value={article} onChange={(e) => setArticle(e.target.value)} />
         </Form.Item>
         <Form.Item>
           <MdEditor
             placeholder="请输入Markdown文本"
-            height={"600px"}
+            height={'600px'}
             lineNum={1}
             toolbar={toolbar}
             value={markdown}

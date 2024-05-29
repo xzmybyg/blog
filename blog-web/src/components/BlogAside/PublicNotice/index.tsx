@@ -6,7 +6,7 @@ function PublicNotice() {
       <p>前端：react、antd Design</p>
       <p>后端：node.js</p>
     </Card>
-  );
+  )
 }
 
-export default PublicNotice;
+export default PublicNotice

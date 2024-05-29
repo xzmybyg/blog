@@ -1,9 +1,9 @@
-var express = require("express")
+var express = require('express')
 var router = express.Router()
-const db = require("../utils/mysqlUtils")
-const checkRole = require("../middleware/checkRole")
+const db = require('../utils/mysqlUtils')
+const checkRole = require('../middleware/checkRole')
 
-router.get("/", function (req, res, _next) {
+router.get('/', function (req, res, _next) {
   const sql = `SELECT * FROM link WHERE state = 0`
 
   db.query(sql, (err, data, _field) => {
@@ -15,7 +15,7 @@ router.get("/", function (req, res, _next) {
   })
 })
 
-router.get("/all", function (req, res, _next) {
+router.get('/all', function (req, res, _next) {
   const sql = `SELECT * FROM link`
 
   db.query(sql, (err, data, _field) => {
@@ -27,7 +27,7 @@ router.get("/all", function (req, res, _next) {
   })
 })
 
-router.post("/", checkRole, function (req, res, _next) {
+router.post('/', checkRole, function (req, res, _next) {
   // 从请求体中获取标签
   const {
     title,
@@ -37,7 +37,7 @@ router.post("/", checkRole, function (req, res, _next) {
   } = req.body.params
 
   if (!title || !url) {
-    return res.status(400).send("Incorrect fields")
+    return res.status(400).send('Incorrect fields')
   }
 
   const sql = `INSERT INTO link 
@@ -46,14 +46,14 @@ router.post("/", checkRole, function (req, res, _next) {
   db.query(sql, [title, url, describe, logo], (err, result) => {
     if (err) {
       console.error(err)
-      res.status(500).send("Server error")
+      res.status(500).send('Server error')
     } else {
-      res.status(201).send("Link created")
+      res.status(201).send('Link created')
     }
   })
 })
 
-router.delete("/", checkRole, function (req, res, _next) {
+router.delete('/', checkRole, function (req, res, _next) {
   // 从查询参数中获取标签 ID
   const { id } = req.query
 
@@ -64,16 +64,16 @@ router.delete("/", checkRole, function (req, res, _next) {
   db.query(sql, [id], (err, result) => {
     if (err) {
       console.error(err)
-      res.status(500).send("Server error")
+      res.status(500).send('Server error')
     } else if (result.affectedRows === 0) {
-      res.status(404).send("Link not found")
+      res.status(404).send('Link not found')
     } else {
-      res.status(200).send("Link deleted")
+      res.status(200).send('Link deleted')
     }
   })
 })
 
-router.put("/", checkRole, function (req, res, _next) {
+router.put('/', checkRole, function (req, res, _next) {
   // 从请求体中获取标签 ID 和新的标签数据
   const { id, ...fields } = req.body
 
@@ -87,12 +87,12 @@ router.put("/", checkRole, function (req, res, _next) {
 
   // 如果没有接收到任何字段，返回错误
   if (setParts.length === 0) {
-    return res.status(400).send("No fields to update")
+    return res.status(400).send('No fields to update')
   }
 
   // 创建 SQL 查询
   const sql = `UPDATE link 
-  SET ${setParts.join(", ")} 
+  SET ${setParts.join(', ')} 
   WHERE id = ?`
 
   // 添加标签 ID 到参数列表
@@ -102,11 +102,11 @@ router.put("/", checkRole, function (req, res, _next) {
   db.query(sql, values, (err, result) => {
     if (err) {
       console.error(err)
-      res.status(500).send("Server error")
+      res.status(500).send('Server error')
     } else if (result.affectedRows === 0) {
-      res.status(404).send("Link not found")
+      res.status(404).send('Link not found')
     } else {
-      res.status(200).send("Link updated")
+      res.status(200).send('Link updated')
     }
   })
 })

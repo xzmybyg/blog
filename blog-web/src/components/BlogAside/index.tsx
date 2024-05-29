@@ -1,17 +1,15 @@
-import { Avatar, Popover } from "antd"
-import { GithubOutlined, LinkOutlined, WechatOutlined } from "@ant-design/icons"
+import { Avatar, Popover } from 'antd'
+import { GithubOutlined, LinkOutlined, WechatOutlined } from '@ant-design/icons'
 
-import PublicNotice from "./PublicNotice"
-import Website from "./Website"
-import LabelCard from "./LabelCard"
+import PublicNotice from './PublicNotice'
+import Website from './Website'
+import LabelCard from './LabelCard'
 
-import Style from "./index.module.scss"
+import Style from './index.module.scss'
 const { introduction, wechat, jello } = Style
 
 function Wechat() {
-  const WechatContent = (
-    <img className={wechat} src="/MyWechat.jpg" alt="加载失败" />
-  )
+  const WechatContent = <img className={wechat} src="/MyWechat.jpg" alt="加载失败" />
   return (
     <Popover content={WechatContent}>
       <WechatOutlined />
@@ -20,7 +18,7 @@ function Wechat() {
 }
 
 function MyGithub() {
-  const github = "https://github.com/xzmybyg"
+  const github = 'https://github.com/xzmybyg'
 
   return (
     <GithubOutlined
@@ -31,27 +29,19 @@ function MyGithub() {
   )
 }
 function BlogAside() {
-  const IntroductionActions = [
-    <MyGithub key="github" />,
-    <Wechat key="wechat" />,
-    <LinkOutlined key="gitee" />,
-  ]
+  const IntroductionActions = [<MyGithub key="github" />, <Wechat key="wechat" />, <LinkOutlined key="gitee" />]
 
   return (
     <>
-      <Card
-        className={introduction}
-        style={{ width: 300 }}
-        actions={IntroductionActions}
-      >
+      <Card className={introduction} style={{ width: 300 }} actions={IntroductionActions}>
         <Space wrap size={16}>
           <Avatar
             className={jello}
             size={64}
-            src={"/blog-icon.jpg"}
+            src={'/blog-icon.jpg'}
             alt="加载失败"
             style={{
-              boxShadow: "0 0 5px rgba(0, 0, 0, 0.5)",
+              boxShadow: '0 0 5px rgba(0, 0, 0, 0.5)',
               marginBottom: 10,
             }}
           />

@@ -1,6 +1,6 @@
 declare type Label = {
-  id: number
+  id: number | null
   label: string
   color: string
-  createTime: Date
+  createTime?: Date
 }

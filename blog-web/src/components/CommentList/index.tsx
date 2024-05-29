@@ -1,18 +1,12 @@
-import { UserOutlined } from "@ant-design/icons"
-import { Avatar } from "antd"
-import dayjs from "dayjs"
-import "./index.scss"
-import useUserStore from "@/store/user"
+import { UserOutlined } from '@ant-design/icons'
+import { Avatar } from 'antd'
+import dayjs from 'dayjs'
+import './index.scss'
+import useUserStore from '@/store/user'
 
 const { TextArea } = Input
 
-function CommentList({
-  data,
-  onDataUpdate,
-}: {
-  data: any
-  onDataUpdate: () => void
-}) {
+function CommentList({ data, onDataUpdate }: { data: any; onDataUpdate: () => void }) {
   const { id: user_id } = useUserStore()
   const {
     comment_id: reply_comment_id,
@@ -35,13 +29,13 @@ function CommentList({
 
   const handleReply = (values: any) => {
     if (!user_id) {
-      message.error("请先登录")
+      message.error('请先登录')
       return
     }
 
     const params = { ...values, user_id, reply_comment_id, reply_user_id }
     addReply(params).then(() => {
-      message.success("回复成功")
+      message.success('回复成功')
       onDataUpdate()
     })
   }
@@ -49,22 +43,12 @@ function CommentList({
   return (
     <div>
       <div className="CommentWrap">
-        <Avatar
-          className="avatar"
-          size="large"
-          src={avatar}
-          icon={avatar ? null : <UserOutlined />}
-        />
+        <Avatar className="avatar" size="large" src={avatar} icon={avatar ? null : <UserOutlined />} />
         <div className="contentMain">
           <div className="username">
             {nickname || username}
-            <span className="date">
-              {dayjs(createTime).format("YYYY-MM-DD HH:mm")}
-            </span>
-            <span
-              style={{ marginLeft: 15, color: "blue" }}
-              onClick={handleReplyClick}
-            >
+            <span className="date">{dayjs(createTime).format('YYYY-MM-DD HH:mm')}</span>
+            <span style={{ marginLeft: 15, color: 'blue' }} onClick={handleReplyClick}>
               回复
             </span>
           </div>
@@ -88,11 +72,7 @@ function CommentList({
           )}
           <div className="replyWrap">
             {replyList.map((item: any) => (
-              <MoemoReply
-                item={{ ...item, reply_comment_id }}
-                key={item.reply_id}
-                onDataUpdate={onDataUpdate}
-              />
+              <MoemoReply item={{ ...item, reply_comment_id }} key={item.reply_id} onDataUpdate={onDataUpdate} />
             ))}
           </div>
         </div>
@@ -124,42 +104,30 @@ function Reply({ item, onDataUpdate }: { item: any; onDataUpdate: () => void }) 
   }
   const handleReply = (values: any) => {
     if (!user_id) {
-      message.error("请先登录")
+      message.error('请先登录')
       return
     }
 
     const params = { ...values, user_id, reply_comment_id, reply_user_id }
     addReply(params).then(() => {
-      message.success("回复成功")
+      message.success('回复成功')
       onDataUpdate()
     })
   }
   return (
     <div>
       <div className="replyItem" key={reply_id}>
-        <Avatar
-          className="avatar"
-          size="large"
-          src={avatar}
-          icon={avatar ? null : <UserOutlined />}
-        />
+        <Avatar className="avatar" size="large" src={avatar} icon={avatar ? null : <UserOutlined />} />
         <div>
           <div className="username">
             {nickname || username}
-            <span className="date">
-              {dayjs(createTime).format("YYYY-MM-DD HH:mm")}
-            </span>
-            <span
-              style={{ marginLeft: 15, color: "blue" }}
-              onClick={handleReplyClick}
-            >
+            <span className="date">{dayjs(createTime).format('YYYY-MM-DD HH:mm')}</span>
+            <span style={{ marginLeft: 15, color: 'blue' }} onClick={handleReplyClick}>
               回复
             </span>
           </div>
           <div className="content">
-            <span style={{ marginRight: 10, color: "blue" }}>
-              {`@${reply_to_nickname || reply_to_username}`}
-            </span>
+            <span style={{ marginRight: 10, color: 'blue' }}>{`@${reply_to_nickname || reply_to_username}`}</span>
             {` ${content}`}
           </div>
         </div>

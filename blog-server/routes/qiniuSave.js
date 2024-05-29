@@ -1,12 +1,12 @@
-var express = require("express")
+var express = require('express')
 var router = express.Router()
-const db = require("../utils/mysqlUtils")
-const fs = require("fs")
-const path = require("path")
-const checkRole = require("../middleware/checkRole")
+const db = require('../utils/mysqlUtils')
+const fs = require('fs')
+const path = require('path')
+const checkRole = require('../middleware/checkRole')
 
-var qiniu = require("qiniu")
-var qiniuconfig = require("../config/qiniuconfig")
+var qiniu = require('qiniu')
+var qiniuconfig = require('../config/qiniuconfig')
 //需要填写你的 Access Key 和 Secret Key
 const { accessKey, secretKey, scope, fromRegionId } = qiniuconfig
 
@@ -22,13 +22,13 @@ config.regionsProvider = qiniu.httpc.Region.fromRegionId(fromRegionId)
 const formUploader = new qiniu.form_up.FormUploader(config)
 const putExtra = new qiniu.form_up.PutExtra()
 
-router.post("/", checkRole, async function (req, res, _next) {
+router.post('/', checkRole, async function (req, res, _next) {
   const { fileName, content } = req.body
-  const dir = "public/article"
+  const dir = 'public/article'
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true })
   }
-  const filePath = path.join(__dirname, "../public/article/", `${fileName}.md`)
+  const filePath = path.join(__dirname, '../public/article/', `${fileName}.md`)
   const qiniuPath = `article/${fileName}.md`
 
   // 文件上传
@@ -37,16 +37,16 @@ router.post("/", checkRole, async function (req, res, _next) {
     .then(({ data, resp }) => {
       if (resp.statusCode === 200) {
         console.log(data)
-        res.send("File uploaded!")
+        res.send('File uploaded!')
       } else {
         console.log(resp.statusCode)
         console.log(data)
-        res.send("File upload failed!")
+        res.send('File upload failed!')
       }
     })
     .catch((err) => {
-      console.log("failed", err)
-      res.send("File upload failed!")
+      console.log('failed', err)
+      res.send('File upload failed!')
     })
 })
 

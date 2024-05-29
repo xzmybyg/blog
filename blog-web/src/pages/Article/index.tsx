@@ -1,9 +1,9 @@
-import dayjs from "dayjs";
-import { List } from "antd";
-import { getAllArticleList } from "@/apis";
+import dayjs from 'dayjs'
+import { List } from 'antd'
+import { getAllArticleList } from '@/apis'
 
 function Article() {
-  const [ArticleList, setArticleList] = useState<Article[]>([]);
+  const [ArticleList, setArticleList] = useState<Article[]>([])
   const navigate = useNavigate()
 
   const routerPush = (id: number) => {
@@ -11,7 +11,7 @@ function Article() {
   }
 
   useEffect(() => {
-    getAllArticleList().then(res => {
+    getAllArticleList().then((res) => {
       setArticleList(res.data)
     })
   }, [])
@@ -21,15 +21,12 @@ function Article() {
       <div className="Article pages">
         <Card className="listWrap">
           <List
-            pagination={{ position: "bottom", align: "center" }}
+            pagination={{ position: 'bottom', align: 'center' }}
             itemLayout="horizontal"
             dataSource={ArticleList}
-            renderItem={item => (
+            renderItem={(item) => (
               <List.Item onClick={() => routerPush(item.id)}>
-                <List.Item.Meta
-                  title={<a>{item.title}</a>}
-                  description={dayjs(item.createTime).format("YYYY-MM-DD")}
-                />
+                <List.Item.Meta title={<a>{item.title}</a>} description={dayjs(item.createTime).format('YYYY-MM-DD')} />
               </List.Item>
             )}
           />
@@ -47,4 +44,4 @@ function Article() {
   )
 }
 
-export default Article;
+export default Article

@@ -1,1 +1,1 @@
-declare module "react-markdown-navbar";
+declare module 'react-markdown-navbar'

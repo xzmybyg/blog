@@ -1,8 +1,8 @@
 // import { useTyped } from "@/hooks"
-import { default as Barrage } from "@/components/Barrage"
-import Style from "./index.module.scss"
-import useUserStore from "@/store/user"
-import { postMessage, getMessage } from "@/apis/lib/message"
+import { default as Barrage } from '@/components/Barrage'
+import Style from './index.module.scss'
+import useUserStore from '@/store/user'
+import { postMessage, getMessage } from '@/apis/lib/message'
 
 const { messagePage, sendWrap, formWarp } = Style
 
@@ -14,19 +14,19 @@ function Message() {
   const [comments, setComments] = useState<TheComment[]>([])
 
   useEffect(() => {
-    getMessage().then(res => {
+    getMessage().then((res) => {
       setComments(res.data)
     })
   }, [])
 
   const sendMessage = (values: any) => {
     if (!id) {
-      message.error("请先登录")
+      message.error('请先登录')
       return
     }
     // 返回 postMessage 的调用
-    postMessage(id, values.content).then(res => {
-      setComments(comments => [...comments, res.data])
+    postMessage(id, values.content).then((res) => {
+      setComments((comments) => [...comments, res.data])
     })
   }
 

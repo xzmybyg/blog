@@ -1,16 +1,14 @@
 declare type baseRouter = {
-  path: string;
-  icon?: React.ReactElement;
-  name: string;
-  visible?: boolean;
-  children?: tRouter[];
-  meta?: any;
-  showOnNav?: boolean;
-};
+  path: string
+  icon?: React.ReactElement | string
+  name: string
+  visible?: boolean
+  children?: tRouter[]
+  meta?: { [key: string]: any }
+  showOnNav?: boolean
+}
 
 declare type RouterType = baseRouter & {
-  element: React.ReactElement;
-  redirect?: string;
-};
-
-
+  component: React.ComponentType
+  redirect?: string
+}

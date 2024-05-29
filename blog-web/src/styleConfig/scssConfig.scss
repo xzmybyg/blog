@@ -47,7 +47,7 @@ $content-side-margin: 30px;
   align-items: $align;
 }
 
-@mixin themeColor($bgColor: map-get($nav, color), $color: "initial") {
+@mixin themeColor($bgColor: map-get($nav, color), $color: 'initial') {
   background-color: $bgColor;
   color: $color;
 }

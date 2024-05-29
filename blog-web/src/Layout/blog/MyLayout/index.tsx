@@ -1,9 +1,9 @@
-import { ReactNode } from "react"
+import { ReactNode } from 'react'
 
-import Style from "./index.module.scss"
+import Style from './index.module.scss'
 
 //第三方库
-import { Layout, FloatButton } from "antd"
+import { Layout, FloatButton } from 'antd'
 const { Content, Footer } = Layout
 
 export default function MyLayout({ children }: { children: ReactNode | ReactNode[] }) {
@@ -16,8 +16,8 @@ export default function MyLayout({ children }: { children: ReactNode | ReactNode
       <Footer
         className="blog-footer"
         style={{
-          width: "100vw",
-          textAlign: "center",
+          width: '100vw',
+          textAlign: 'center',
         }}
       >
         ©2023 Created By 心中没有白月光
@@ -32,7 +32,7 @@ export default function MyLayout({ children }: { children: ReactNode | ReactNode
         <FloatButton
           tooltip={<div>跳转到后台管理系统</div>}
           onClick={() => {
-            window.location.href = import.meta.env.VITE_ADMIN_URL;
+            window.location.href = import.meta.env.VITE_ADMIN_URL
           }}
         />
         <FloatButton.BackTop visibilityHeight={0} />

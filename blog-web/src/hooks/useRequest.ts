@@ -1,24 +1,21 @@
-export default function useRequest<T>(
-  fun: (params: T) => Promise<any>,
-  params: T
-) {
-  const [data, setData] = useState<any>(null);
+export default function useRequest<T>(fun: (params: T) => Promise<any>, params: T) {
+  const [data, setData] = useState<any>(null)
   // const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<any>(null);
+  const [error, setError] = useState<any>(null)
 
   useEffect(() => {
     // setLoading(true);
     fun(params)
-      .then(res => {
-        setData(res.data);
+      .then((res) => {
+        setData(res.data)
       })
-      .catch(err => {
-        setError(err);
+      .catch((err) => {
+        setError(err)
       })
       .finally(() => {
         // setLoading(false);
-      });
-  }, [JSON.stringify(params)]);
+      })
+  }, [JSON.stringify(params)])
 
-  return { data, error };
+  return { data, error }
 }

@@ -1,8 +1,8 @@
-var express = require("express")
+var express = require('express')
 var router = express.Router()
-const db = require("../utils/mysqlUtils")
-const checkRole = require("../middleware/checkRole")
-const checkToken = require("../middleware/checkToken")
+const db = require('../utils/mysqlUtils')
+const checkRole = require('../middleware/checkRole')
+const checkToken = require('../middleware/checkToken')
 
 function transformData(data) {
   return data.reduce((acc, cur) => {
@@ -41,7 +41,7 @@ function transformData(data) {
   }, [])
 }
 
-router.get("/", function (req, res, _next) {
+router.get('/', function (req, res, _next) {
   const { id } = req.query
 
   // const sql = `SELECT c.*, u.id, u.username,u.avatar FROM comment c LEFT JOIN user u ON u.id = c.user_id WHERE c.article_id = ?;`;
@@ -69,18 +69,13 @@ router.get("/", function (req, res, _next) {
   })
 })
 
-router.post("/", checkToken, function (req, res, _next) {
-  const {
-    user_id,
-    article_id,
-    content,
-    createTime = new Date(),
-  } = req.body.params
+router.post('/', checkToken, function (req, res, _next) {
+  const { user_id, article_id, content, createTime = new Date() } = req.body.params
   const sql = `INSERT INTO comment (user_id, article_id, content, createTime) VALUES (?, ?, ?, ?)`
   db.query(sql, [user_id, article_id, content, createTime], (err, result) => {
     if (err) {
       console.error(err)
-      res.status(500).send("Server error")
+      res.status(500).send('Server error')
     } else {
       const data = {
         id: result.insertId,
@@ -95,33 +90,33 @@ router.post("/", checkToken, function (req, res, _next) {
   // res.send("ok");
 })
 
-router.put("/", function (req, res, _next) {
+router.put('/', function (req, res, _next) {
   const { id, like } = req.body.params
   const sql = `UPDATE comment SET like = ? WHERE id = ?`
   db.query(sql, [like, id], (err, _result) => {
     if (err) {
       console.error(err)
-      res.status(500).send("Server error")
+      res.status(500).send('Server error')
     } else {
-      res.status(200).send("ok")
+      res.status(200).send('ok')
     }
   })
 })
 
-router.delete("/", checkRole, function (req, res, _next) {
+router.delete('/', checkRole, function (req, res, _next) {
   const { id } = req.query
   const sql = `DELETE FROM comment WHERE id = ?`
   db.query(sql, [id], (err, _result) => {
     if (err) {
       console.error(err)
-      res.status(500).send("Server error")
+      res.status(500).send('Server error')
     } else {
-      res.status(200).send("ok")
+      res.status(200).send('ok')
     }
   })
 })
 
-router.get("/commentList", function (req, res, _next) {
+router.get('/commentList', function (req, res, _next) {
   const sql = `select 
   comment.id,comment.content,comment.like,comment.createTime,comment.article_id,
   user.id user_id,user.username,user.avatar,user.nickname user_nickName,

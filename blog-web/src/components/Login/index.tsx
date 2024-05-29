@@ -1,8 +1,8 @@
-import { forwardRef, useImperativeHandle } from "react"
-import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons"
+import { forwardRef, useImperativeHandle } from 'react'
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons'
 // import Style from "./index.module.scss";
-import "./index.scss"
-import { login, register } from "@/apis"
+import './index.scss'
+import { login, register } from '@/apis'
 
 interface LoginHandle {
   openModal: () => void
@@ -27,18 +27,18 @@ const Login = forwardRef<LoginHandle>((_props, ref) => {
    */
   const handleSubmit = () => {
     const sign = haveAccount ? login : register
-    form.validateFields().then(values => {
+    form.validateFields().then((values) => {
       sign(values)
-        .then(res => {
+        .then((res) => {
           setUserInfo(res.data)
-          message.success(haveAccount ? "登录成功" : "注册成功")
+          message.success(haveAccount ? '登录成功' : '注册成功')
           values = { username: values.username, password: values.password }
-          login(values).then(res => {
+          login(values).then((res) => {
             setUserInfo(res.data)
             setIsModalOpen(false)
           })
         })
-        .catch(err => {
+        .catch((err) => {
           message.error(err.response.data.message)
         })
     })
@@ -77,17 +77,17 @@ const Login = forwardRef<LoginHandle>((_props, ref) => {
       cancelText="取消"
     >
       <div>
-        <h1>{haveAccount ? "登录" : "注册"}</h1>
+        <h1>{haveAccount ? '登录' : '注册'}</h1>
 
-        <Form form={form} name={haveAccount ? "login" : "register"}>
+        <Form form={form} name={haveAccount ? 'login' : 'register'}>
           <Form.Item
             label="账号"
             name="username"
             rules={
               !haveAccount
                 ? [
-                    { required: true, message: "请输入账号!" },
-                    { min: 8, max: 16, message: "账号长度在8-16之间" },
+                    { required: true, message: '请输入账号!' },
+                    { min: 8, max: 16, message: '账号长度在8-16之间' },
                   ]
                 : []
             }
@@ -102,16 +102,14 @@ const Login = forwardRef<LoginHandle>((_props, ref) => {
             rules={
               !haveAccount
                 ? [
-                    { required: true, message: "请输入密码!" },
-                    { min: 8, max: 16, message: "密码长度在8-16之间" },
+                    { required: true, message: '请输入密码!' },
+                    { min: 8, max: 16, message: '密码长度在8-16之间' },
                   ]
                 : []
             }
           >
             <Input.Password
-              iconRender={visible =>
-                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-              }
+              iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
               placeholder="密码"
             />
           </Form.Item>
@@ -120,8 +118,8 @@ const Login = forwardRef<LoginHandle>((_props, ref) => {
               label="邮箱"
               name="email"
               rules={[
-                { required: true, message: "请输入邮箱!" },
-                { type: "email", message: "请输入有效的邮箱地址!" },
+                { required: true, message: '请输入邮箱!' },
+                { type: 'email', message: '请输入有效的邮箱地址!' },
               ]}
             >
               <Input placeholder="邮箱" />
@@ -134,7 +132,7 @@ const Login = forwardRef<LoginHandle>((_props, ref) => {
             setHaveAccount(!haveAccount)
           }}
         >
-          {haveAccount ? "还没有账号？去注册-->" : "已有账号？去登录-->"}
+          {haveAccount ? '还没有账号？去注册-->' : '已有账号？去登录-->'}
         </p>
       </div>
       {/* <div id="wx_login_container"></div> */}
