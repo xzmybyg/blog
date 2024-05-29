@@ -3,7 +3,7 @@
   position: relative;
 
   .blog-header {
-    height: 7vh;
+    height: map-get($nav, height);
     position: sticky;
     top: 0;
     left: 0;
@@ -14,7 +14,7 @@
   }
 
   .blog-content {
-    min-height: 93vh;
+    min-height: calc(100vh - map-get($nav, height) - 50px);
     // padding: 10px 0px;
     overflow-x: hidden;
     margin: 0 auto;
@@ -40,8 +40,6 @@
 
 @media screen and (max-width: $hiddenSomeSize) {
   .layout {
-    .blog-header {
-    }
     .blog-content {
       .pages {
         box-sizing: border-box;

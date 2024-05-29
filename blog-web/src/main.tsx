@@ -6,6 +6,9 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { ConfigProvider } from "antd";
 import Theme from "@/styleConfig/antdConfig.js";
 
+import '@/assets/iconfont/font_4530597_shxu8uijqn/iconfont.css'
+import '@/assets/iconfont/font_4530597_shxu8uijqn/iconfont.js'
+
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   //<React.StrictMode>

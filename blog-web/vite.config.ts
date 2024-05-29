@@ -2,6 +2,7 @@ import { defineConfig, ConfigEnv, loadEnv } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import AutoImport from "unplugin-auto-import/vite";
+import { codeInspectorPlugin } from "code-inspector-plugin";
 declare const __dirname: string;
 
 // https://vitejs.dev/config/
@@ -33,6 +34,7 @@ export default defineConfig((mode: ConfigEnv) => {
               "Tag",
               "Divider",
               "message",
+              "Switch",
             ],
             //import {default as axios} from 'axios'
             //import axios from 'axios'
@@ -48,6 +50,7 @@ export default defineConfig((mode: ConfigEnv) => {
           "./src/types/**",
           "./src/store/**",
           "./src/apis/**",
+          "./src/Layout/**"
         ],
         dts: "src/types/auto-imports.d.ts",
         eslintrc: {
@@ -55,6 +58,9 @@ export default defineConfig((mode: ConfigEnv) => {
           filepath: './.eslintrc-auto-import.json', // Default `./.eslintrc-auto-import.json`
           globalsPropValue: true, // Default `true`, (true | false | 'readonly' | 'readable' | 'writable' | 'writeable')
         },
+      }),
+      codeInspectorPlugin({
+        bundler: "vite",
       }),
     ],
     css: {

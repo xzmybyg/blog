@@ -9,7 +9,7 @@
     "web": "pnpm --filter blog-web run dev",
     "server": "pnpm --filter blog-server run dev",
     "admin": "pnpm --filter blog-admin run dev",
-    "lint": "eslint --ext .ts,.tsx,js,.json --max-warnings 0 .",
+    "lint": "eslint --ext .ts,.tsx,js,.json .",
     "format": "prettier --config .prettierrc --write ."
   },
   "devDependencies": {

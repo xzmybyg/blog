@@ -1,7 +1,0 @@
-{
-    "name": "blog-components",
-    "version": "1.0.0",
-    "description": "blog components",
-    "main": "index.js",
-    "type": "module"
-}

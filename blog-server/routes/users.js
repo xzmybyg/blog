@@ -3,7 +3,7 @@ var router = express.Router()
 const jwt = require("jsonwebtoken")
 const md5 = require("md5")
 const db = require("../utils/mysqlUtils")
-const key = require("../utils/key")
+const key = require("../config/key")
 const checkRole = require("../middleware/checkRole")
 const checkToken = require("../middleware/checkToken")
 

@@ -1,4 +1,58 @@
 .homePage {
-  .articleWrap {
+  .banerWrap {
+    width: 100vw;
+    height: calc(100vh - map-get($nav, height));
+    // background: url(../../../public/banner.jpg);
+    background-color: #fff;
+    background-size: cover;
+    position: relative;
+    .slogan {
+      position: absolute;
+      top: 20%;
+      left: 12%;
+      color: #322f2f;
+      font-size: 2rem;
+      font-weight: 700;
+      p {
+        margin-bottom: 20px;
+        font-size: 2rem;
+        font-weight: 700;
+        em {
+          background: linear-gradient(to right,#757cd9, #7c45d9);
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+        .typed {
+        }
+        
+      }
+      .Social_links{
+        display: flex;
+        // justify-content: space-evenly;
+        // align-items: center;
+        gap: 20px;
+        .icon_gitee{
+          color: red;
+        }
+      }
+    }
+    .jump{
+      position: absolute;
+      bottom: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      .ant-btn{
+        background: #9286f5;
+        color: #fff;
+        border: none;
+        border-radius: 20px;
+        padding: 0 20px;
+        font-size: 1.5rem;
+        font-weight: 700;
+        &:hover{
+          background: #7c45d9;
+        }
+      }
+    }
   }
 }

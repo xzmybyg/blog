@@ -78,3 +78,14 @@ $content-side-margin: 30px;
     transform: scale(0.95, 1.05);
   }
 }
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

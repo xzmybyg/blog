@@ -1,11 +1,12 @@
-import { Suspense } from "react";
+// import { Suspense } from "react";
 
 import useStore from "@/store";
 //api引入
 // import { getInfo } from "@/apis";
 //样式引入
 import "./App.scss";
-import { routerList } from "@/utils";
+// import { routerList } from "@/utils";
+import RouterView from "@/router"
 
 function App() {
   const { setTotal } = useStore();
@@ -18,7 +19,7 @@ function App() {
 
   return (
     <>
-      <div className="layout">
+      {/* <div className="layout">
         <Suspense fallback={<Loading />}>
           <Routes>
             {routerList.map((item: RouterType) =>
@@ -42,7 +43,8 @@ function App() {
             )}
           </Routes>
         </Suspense>
-      </div>
+      </div> */}
+      <RouterView />
     </>
   );
 }

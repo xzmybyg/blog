@@ -1,4 +1,3 @@
-
 // /**
 //  * 获取分页文章列表
 //  * @param {Object} options - 选项参数
@@ -8,12 +7,12 @@
 //  */
 
 export function getPageArticleList({ page = 1, pageSize = 5 }) {
-  return axiosInstance.get("/article/", {
+  return axiosInstance.get('/article/', {
     params: {
       page,
       pageSize,
     },
-  });
+  })
 }
 
 /**
@@ -21,11 +20,11 @@ export function getPageArticleList({ page = 1, pageSize = 5 }) {
  * @returns Promise<AxiosResponse<any>>
  */
 export function getAllArticleList() {
-  return axiosInstance.get("/article/", {
+  return axiosInstance.get('/article/', {
     params: {
       allList: true,
     },
-  });
+  })
 }
 
 /**
@@ -34,11 +33,11 @@ export function getAllArticleList() {
  * @returns Promise对象，用于处理编辑文章的请求
  */
 export function deleteArticle(id: number) {
-  return axiosInstance.delete("/article/", {
+  return axiosInstance.delete('/article/', {
     params: {
       id,
     },
-  });
+  })
 }
 
 /**
@@ -47,9 +46,28 @@ export function deleteArticle(id: number) {
  * @returns Promise对象，用于处理编辑文章的请求
  */
 export function editArticle(id: number) {
-  return axiosInstance.put("/article/", {
+  return axiosInstance.put('/article/', {
     params: {
       id,
     },
-  });
+  })
+}
+/*-----管理系统接口-----*/
+export function updateArticle(data) {
+  return axiosInstance.put('/article', data)
+}
+
+//上传文章文件
+export function uploadArticleFile(data) {
+  return axiosInstance.post('/article/upload', data)
+}
+
+//获取文章文件
+export function getArticleFiles() {
+  return axiosInstance.get('/article/articles')
+}
+
+//上传文章到七牛云
+export function UploadArticleQiniu(data) {
+  return axiosInstance.post('/qiniu', data)
 }

@@ -1,0 +1,37 @@
+pipeline {
+
+    agent any
+
+    environment {
+        // 根目录
+        ROOT_DIR = 'C:\\Blog\\blog'
+        // 博客前台路径
+        BLOG_WEB_DIR = 'C:\\Blog\\blog\\blog-web'
+    }
+
+    stages {
+        stage('检出') {
+            steps {
+                bat "cd /d ${env.ROOT_DIR} && git pull"
+            }
+        }
+
+        stage('构建') {
+            steps {
+                bat "if exist ${env.BLOG_WEB_DIR}\\dist rd /s /q ${env.BLOG_WEB_DIR}\\dist"
+                bat "cd /d ${env.ROOT_DIR} && pnpm install && pnpm -F blog-web run build "
+            }
+        }
+
+        stage('部署') {
+            steps {
+                script {
+                    echo "部署到本地"
+                    bat "if exist ${env.BLOG_ADMIN_DIR}\\blog rd /s /q ${env.BLOG_WEB_DIR}\\blog"
+                    bat "cd /d ${env.BLOG_WEB_DIR} && ren dist blog"
+                    bat "move /y ${env.BLOG_WEB_DIR}\\blog ${env.ROOT_DIR}"
+                }
+            }
+        }
+    }
+}
