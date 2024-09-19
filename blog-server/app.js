@@ -1,4 +1,8 @@
 require('module-alias/register')
+const dotenv = require('dotenv')
+dotenv.config()
+const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development'
+dotenv.config({ path: envFile })
 
 var createError = require('http-errors')
 var express = require('express')
@@ -25,8 +29,9 @@ db.connect(function (err) {
     console.error('Error connecting to MySQL: ' + err.stack)
     return
   }
-  console.log('Connected to MySQL as id ' + db.threadId)
-
+  console.log('Connected to MySQL as id ' + db.threadId + process.env.DB_PORT)
+  console.log();
+  
   // 启动 Express 服务
   startServer()
 })
@@ -43,9 +48,6 @@ function startServer() {
     // res.header("Content-Type", "application/json;charset=utf-8")
     next()
   })
-
-  // view engine setup
-  app.set('views', path.join(__dirname, 'views'))
 
   app.use(logger('dev'))
   app.use(express.json())
@@ -68,6 +70,10 @@ function startServer() {
     res.sendFile(path.join(__dirname, 'public/blog/index.html'))
   })
 
+  app.get('*', (req, res) => {
+    res.sendFile(`/blog/index.html`, { root: 'public' })
+  })
+
   // catch 404 and forward to error handler
   app.use(function (req, res, next) {
     next(createError(404))
@@ -81,7 +87,7 @@ function startServer() {
 
     // render the error page
     res.status(err.status || 500)
-    res.send('Server error')
+    res.sendFile(`/error.html`, { root: 'public' })
   })
 }
 
