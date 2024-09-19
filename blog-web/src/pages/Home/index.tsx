@@ -64,6 +64,7 @@ function Home() {
                 label={item.label}
                 description={item.description}
                 createTime={item.createTime}
+                banner={item.banner}
               ></ArticleCard>
             )
           })}

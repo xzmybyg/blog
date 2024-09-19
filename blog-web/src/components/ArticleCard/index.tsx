@@ -4,11 +4,10 @@ import { TagOutlined, PushpinOutlined } from '@ant-design/icons'
 //样式引入
 import Style from './index.module.scss'
 
-import png404 from '@/assets/404.png'
 const { articleCard, articleInfo, articleContent, articleTitle, articleTime, articleLabel, articleDescription } = Style
 
 function ArticleCard(props: CardProps) {
-  const { id, title, topping, createTime, label, description, addClassName } = props
+  const { id, title, topping, createTime, label, description, addClassName,banner } = props
   const navigate = useNavigate()
   const handleNavigate = () => {
     navigate(`/topic/${id}`)
@@ -16,7 +15,7 @@ function ArticleCard(props: CardProps) {
 
   return (
     <div className={`${articleCard} ${addClassName && Style[addClassName as string]}`}>
-      <img src={png404} onClick={handleNavigate} />
+      <img src={`http://filespace.xzmybyg.cn/images/${banner}`} onClick={handleNavigate} />
       <div className={articleContent}>
         <p onClick={handleNavigate} className={articleTitle}>
           {title || '文章标题'}
