@@ -1,7 +1,7 @@
 var express = require('express')
 var router = express.Router()
-const db = require('../utils/mysqlUtils')
-const checkRole = require('../middleware/checkRole')
+const db = require('@utils/mysqlUtils')
+const checkRole = require('@middleware/checkRole')
 
 router.get('/', function (req, res, _next) {
   const sql = `SELECT * FROM label`

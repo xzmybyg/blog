@@ -1,9 +1,9 @@
 var express = require('express')
 var router = express.Router()
-const db = require('../utils/mysqlUtils')
+const db = require('@utils/mysqlUtils')
 const fs = require('fs')
 const path = require('path')
-const checkRole = require('../middleware/checkRole')
+const checkRole = require('@middleware/checkRole')
 
 router.get('/', function (req, res, next) {
   const { id } = req.query

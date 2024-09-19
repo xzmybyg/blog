@@ -2,10 +2,10 @@ var express = require('express')
 var router = express.Router()
 const jwt = require('jsonwebtoken')
 const md5 = require('md5')
-const db = require('../utils/mysqlUtils')
-const key = require('../config/key')
-const checkRole = require('../middleware/checkRole')
-const checkToken = require('../middleware/checkToken')
+const db = require('@utils/mysqlUtils')
+const key = require('@config/key')
+const checkRole = require('@middleware/checkRole')
+const checkToken = require('@middleware/checkToken')
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {

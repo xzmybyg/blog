@@ -1,8 +1,8 @@
 var express = require('express')
 var router = express.Router()
-const db = require('../utils/mysqlUtils')
-const checkRole = require('../middleware/checkRole')
-const checkToken = require('../middleware/checkToken')
+const db = require('@utils/mysqlUtils')
+const checkRole = require('@middleware/checkRole')
+const checkToken = require('@middleware/checkToken')
 
 function transformData(data) {
   return data.reduce((acc, cur) => {

@@ -1,20 +1,22 @@
+require('module-alias/register')
+
 var createError = require('http-errors')
 var express = require('express')
 var path = require('path')
 var cookieParser = require('cookie-parser')
 var logger = require('morgan')
-const db = require('./utils/mysqlUtils')
+const db = require('@utils/mysqlUtils')
 
-var indexRouter = require('./routes/index')
-var usersRouter = require('./routes/users')
-var articleRouter = require('./routes/article')
-var topicRouter = require('./routes/topic')
-var labelRouter = require('./routes/label')
-var linkRouter = require('./routes/link')
-var commentRouter = require('./routes/comment')
-var messageRouter = require('./routes/message')
-var replyRouter = require('./routes/reply')
-var qiniuRouter = require('./routes/qiniuSave')
+var indexRouter = require('@routes/index')
+var usersRouter = require('@routes/users')
+var articleRouter = require('@routes/article')
+var topicRouter = require('@routes/topic')
+var labelRouter = require('@routes/label')
+var linkRouter = require('@routes/link')
+var commentRouter = require('@routes/comment')
+var messageRouter = require('@routes/message')
+var replyRouter = require('@routes/reply')
+var qiniuRouter = require('@routes/qiniuSave')
 
 var app = express()
 
@@ -44,7 +46,6 @@ function startServer() {
 
   // view engine setup
   app.set('views', path.join(__dirname, 'views'))
-  app.set('view engine', 'jade')
 
   app.use(logger('dev'))
   app.use(express.json())

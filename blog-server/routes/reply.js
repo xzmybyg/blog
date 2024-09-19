@@ -1,7 +1,7 @@
 var express = require('express')
 var router = express.Router()
-const db = require('../utils/mysqlUtils')
-const checkRole = require('../middleware/checkRole')
+const db = require('@utils/mysqlUtils')
+const checkRole = require('@middleware/checkRole')
 
 router.post('/', function (req, res, _next) {
   const { user_id, reply_comment_id, reply_user_id, content, createTime = new Date() } = req.body.params

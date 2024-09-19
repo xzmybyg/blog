@@ -1,8 +1,8 @@
 var express = require('express')
 var router = express.Router()
-const db = require('../utils/mysqlUtils')
-const articleDataProcessing = require('../utils/articleDataProcessing')
-const checkRole = require('../middleware/checkRole')
+const db = require('@utils/mysqlUtils')
+const articleDataProcessing = require('@utils/articleDataProcessing')
+const checkRole = require('@middleware/checkRole')
 const fs = require('fs')
 const path = require('path')
 
