@@ -6,3 +6,5 @@ blog-server/
 **/iconfont/
 **/dist/
 ./blog-components/
+
+blog-web/blog
