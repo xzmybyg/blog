@@ -15,7 +15,7 @@ function ArticleCard(props: CardProps) {
 
   return (
     <div className={`${articleCard} ${addClassName && Style[addClassName as string]}`}>
-      <img src={`http://filespace.xzmybyg.cn/images/${banner}`} onClick={handleNavigate} />
+      <img src={`https://filespace.xzmybyg.cn/images/${banner}`} onClick={handleNavigate} />
       <div className={articleContent}>
         <p onClick={handleNavigate} className={articleTitle}>
           {title || '文章标题'}
