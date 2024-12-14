@@ -7,6 +7,7 @@ import LabelCard from './LabelCard'
 
 import Style from './index.module.scss'
 const { introduction, wechat, jello } = Style
+const baseURL = import.meta.env.VITE_BASE_URL
 
 function Wechat() {
   const WechatContent = <img className={wechat} src="/MyWechat.jpg" alt="加载失败" />
@@ -38,7 +39,7 @@ function BlogAside() {
           <Avatar
             className={jello}
             size={64}
-            src={'/blog-icon.jpg'}
+            src={`${baseURL}/blog-icon.jpg`}
             alt="加载失败"
             style={{
               boxShadow: '0 0 5px rgba(0, 0, 0, 0.5)',

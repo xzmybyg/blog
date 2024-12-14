@@ -9,7 +9,7 @@ declare const __dirname: string
 export default defineConfig((mode: ConfigEnv) => {
   const env = loadEnv(mode.mode, process.cwd())
   return {
-    base: './',
+    base: env.VITE_BASE_URL,
     plugins: [
       react(),
       //自动引入配置
@@ -88,11 +88,27 @@ export default defineConfig((mode: ConfigEnv) => {
       },
     },
     build: {
+      outDir: 'blog',
       minify: 'terser', // 启用后 terserOptions 配置才有效
       terserOptions: {
         compress: {
           drop_console: true, // 生产环境时移除console
           drop_debugger: true,
+        },
+      },
+      rollupOptions: {
+        output: {
+          entryFileNames: 'assets/[name].[hash].js',
+          chunkFileNames: 'assets/[name].[hash].js',
+          assetFileNames: 'assets/[name].[hash].[ext]',
+          manualChunks: {
+            // 将 React 相关库分离到一个单独的 chunk
+            react: ['react', 'react-dom', 'react-router-dom'],
+            // 将 Ant Design 相关库分离到一个单独的 chunk
+            antd: ['antd', '@ant-design/icons'],
+            // 将其他第三方库分离到一个单独的 chunk
+            vendor: ['axios', 'classnames', 'dayjs', 'for-editor', 'framer-motion', 'markdown-navbar', 'react-markdown', 'zustand'],
+          },
         },
       },
     },
