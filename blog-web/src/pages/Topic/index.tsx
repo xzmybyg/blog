@@ -3,6 +3,8 @@ import ReactMarkdown from 'react-markdown'
 import MarkdownNavbar from 'markdown-navbar'
 import { Card, Affix } from 'antd'
 const { TextArea } = Input
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { okaidia } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
 //api引入
 import { getTopic } from '@/apis'
@@ -64,7 +66,24 @@ export default function Topic() {
   return (
     <div id={topic} className={`pages`}>
       <div className={topicWrap}>
-        <ReactMarkdown className={`${markdownBody} markdown-body`} children={mdContent} />
+        <ReactMarkdown
+          className={`${markdownBody} markdown-body`}
+          children={mdContent}
+          components={{
+            code({ className, children, ...props }) {
+              const match = /language-(\w+)/.exec(className || '')
+              return match ? (
+                <SyntaxHighlighter style={okaidia} language={match[1]} PreTag="div" {...props}>
+                  {String(children).replace(/\n$/, '')}
+                </SyntaxHighlighter>
+              ) : (
+                <code className={className} {...props}>
+                  {children}
+                </code>
+              )
+            },
+          }}
+        />
         <Divider />
         <div className="handleComment">
           <h2>评论</h2>
