@@ -24,17 +24,6 @@ var qiniuRouter = require('@routes/qiniuSave')
 
 var app = express()
 
-db.connect(function (err) {
-  if (err) {
-    console.error('Error connecting to MySQL: ' + err.stack)
-    return
-  }
-  console.log('Connected to MySQL as id ' + db.threadId + process.env.DB_PORT)
-  console.log();
-  
-  // 启动 Express 服务
-})
-
 function startServer() {
   app.all('*', function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*')
