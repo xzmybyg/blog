@@ -33,7 +33,6 @@ db.connect(function (err) {
   console.log();
   
   // 启动 Express 服务
-  startServer()
 })
 
 function startServer() {
@@ -90,5 +89,7 @@ function startServer() {
     res.sendFile(`/error.html`, { root: 'public' })
   })
 }
+
+startServer()
 
 module.exports = app
