@@ -24,5 +24,4 @@ dist-ssr
 *.sln
 *.sw?
 
-src/types/auto-imports.d.ts
 public/font
