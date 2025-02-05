@@ -52,32 +52,35 @@ function Home() {
         </div>
       </div>
       <div id="articles" className={`pages`}>
-        <Space className={articleWrap} direction="vertical">
-          {artList?.map((item: CardProps, i: number) => {
-            return (
-              <ArticleCard
-                key={item.id}
-                id={item.id}
-                title={item.title || description}
-                addClassName={i % 2 == 1 ? 'article-reverse' : ''}
-                topping={item.topping}
-                label={item.label}
-                description={item.description}
-                createTime={item.createTime}
-                banner={item.banner}
-              ></ArticleCard>
-            )
-          })}
-          <Pagination
-            defaultCurrent={1}
-            current={page}
-            defaultPageSize={pageSize}
-            total={aticleTotal}
-            onChange={(page) => {
-              setPage(page)
-            }}
-          />
-        </Space>
+        <main>
+          <Space className={articleWrap} direction="vertical">
+            {artList?.map((item: CardProps, i: number) => {
+              return (
+                <ArticleCard
+                  key={item.id}
+                  id={item.id}
+                  title={item.title || description}
+                  addClassName={i % 2 == 1 ? 'article-reverse' : ''}
+                  topping={item.topping}
+                  label={item.label}
+                  description={item.description}
+                  createTime={item.createTime}
+                  banner={item.banner}
+                ></ArticleCard>
+              )
+            })}
+            <Pagination
+              defaultCurrent={1}
+              current={page}
+              defaultPageSize={pageSize}
+              total={aticleTotal}
+              onChange={(page) => {
+                setPage(page)
+              }}
+            />
+          </Space>
+        </main>
+
         <div className={`aside ${aside}`}>
           <Flex gap="small" vertical>
             <BlogAside></BlogAside>

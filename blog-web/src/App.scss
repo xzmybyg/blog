@@ -20,10 +20,15 @@
     margin: 0 auto;
     .pages {
       @include pagesLayout();
+      main{
+        flex: 1;
+        display: flex;
+        justify-content: center;
+      }
       margin: 0;
       padding: 10px 0;
       .ant-card {
-        width: 50vw;
+        width: 100%;
       }
       .aside {
         margin-left: $content-side-margin;

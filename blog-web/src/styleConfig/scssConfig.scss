@@ -55,6 +55,7 @@ $content-side-margin: 30px;
 @mixin pagesLayout() {
   display: flex;
   justify-content: center;
+  width: 100%;
 }
 
 //动画

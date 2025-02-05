@@ -1,6 +1,6 @@
 .homePage {
   .banerWrap {
-    width: 100vw;
+    width: 100%;
     height: calc(100vh - map-get($nav, height));
     // background: url(../../../public/banner.jpg);
     background-color: #fff;
@@ -53,5 +53,8 @@
         }
       }
     }
+  }
+  main{
+    width: 100%;
   }
 }
