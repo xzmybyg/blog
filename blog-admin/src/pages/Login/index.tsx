@@ -20,7 +20,7 @@ export default function Login() {
           values = { username: values.username, password: values.password }
           login(values).then((res) => {
             setUserInfo(res.data)
-            navigate('/admin')
+            navigate('/')
           })
         })
         .catch((err) => {
