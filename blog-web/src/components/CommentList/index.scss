@@ -12,10 +12,14 @@
       flex: 1;
     }
     .username {
-      color: red;
+      color: $ink;
       .date {
-        color: #ccc;
+        color: $muted;
         margin-left: 10px;
+      }
+      .replyAction {
+        margin-left: 15px;
+        color: $accent;
       }
     }
     .content {
@@ -28,5 +32,10 @@
         margin: 20px 0;
       }
     }
+  }
+
+  .replyTarget {
+    margin-right: 10px;
+    color: $accent;
   }
 }

@@ -1,20 +1,60 @@
+html {
+  scroll-behavior: smooth;
+  scrollbar-color: $accent $paper-deep;
+  scrollbar-width: thin;
+}
+
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 body {
   overflow-x: hidden;
-  background: linear-gradient(
-    90deg,
-    rgba(247, 149, 51, 0.1),
-    rgba(243, 112, 85, 0.1) 15%,
-    rgba(239, 78, 123, 0.1) 30%,
-    rgba(161, 102, 171, 0.1) 44%,
-    rgba(80, 115, 184, 0.1) 58%,
-    rgba(16, 152, 173, 0.1) 72%,
-    rgba(7, 179, 155, 0.1) 86%,
-    rgba(109, 186, 130, 0.1)
-  );
+  color: $ink;
+  font-family: $font-body;
+  background: $paper;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background-image: linear-gradient(rgba(24, 87, 217, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(24, 87, 217, 0.035) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: linear-gradient(to bottom, black, transparent 72%);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+a,
+[role='button'] {
+  &:focus-visible {
+    outline: 3px solid $focus-ring;
+    outline-offset: 3px;
+  }
+}
+
+::selection {
+  color: #fff;
+  background: $accent;
+}
+
+.ant-btn-primary {
+  background: $accent;
+  box-shadow: none;
+
+  &:hover,
+  &:focus {
+    background: $accent-deep !important;
+  }
 }
 // 滚动条样式
 ::-webkit-scrollbar-thumb {
@@ -22,6 +62,38 @@ body {
   border-radius: 10px;
   transition: all 0.2s ease-in-out;
 }
+
+.ant-input-textarea textarea {
+  resize: none;
+}
 ::-webkit-scrollbar {
   width: map-get($thumb, width);
+}
+
+::-webkit-scrollbar-track {
+  background: $paper-deep;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: $accent-deep;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (forced-colors: active) {
+  html {
+    scrollbar-color: auto;
+  }
 }

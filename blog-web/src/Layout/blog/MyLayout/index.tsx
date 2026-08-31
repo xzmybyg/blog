@@ -20,7 +20,7 @@ export default function MyLayout({ children }: { children: ReactNode | ReactNode
           textAlign: 'center',
         }}
       >
-        ©2023 Created By 心中没有白月光
+        <span>© 2023–2026 心中没有白月光 · 用代码记录问题，也记录答案</span>
         <p>黑ICP备2024017494号</p>
         {/* 
         黑ICP备2024017494号 <br />
@@ -30,12 +30,13 @@ export default function MyLayout({ children }: { children: ReactNode | ReactNode
       </Footer>
       <FloatButton.Group shape="circle">
         <FloatButton
-          tooltip={<div>跳转到后台管理系统</div>}
+          tooltip={<div>前往后台管理</div>}
+          aria-label="前往后台管理"
           onClick={() => {
             window.location.href = import.meta.env.VITE_ADMIN_URL
           }}
         />
-        <FloatButton.BackTop visibilityHeight={0} />
+        <FloatButton.BackTop visibilityHeight={320} aria-label="返回页面顶部" />
       </FloatButton.Group>
     </div>
   )

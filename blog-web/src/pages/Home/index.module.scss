@@ -1,57 +1,32 @@
 .homePage {
   .banerWrap {
-    width: 100vw;
-    height: calc(100vh - map-get($nav, height));
-    // background: url(../../../public/banner.jpg);
-    background-color: #fff;
-    background-size: cover;
-    position: relative;
-    .slogan {
-      position: absolute;
-      top: 20%;
-      left: 12%;
-      color: #322f2f;
-      font-size: 2rem;
-      font-weight: 700;
-      p {
-        margin-bottom: 20px;
-        font-size: 2rem;
-        font-weight: 700;
-        em {
-          background: linear-gradient(to right, #757cd9, #7c45d9);
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
-        .typed {
-        }
-      }
-      .Social_links {
-        display: flex;
-        // justify-content: space-evenly;
-        // align-items: center;
-        gap: 20px;
-        .icon_gitee {
-          color: red;
-        }
-      }
-    }
-    .jump {
-      position: absolute;
-      bottom: 10%;
-      left: 50%;
-      transform: translateX(-50%);
-      .ant-btn {
-        background: #9286f5;
-        color: #fff;
-        border: none;
-        border-radius: 20px;
-        padding: 0 20px;
-        font-size: 1.5rem;
-        font-weight: 700;
-        &:hover {
-          background: #7c45d9;
-        }
-      }
+    position: relative; width: 100%; min-height: calc(100vh - map-get($nav, height)); height: 620px; overflow: hidden;
+    border-bottom: 1px solid $line;
+    background: linear-gradient(90deg, rgba(9, 26, 51, .94), rgba(9, 26, 51, .82) 42%, rgba(9, 26, 51, .3)), url('/banner.jpg') center / cover;
+    &::after { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(rgba(95, 145, 255, .1) 1px, transparent 1px), linear-gradient(90deg, rgba(95, 145, 255, .1) 1px, transparent 1px); background-size: 40px 40px; }
+  }
+  .slogan {
+    position: absolute; top: 50%; left: max(24px, calc((100vw - $content-max-width) / 2)); z-index: 1;
+    width: min(760px, calc(100vw - 48px)); padding: clamp(24px, 3vw, 40px) 0; color: #f7faff; transform: translateY(-50%);
+    h1 { max-width: 720px; font-family: $font-display; font-size: clamp(2.8rem, 6vw, 5.4rem); line-height: 1.06; letter-spacing: -.05em; }
+  }
+  .intro { max-width: 650px; margin-top: 24px; color: #dbe7f7; font-size: clamp(1rem, 1.6vw, 1.15rem); line-height: 1.9; em { color: #fff; font-style: normal; font-weight: 700; } }
+  .typed { color: #a9c4ff; font-family: $font-mono; white-space: normal; }
+  .Social_links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px;
+    :global(.ant-btn) { min-height: 46px; padding: 0 18px; color: #fff; border-color: rgba(255,255,255,.32); background: rgba(9,26,51,.5); cursor: pointer;
+      &:hover { color: #fff !important; border-color: $accent !important; background: $accent !important; }
     }
   }
+  .jump { position: absolute; bottom: 34px; left: 50%; z-index: 1; transform: translateX(-50%);
+    :global(.ant-btn) { width: 50px; height: 50px; color: $ink; border: 1px solid $line; border-radius: 50%; background: #fff; cursor: pointer; }
+  }
+  .articleWrap { width: 100%; gap: 24px !important; padding-top: 8px; }
+  .sectionHeader { display: flex; align-items: end; justify-content: space-between; margin: 4px 0 8px; padding: 0 0 18px 18px; border-bottom: 1px solid $line; border-left: 3px solid $signal;
+    h2 { margin-top: 5px; color: $ink; font-family: $font-display; font-size: clamp(1.8rem, 3vw, 2.5rem); }
+  }
+}
+.eyebrow, .articleCount { color: $muted; font-family: $font-mono; font-size: .75rem; letter-spacing: .1em; }
+.banerWrap .eyebrow { display: block; margin-bottom: 18px; color: #8fb4ff; }
+@media screen and (max-width: $hiddenSomeSize) {
+  .homePage { .banerWrap { height: 590px; min-height: 590px; } .slogan { left: 18px; width: calc(100vw - 36px); padding: 20px 4px; } .typed { display: inline; } .sectionHeader { align-items: start; } }
 }

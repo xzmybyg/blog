@@ -33,11 +33,13 @@ function Message() {
   return (
     <div id={messagePage}>
       <div className={sendWrap}>
-        留言板
-        <Form className={formWarp} onFinish={sendMessage}>
-          <Space.Compact>
-            <Form.Item name="content">
-              <Input></Input>
+        <span className={Style.eyebrow}>OPEN MESSAGE WALL</span>
+        <h1>留言板</h1>
+        <p>分享一个想法、问题，或者简单打个招呼。</p>
+        <Form className={formWarp} onFinish={sendMessage} noValidate>
+          <Space.Compact block>
+            <Form.Item name="content" rules={[{ required: true, message: '请输入留言内容' }]}>
+              <Input aria-label="留言内容" placeholder="写下你的留言…" maxLength={200} />
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">

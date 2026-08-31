@@ -10,7 +10,7 @@ import useRequest from '@/hooks/useRequest'
 const description = '本站使用React+Express搭建'
 
 import { useTyped } from '@/hooks'
-import { DownOutlined, GithubOutlined } from '@ant-design/icons'
+import { ArrowDownOutlined, GithubOutlined, ReadOutlined } from '@ant-design/icons'
 
 function Home() {
   const { aticleTotal } = useStore()
@@ -24,35 +24,38 @@ function Home() {
   const el = useTyped(['一名前端开发工程师', 'A Web &lt;Developer /&gt;'], { loop: true })
 
   return (
-    <div className={`${homePage}`}>
-      <div className={`${banerWrap}`}>
+    <div className={`${homePage} home-page`}>
+      <section className={`${banerWrap}`} aria-labelledby="home-title">
         <div className={`${slogan}`}>
-          <p>你好!&#128075; </p>
-          <p>
-            我是<em>心中没有白月光</em>，
+          <span className={Style.eyebrow}>FRONTEND FIELD NOTES · BEIJING</span>
+          <h1 id="home-title">把复杂的问题，<br />写成清晰的答案。</h1>
+          <p className={Style.intro}>
+            我是<em>心中没有白月光</em>，<span className={`${typed}`} ref={el}></span>。
+            这里记录前端工程、产品体验和持续学习中的真实解法。
           </p>
-          <p>
-            <span className={`${typed}`} ref={el}></span>
-          </p>
-          <p>欢迎来到我的博客。</p>
           <div className={`${Social_links}`}>
-            <Button icon={<GithubOutlined />} />
-            <Button icon={<i className={`iconfont icon-gitee ${icon_gitee}`} />} />
+            <Button href="#articles" type="primary" icon={<ReadOutlined />}>阅读最新文章</Button>
+            <Button href="https://github.com/xzmybyg" target="_blank" rel="noreferrer" aria-label="在新标签页打开 GitHub" icon={<GithubOutlined />}>GitHub</Button>
+            <span className={icon_gitee} aria-hidden="true" />
           </div>
         </div>
         <div className={`${jump}`}>
           <Button
             type="text"
-            icon={<DownOutlined />}
+            aria-label="滚动到最新文章"
+            icon={<ArrowDownOutlined />}
             onClick={() => {
-              window.location.hash = ''
-              window.location.hash = 'articles'
+              document.getElementById('articles')?.scrollIntoView({ behavior: 'smooth' })
             }}
           />
         </div>
-      </div>
+      </section>
       <div id="articles" className={`pages`}>
         <Space className={articleWrap} direction="vertical">
+          <header className={Style.sectionHeader}>
+            <div><span className={Style.eyebrow}>LATEST WRITING</span><h2>最近更新</h2></div>
+            <span className={Style.articleCount}>共 {aticleTotal || 0} 篇</span>
+          </header>
           {artList?.map((item: CardProps, i: number) => {
             return (
               <ArticleCard
@@ -72,9 +75,10 @@ function Home() {
             defaultCurrent={1}
             current={page}
             defaultPageSize={pageSize}
-            total={aticleTotal}
+            total={aticleTotal > 0 ? aticleTotal : (artList?.length ?? 0)}
             onChange={(page) => {
               setPage(page)
+              document.getElementById('articles')?.scrollIntoView({ behavior: 'smooth' })
             }}
           />
         </Space>

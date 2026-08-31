@@ -16,10 +16,6 @@ function TheLink() {
     })
   }, [])
 
-  const gotoLink = (url: string) => {
-    window.open(url, '_blank')
-  }
-
   const [messageApi, contextHolder] = message.useMessage()
 
   const submit = (values: FormValues) => {
@@ -45,17 +41,13 @@ function TheLink() {
         <h1>友链</h1>
         <div className={listWrap}>
           {linkList.map((item: any) => (
-            <Card
-              key={item.id}
-              className={linkItem}
-              onClick={() => {
-                gotoLink(item.url)
-              }}
-            >
+            <a key={item.id} className={linkItem} href={item.url} target="_blank" rel="noreferrer" aria-label={`访问 ${item.title}（新标签页）`}>
+            <Card>
               {/* <Skeleton avatar active> */}
               <Meta avatar={<Avatar src={item.logo} />} title={item.title} description={item.describe} />
               {/* </Skeleton> */}
             </Card>
+            </a>
           ))}
         </div>
         <Divider>申请友链</Divider>
@@ -68,17 +60,17 @@ function TheLink() {
             <p>头像：https://www.xzmybyg.com/logo.png</p>
           </div>
           <div className={linkForm}>
-            <Form onFinish={(values) => submit(values)}>
-              <Form.Item className={formItem} label="标题" name="title">
+            <Form onFinish={(values) => submit(values)} noValidate layout="vertical">
+              <Form.Item className={formItem} label="标题" name="title" rules={[{ required: true, message: '请输入网站名称' }]}>
                 <Input placeholder="网站名称" />
               </Form.Item>
-              <Form.Item className={formItem} label="描述" name="describe">
+              <Form.Item className={formItem} label="描述" name="describe" rules={[{ required: true, message: '请输入网站描述' }]}>
                 <Input placeholder="网站描述" />
               </Form.Item>
-              <Form.Item className={formItem} label="网址" name="url">
+              <Form.Item className={formItem} label="网址" name="url" rules={[{ required: true, message: '请输入网站地址' }, { type: 'url', message: '请输入完整的 https:// 地址' }]}>
                 <Input placeholder="网站地址" />
               </Form.Item>
-              <Form.Item className={formItem} label="头像" name="logo">
+              <Form.Item className={formItem} label="头像" name="logo" rules={[{ required: true, message: '请输入头像地址' }, { type: 'url', message: '请输入完整的图片地址' }]}>
                 <Input placeholder="网站logo" />
               </Form.Item>
               <Form.Item className={formItem}>

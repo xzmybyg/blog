@@ -48,7 +48,7 @@ function CommentList({ data, onDataUpdate }: { data: any; onDataUpdate: () => vo
           <div className="username">
             {nickname || username}
             <span className="date">{dayjs(createTime).format('YYYY-MM-DD HH:mm')}</span>
-            <span style={{ marginLeft: 15, color: 'blue' }} onClick={handleReplyClick}>
+            <span className="replyAction" onClick={handleReplyClick}>
               回复
             </span>
           </div>
@@ -122,12 +122,12 @@ function Reply({ item, onDataUpdate }: { item: any; onDataUpdate: () => void }) 
           <div className="username">
             {nickname || username}
             <span className="date">{dayjs(createTime).format('YYYY-MM-DD HH:mm')}</span>
-            <span style={{ marginLeft: 15, color: 'blue' }} onClick={handleReplyClick}>
+            <span className="replyAction" onClick={handleReplyClick}>
               回复
             </span>
           </div>
           <div className="content">
-            <span style={{ marginRight: 10, color: 'blue' }}>{`@${reply_to_nickname || reply_to_username}`}</span>
+            <span className="replyTarget">{`@${reply_to_nickname || reply_to_username}`}</span>
             {` ${content}`}
           </div>
         </div>

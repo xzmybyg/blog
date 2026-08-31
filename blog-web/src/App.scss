@@ -1,5 +1,5 @@
 .layout {
-  height: 100vh;
+  min-height: 100vh;
   position: relative;
 
   .blog-header {
@@ -7,34 +7,44 @@
     position: sticky;
     top: 0;
     left: 0;
-    opacity: 0.8;
     z-index: 5;
-    overflow: hidden;
-    background-color: map-get($nav, color);
+    border-bottom: 1px solid $line;
+    background-color: map-get($nav, bcColor);
   }
 
   .blog-content {
-    min-height: calc(100vh - map-get($nav, height) - 50px);
-    // padding: 10px 0px;
+    min-height: calc(100vh - map-get($nav, height) - 64px);
     overflow-x: hidden;
-    margin: 0 auto;
+    padding: 42px 0 56px;
     .pages {
       @include pagesLayout();
-      margin: 0;
-      padding: 10px 0;
+      align-items: start;
       .ant-card {
-        width: 50vw;
+        border: 1px solid $line;
+        border-radius: $card-radius;
+        box-shadow: $card-shadow;
       }
       .aside {
-        margin-left: $content-side-margin;
+        min-width: 0;
+        position: sticky;
+        top: 92px;
       }
     }
   }
 
+  .blog-content:has(.home-page) {
+    padding-top: 0;
+  }
+
   .blog-footer {
-    height: 50px;
+    min-height: 64px;
+    display: grid;
+    place-items: center;
+    letter-spacing: 0.08em;
+    font-size: 0.85rem;
     background-color: map-get($footer, bcColor);
     color: map-get($footer, color);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
 }
 
@@ -42,9 +52,9 @@
   .layout {
     .blog-content {
       .pages {
-        box-sizing: border-box;
-        padding: 10px;
-        width: 100%;
+        display: block;
+        width: min(100%, calc(100% - 28px));
+        padding: 0;
         .ant-card {
           width: 100%;
         }

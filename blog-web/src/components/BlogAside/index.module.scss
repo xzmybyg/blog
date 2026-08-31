@@ -1,5 +1,28 @@
 .introduction {
+  :global(.ant-card-body) {
+    padding: 24px;
+  }
+
+  p {
+    margin: 8px 0;
+    color: $muted;
+    font-size: 0.9rem;
+  }
+
+  :global(.ant-card-actions) {
+    background: $surface;
+    border-top-color: $line;
+
+    li {
+      color: $accent;
+    }
+  }
 }
 .wechat {
   width: 200px;
+}
+
+.jello {
+  border: 3px solid $surface;
+  box-shadow: 0 8px 20px rgba(18, 32, 51, 0.16) !important;
 }

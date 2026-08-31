@@ -1,5 +1,6 @@
 //第三方库
 import dayjs from 'dayjs'
+import { Link } from 'react-router-dom'
 import { TagOutlined, PushpinOutlined } from '@ant-design/icons'
 //样式引入
 import Style from './index.module.scss'
@@ -8,23 +9,32 @@ const { articleCard, articleInfo, articleContent, articleTitle, articleTime, art
 
 function ArticleCard(props: CardProps) {
   const { id, title, topping, createTime, label, description, addClassName,banner } = props
-  const navigate = useNavigate()
-  const handleNavigate = () => {
-    navigate(`/topic/${id}`)
-  }
-
+  const defaultBanner = '/banner.jpg'
+  const [bannerSrc, setBannerSrc] = useState(
+    banner && banner !== '404' ? `https://filespace.xzmybyg.cn/images/${banner}` : defaultBanner,
+  )
   return (
-    <div className={`${articleCard} ${addClassName && Style[addClassName as string]}`}>
-      <img src={`https://filespace.xzmybyg.cn/images/${banner}`} onClick={handleNavigate} />
+    <article className={`${articleCard} ${addClassName && Style[addClassName as string]}`}>
+      <Link className={Style.articleImageWrap} to={`/topic/${id}`} aria-label={`阅读文章：${title}`}>
+        <img
+          src={bannerSrc}
+          alt={title || '文章封面'}
+          onError={() => {
+            if (bannerSrc !== defaultBanner) {
+              setBannerSrc(defaultBanner)
+            }
+          }}
+        />
+      </Link>
       <div className={articleContent}>
-        <p onClick={handleNavigate} className={articleTitle}>
-          {title || '文章标题'}
+        <h3 className={articleTitle}>
+          <Link to={`/topic/${id}`}>{title || '文章标题'}</Link>
           {createTime && (
-            <span className={articleTime} color="#f50">
+            <time className={articleTime} dateTime={dayjs(createTime).format('YYYY-MM-DD')}>
               {dayjs(createTime).format('YYYY-MM-DD')}
-            </span>
+            </time>
           )}
-        </p>
+        </h3>
         <div className={articleInfo}>
           <div className={articleLabel}>
             {topping && (
@@ -44,8 +54,9 @@ function ArticleCard(props: CardProps) {
           </div>
           <div className={articleDescription}>{description || '暂无文章描述，等待后续添加。'}</div>
         </div>
+        <Link className={Style.readMore} to={`/topic/${id}`}>阅读全文 <span aria-hidden="true">→</span></Link>
       </div>
-    </div>
+    </article>
   )
 }
 

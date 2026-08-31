@@ -5,17 +5,19 @@ function About() {
   return (
     <div id="aboutpage" className="pages">
       <Card className="card" style={{ position: 'relative' }}>
-        <img className="animal_avatars" src={`${baseURL}/animal_avatars.png`} alt="" />
+        <img className="animal_avatars" src={`${baseURL}/animal_avatars.png`} alt="" aria-hidden="true" />
 
         <Avatar
           className="avatar jello"
           src={`${baseURL}/blog-icon.jpg`}
+          alt="作者头像"
           size={{ xs: 40, sm: 40, md: 40, lg: 64, xl: 80, xxl: 100 }}
           style={{
             boxShadow: '0 0 5px rgba(0, 0, 0, 0.5)',
           }}
         />
-        <h2>关于我</h2>
+        <span className="aboutEyebrow">ABOUT THE AUTHOR</span>
+        <h1>关于我</h1>
         <Divider className="divider" />
         <ol>
           <li>主要做前端开发，做过一段时间C++全栈</li>
@@ -23,7 +25,7 @@ function About() {
           <li>平时喜欢写一些小项目，通过新媒体了解一些前沿的技术</li>
           <li>邮箱：1277215827@qq.com</li>
         </ol>
-        <h2>技术栈</h2>
+        <h2>我使用的技术</h2>
         <Divider className="divider" />
         <ol>
           <li>前端：React、Vue、Typescript</li>
@@ -31,7 +33,7 @@ function About() {
           <li>数据库：MySQL、MongoDB</li>
           <li>其他：Webpack、Vite</li>
         </ol>
-        <h2>关于本站</h2>
+        <h2>关于这个博客</h2>
         <Divider className="divider" />
         <ul>
           <li>博客搭建</li>

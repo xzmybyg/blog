@@ -5,31 +5,72 @@
   left: 0;
   z-index: 50;
   background-color: map-get($nav, bcColor);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid $line;
   height: map-get($nav, height);
   color: map-get($nav, color);
-  font-size: 1rem;
-  transition: all 0.5s ease-in-out;
+  font-size: 0.92rem;
+  transition: border-color 0.2s ease;
 }
 .navDesktop {
   @extend .nav;
-  padding: 0 36px;
+  padding: 0 max(36px, calc((100vw - $content-max-width) / 2));
+  .authorName {
+    color: $accent-deep;
+    font-family: $font-mono;
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
   .itemWrap {
     height: 100%;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
     .navItem {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       height: 100%;
       line-height: map-get($nav, height);
       text-align: center;
-      color: map-get($nav, color);
+      color: $muted;
       min-width: 50px;
-      margin: 0 5px;
-      font-weight: 1200;
+      margin: 0 10px;
+      padding: 0 6px;
+      font-weight: 600;
+      position: relative;
       cursor: pointer;
+      border: 0;
+      background: transparent;
+      font: inherit;
+      transition: color 0.2s ease;
       &:hover {
-        color: lighten(map-get($nav, color), 10%);
-        background-color: lighten(map-get($nav, bcColor), 10%);
+        color: $ink;
+        background-color: transparent;
+        &::after {
+          transform: scaleX(1);
+        }
+      }
+      &::after {
+        content: '';
+        position: absolute;
+        right: 4px;
+        bottom: 18px;
+        left: 4px;
+        height: 2px;
+        background: $signal;
+        transform: scaleX(0);
+        transform-origin: center;
+        transition: transform 0.2s ease;
+      }
+      &.active {
+        color: $accent-deep;
+        &::after {
+          transform: scaleX(1);
+        }
       }
     }
   }
@@ -39,23 +80,70 @@
   padding: 0 20px;
   display: none;
 
+  .authorName {
+    color: $accent-deep;
+    font-family: $font-mono;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .menuButton {
+    width: 44px;
+    height: 44px;
+    border: 1px solid $line;
+    border-radius: 10px;
+    color: $ink;
+    background: $surface;
+    cursor: pointer;
+  }
+
   .MobileMenu {
     position: fixed;
     right: 0;
     top: map-get($nav, height);
-    height: calc(100vh - 80px);
-    width: 30%;
-    background-color: #00000088;
+    height: auto;
+    width: min(280px, 78vw);
+    padding: 20px;
+    background: rgba(244, 247, 251, 0.98);
+    border: 1px solid $line;
+    box-shadow: $card-shadow;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 20px;
+    align-items: stretch;
+    gap: 10px;
     .navItem {
-      width: 70%;
-      height: 30px;
-      margin: 0 auto;
+      width: 100%;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 12px;
+      border: 0;
+      border-radius: 8px;
+      color: $ink;
+      background: transparent;
+      font: inherit;
+      cursor: pointer;
+      &.active,
+      &:hover {
+        color: $accent-deep;
+        background: rgba(24, 87, 217, 0.08);
+      }
     }
   }
+}
+
+.popoverAction {
+  min-height: 36px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 8px;
+  color: $ink;
+  background: transparent;
+  cursor: pointer;
+  &:hover { color: $accent; background: rgba(24, 87, 217, .08); }
 }
 
 @media screen and (max-width: $hiddenSomeSize) {

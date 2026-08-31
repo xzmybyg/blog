@@ -1,6 +1,31 @@
 .Article {
-  .listWrap {
-    width: 800px !important;
-    background-color: aqua;
+  .listWrap { width: 100% !important; background: $surface; }
+  .articlePageHeader { padding: 18px 12px 34px; border-bottom: 1px solid $line;
+    span { color: $accent; font-family: $font-mono; font-size: .75rem; letter-spacing: .12em; }
+    h1 { margin: 8px 0 10px; color: $ink; font-family: $font-display; font-size: clamp(2rem, 4vw, 3.5rem); letter-spacing: -.04em; }
+    p { max-width: 38rem; color: $muted; line-height: 1.8; }
+  }
+  .ant-list-item { display: grid; grid-template-columns: 120px minmax(0, 1fr) 44px; gap: 20px; padding: 24px 12px !important;
+    time { color: $muted; font-family: $font-mono; font-size: .82rem; }
+  }
+  .ant-list-item-meta-title { margin-bottom: 7px !important; font-family: $font-display; font-size: 1.18rem !important;
+    a:hover { color: $accent; }
+  }
+  .ant-list-item-meta-description { color: $muted; }
+  .articleArrow { display: grid; width: 40px; height: 40px; place-items: center; border: 1px solid $line; border-radius: 10px; color: $accent; font-family: $font-mono; transition: .18s ease;
+    &:hover { color: #fff; border-color: $accent; background: $accent; }
+  }
+}
+@media screen and (max-width: 620px) {
+  .Article .ant-list-item {
+    grid-template-areas:
+      'date date'
+      'content arrow';
+    grid-template-columns: minmax(0, 1fr) 44px;
+    gap: 10px 12px;
+
+    time { grid-area: date; }
+    .ant-list-item-meta { grid-area: content; min-width: 0; }
+    .articleArrow { grid-area: arrow; align-self: center; }
   }
 }

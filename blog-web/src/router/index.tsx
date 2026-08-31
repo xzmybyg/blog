@@ -21,6 +21,10 @@ const Element = function Element(props) {
   const [hasCheckedAuth, setHasCheckedAuth] = useState(false)
 
   useEffect(() => {
+    document.title = `${props.name} · 心中没有白月光`
+  }, [props.name])
+
+  useEffect(() => {
     if (props.meta.checkAuth && !token) {
       navigate('/admin/login')
     } else {

@@ -66,6 +66,7 @@ export default function Topic() {
   return (
     <div id={topic} className={`pages`}>
       <div className={topicWrap}>
+        <article aria-label="文章正文">
         <ReactMarkdown
           className={`${markdownBody} markdown-body`}
           children={mdContent}
@@ -84,12 +85,13 @@ export default function Topic() {
             },
           }}
         />
+        </article>
         <Divider />
         <div className="handleComment">
           <h2>评论</h2>
-          <Form onFinish={handleComment}>
-            <Form.Item name="content">
-              <TextArea rows={4} />
+          <Form onFinish={handleComment} noValidate>
+            <Form.Item name="content" label="评论内容" rules={[{ required: true, message: '请写下评论内容' }]}>
+              <TextArea rows={5} placeholder="分享你的想法或补充…" maxLength={1000} showCount />
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">

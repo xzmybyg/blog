@@ -4,41 +4,56 @@ $mediaSize: (
   mediumScreen: 992px,
   maxiScreen: 1200px,
 );
-$hiddenSomeSize: 960px;
-$hiddenSomeSize: 768px;
+$hiddenSomeSize: 896px;
 
-// 颜色变量
-$testBgColor: gold;
+// Developer Field Notes：运行时语义令牌（DESIGN.md 的唯一实现映射）
+$paper: #f4f7fb;
+$paper-deep: #e9eef6;
+$surface: #ffffff;
+$ink: #122033;
+$muted: #58677c;
+$accent: #1857d9;
+$accent-deep: #0b3ca8;
+$signal: #f05a3c;
+$line: #d9e1ec;
+$success: #18794e;
+$danger: #c83b31;
+$focus-ring: rgba(24, 87, 217, 0.28);
+$card-shadow: 0 14px 36px rgba(18, 32, 51, 0.1);
+$card-radius: 18px;
+$content-max-width: 1220px;
+$font-display: Arial, 'Microsoft YaHei', 'PingFang SC', sans-serif;
+$font-body: 'Microsoft YaHei', 'PingFang SC', system-ui, sans-serif;
+$font-mono: 'Cascadia Code', 'SFMono-Regular', Consolas, monospace;
+
 // 字体变量
 $rootFontSize: 16px;
 
 //主题变量
 $nav: (
-  // bcColor: #1f262c,
-  bcColor: #272936,
-  // color: #d6dcff,
-  color: #9286f5,
-  height: 7vh,
+  bcColor: rgba(244, 247, 251, 0.94),
+  color: $ink,
+  height: 72px,
   fontSize: 1rem
 );
 $footer: (
-  bcColor: #060f17,
-  color: #fff,
+  bcColor: #0d1b2d,
+  color: #f4f7fb,
 );
 $articleCard: (
-  bcColor: #d6dcff,
-  color: #fff,
+  bcColor: $surface,
+  color: $ink,
   width: 8px,
 );
 
 //滚动条变量
 $thumb: (
-  color: #001529,
+  color: $accent,
   width: 8px,
 );
 
 //其他变量
-$content-side-margin: 30px;
+$content-side-margin: 32px;
 
 //mixin
 @mixin flexBetween($justify: space-between, $align: center) {
@@ -53,8 +68,11 @@ $content-side-margin: 30px;
 }
 
 @mixin pagesLayout() {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: $content-side-margin;
+  width: min($content-max-width, calc(100% - 48px));
+  margin: 0 auto;
 }
 
 //动画

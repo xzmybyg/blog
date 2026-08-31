@@ -1,9 +1,16 @@
 #aboutpage {
   min-height: 85vh;
-  margin-top: 30px;
+  display: block;
+  margin-top: 0;
   .card {
     position: relative;
-    width: 50vw;
+    width: min(760px, 100%);
+    margin: 0 auto;
+    padding: 12px;
+    background: $surface;
+    border: 1px solid $line;
+    border-radius: $card-radius;
+    box-shadow: none;
     .animal_avatars {
       position: absolute;
       top: -50px;
@@ -15,13 +22,20 @@
   .divider {
     margin-top: 0;
   }
+  h1,
   h2 {
     margin-top: 30px;
+    color: $ink;
+    font-family: $font-display;
   }
+  h1 { margin-top: 14px; font-size: clamp(2.2rem, 4vw, 3.6rem); letter-spacing: -.045em; }
+  .aboutEyebrow { color: $accent; font-family: $font-mono; font-size: .75rem; letter-spacing: .12em; }
   ol,
   ul {
     margin-left: 50px;
+    color: $muted;
     font-size: 1rem;
+    line-height: 1.9;
 
     & > :nth-child(n):not(:last-child) {
       margin-bottom: 10px;

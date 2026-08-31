@@ -1,4 +1,5 @@
-import { UnorderedListOutlined } from '@ant-design/icons'
+import { MenuOutlined, CloseOutlined } from '@ant-design/icons'
+import { NavLink } from 'react-router-dom'
 import Style from './index.module.scss'
 import Login from '@/components/Login'
 import useUserStore, { logoutInfo } from '@/store/user'
@@ -10,8 +11,6 @@ function Nav({ navlist = routes }) {
   const { id, username, nickname, avatar } = useUserStore()
   const [MobileMenuVisible, setMobileMenuVisible] = useState(false)
 
-  const navigate = useNavigate()
-
   const loginRef = useRef<{ openModal: () => void } | null>(null)
   const callChildMethod = () => {
     if (loginRef.current) {
@@ -21,102 +20,88 @@ function Nav({ navlist = routes }) {
 
   const navbarRef = useRef<HTMLElement | null>(null)
 
-  let lastScrollTop = 0
-
-  const handleScroll = () => {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop
-    if (navbarRef.current) {
-      if (scrollTop > lastScrollTop) {
-        // 向下滚动
-        navbarRef.current.style.opacity = '0'
-      } else {
-        // 向上滚动
-        navbarRef.current.style.opacity = '1'
-        navbarRef.current.style.backgroundColor = 'rgba(0, 0, 0, 0.7)'
-      }
-    }
-    lastScrollTop = scrollTop
-  }
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll)
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [])
-
   return (
     <>
       <nav className={navDesktop} ref={navbarRef}>
-        <div className={authorName}>心中没有白月光</div>
+        <NavLink className={authorName} to="/" aria-label="心中没有白月光博客首页">
+          <span aria-hidden="true">&lt;/&gt;</span> 心中没有白月光
+        </NavLink>
         <div className={itemWrap}>
           {navlist.map((item) => {
             return (
               item.showOnNav != false && (
-                <div
-                  className={navItem}
+                <NavLink
+                  className={({ isActive }) => `${navItem} ${isActive ? Style.active : ''}`}
                   key={item.name}
-                  onClick={() => {
-                    navigate(item.path)
-                  }}
+                  to={item.path}
                 >
-                  <i className={`iconfont ${item.icon}`}></i>
+                  <i className={`iconfont ${item.icon}`} aria-hidden="true"></i>
                   {item.name}
-                </div>
+                </NavLink>
               )
             )
           })}
           {id ? (
             <div className={navItem}>
-              <Popover placement="bottomRight" content={<div onClick={logoutInfo}>退出</div>}>
+              <Popover placement="bottomRight" content={<button type="button" className={Style.popoverAction} onClick={logoutInfo}>退出登录</button>}>
                 <Avatar src={avatar} icon={avatar ? null : <i className="iconfont icon-denglu1" />} />
                 <span>{nickname || username}</span>
               </Popover>
             </div>
           ) : (
-            <div className={navItem} onClick={callChildMethod}>
+            <button type="button" className={navItem} onClick={callChildMethod}>
               <i className="iconfont icon-zhucedenglu" />
               登录
-            </div>
+            </button>
           )}
         </div>
       </nav>
       <nav className={navMobile}>
-        <div className={authorName}>心中没有白月光</div>
-        <UnorderedListOutlined onClick={() => setMobileMenuVisible(!MobileMenuVisible)} />
+        <NavLink className={authorName} to="/">
+          <span aria-hidden="true">&lt;/&gt;</span> 心中没有白月光
+        </NavLink>
+        <button
+          type="button"
+          className={Style.menuButton}
+          aria-label={MobileMenuVisible ? '关闭导航菜单' : '打开导航菜单'}
+          aria-expanded={MobileMenuVisible}
+          aria-controls="mobile-navigation"
+          onClick={() => setMobileMenuVisible(!MobileMenuVisible)}
+        >
+          {MobileMenuVisible ? <CloseOutlined /> : <MenuOutlined />}
+        </button>
         {MobileMenuVisible && (
-          <div className={MobileMenu}>
+          <div id="mobile-navigation" className={MobileMenu}>
             {avatar ? (
               <div>
                 <Avatar src={avatar} />
                 <span>{nickname || username}</span>
               </div>
             ) : (
-              <div className={navItem} onClick={callChildMethod}>
+              <button type="button" className={navItem} onClick={callChildMethod}>
                 <i className="iconfont icon-zhucedenglu" />
                 登录
-              </div>
+              </button>
             )}
             {navlist.map((item) => {
               return (
                 item.showOnNav != false && (
-                  <div
-                    className={navItem}
+                  <NavLink
+                    className={({ isActive }) => `${navItem} ${isActive ? Style.active : ''}`}
                     key={item.name}
-                    onClick={() => {
-                      navigate(item.path)
-                    }}
+                    to={item.path}
+                    onClick={() => setMobileMenuVisible(false)}
                   >
                     <i className={`iconfont ${item.icon}`}></i>
                     {item.name}
-                  </div>
+                  </NavLink>
                 )
               )
             })}
             {id && (
-              <div className={navItem} onClick={logoutInfo}>
+              <button type="button" className={navItem} onClick={logoutInfo}>
                 退出
-              </div>
+              </button>
             )}
           </div>
         )}
