@@ -3,11 +3,18 @@ import react from '@vitejs/plugin-react-swc'
 import path from 'path'
 import AutoImport from 'unplugin-auto-import/vite'
 import { codeInspectorPlugin } from 'code-inspector-plugin'
+// import dotenv from 'dotenv';
 declare const __dirname: string
 
 // https://vitejs.dev/config/
-export default defineConfig((mode: ConfigEnv) => {
-  const env = loadEnv(mode.mode, process.cwd())
+export default defineConfig(({mode}: ConfigEnv) => {
+  // 加载根目录下的 .env 文件
+  // dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+
+  // 加载子项目目录下的 .env 文件，覆盖根目录的环境变量
+  // dotenv.config({ path: path.resolve(__dirname, '.env') });
+
+  const env = loadEnv(mode, process.cwd())
   return {
     base: env.VITE_BASE_URL,
     plugins: [
@@ -77,7 +84,7 @@ export default defineConfig((mode: ConfigEnv) => {
       },
     },
     server: {
-      port: env.VITE_PORT as unknown as number,
+      port: parseInt(env.VITE_PORT),
       //设置正向代理跨域
       proxy: {
         '/api': {

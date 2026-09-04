@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import type { TableColumnsType } from 'antd';
 
 export default function Comment() {
   const [commentList, setCommentList] = useState<CommentAdmin[]>([])
@@ -8,7 +9,7 @@ export default function Comment() {
     })
   }, [])
 
-  const columns = [
+  const columns:TableColumnsType<CommentAdmin> = [
     {
       title: 'id',
       dataIndex: 'comment_id',
@@ -63,7 +64,7 @@ export default function Comment() {
     },
   ]
   const expandedRowRender = (record) => {
-    const columns = [
+    const columns:TableColumnsType<Reply> = [
       {
         title: '回复id',
         dataIndex: 'reply_id',
@@ -106,7 +107,7 @@ export default function Comment() {
       },
     ]
     return (
-      <Table rowKey={(record) => record.reply_id} columns={columns} dataSource={record.replyList} pagination={false} />
+      <Table rowKey={(row) => row.reply_id} columns={columns} dataSource={record.replyList} pagination={false} />
     )
   }
 
