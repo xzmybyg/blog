@@ -3,17 +3,17 @@
   position: relative;
 
   .blog-header {
-    height: map-get($nav, height);
+    height: map.get($nav, height);
     position: sticky;
     top: 0;
     left: 0;
     z-index: 5;
     border-bottom: 1px solid $line;
-    background-color: map-get($nav, bcColor);
+    background-color: map.get($nav, bcColor);
   }
 
   .blog-content {
-    min-height: calc(100vh - map-get($nav, height) - 64px);
+    min-height: calc(100vh - map.get($nav, height) - 64px);
     overflow-x: hidden;
     padding: 42px 0 56px;
     .pages {
@@ -42,8 +42,8 @@
     place-items: center;
     letter-spacing: 0.08em;
     font-size: 0.85rem;
-    background-color: map-get($footer, bcColor);
-    color: map-get($footer, color);
+    background-color: map.get($footer, bcColor);
+    color: map.get($footer, color);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
 }

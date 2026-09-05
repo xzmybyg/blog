@@ -73,7 +73,8 @@ export default defineConfig(({mode}: ConfigEnv) => {
       preprocessorOptions: {
         scss: {
           //引入scss全局变量
-          additionalData: `@import "@/styleConfig/scssConfig.scss";`,
+          additionalData: `@use "sass:map"; @use "@/styleConfig/scssConfig.scss" as *;`,
+          silenceDeprecations: ['legacy-js-api'],
         },
       },
     },

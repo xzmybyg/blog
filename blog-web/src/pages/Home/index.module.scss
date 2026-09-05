@@ -1,6 +1,6 @@
 .homePage {
   .banerWrap {
-    position: relative; width: 100%; min-height: calc(100vh - map-get($nav, height)); height: 620px; overflow: hidden;
+    position: relative; width: 100%; min-height: calc(100vh - map.get($nav, height)); height: 620px; overflow: hidden;
     border-bottom: 1px solid $line;
     background: linear-gradient(90deg, rgba(9, 26, 51, .94), rgba(9, 26, 51, .82) 42%, rgba(9, 26, 51, .3)), url('/banner.jpg') center / cover;
     &::after { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(rgba(95, 145, 255, .1) 1px, transparent 1px), linear-gradient(90deg, rgba(95, 145, 255, .1) 1px, transparent 1px); background-size: 40px 40px; }

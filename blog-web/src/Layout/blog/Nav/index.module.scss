@@ -4,11 +4,11 @@
   top: 0;
   left: 0;
   z-index: 50;
-  background-color: map-get($nav, bcColor);
+  background-color: map.get($nav, bcColor);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid $line;
-  height: map-get($nav, height);
-  color: map-get($nav, color);
+  height: map.get($nav, height);
+  color: map.get($nav, color);
   font-size: 0.92rem;
   transition: border-color 0.2s ease;
 }
@@ -34,7 +34,7 @@
       align-items: center;
       justify-content: center;
       height: 100%;
-      line-height: map-get($nav, height);
+      line-height: map.get($nav, height);
       text-align: center;
       color: $muted;
       min-width: 50px;
@@ -102,7 +102,7 @@
   .MobileMenu {
     position: fixed;
     right: 0;
-    top: map-get($nav, height);
+    top: map.get($nav, height);
     height: auto;
     width: min(280px, 78vw);
     padding: 20px;

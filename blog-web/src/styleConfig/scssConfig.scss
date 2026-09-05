@@ -1,3 +1,5 @@
+@use 'sass:map';
+
 // 媒体查询变量
 $mediaSize: (
   miniScreen: 768px,
@@ -62,7 +64,7 @@ $content-side-margin: 32px;
   align-items: $align;
 }
 
-@mixin themeColor($bgColor: map-get($nav, color), $color: 'initial') {
+@mixin themeColor($bgColor: map.get($nav, color), $color: 'initial') {
   background-color: $bgColor;
   color: $color;
 }

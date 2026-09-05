@@ -58,7 +58,7 @@ a,
 }
 // 滚动条样式
 ::-webkit-scrollbar-thumb {
-  background-color: map-get($thumb, color);
+  background-color: map.get($thumb, color);
   border-radius: 10px;
   transition: all 0.2s ease-in-out;
 }
@@ -67,7 +67,7 @@ a,
   resize: none;
 }
 ::-webkit-scrollbar {
-  width: map-get($thumb, width);
+  width: map.get($thumb, width);
 }
 
 ::-webkit-scrollbar-track {
