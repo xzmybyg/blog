@@ -50,7 +50,6 @@ export default defineConfig(({mode}: ConfigEnv) => {
         ],
         //配置本地目录支持自动引入
         dirs: [
-          './src/pages/**',
           './src/components/**',
           './src/utils/**',
           './src/types/**',
