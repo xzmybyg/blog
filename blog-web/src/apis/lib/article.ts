@@ -7,12 +7,23 @@
 //  */
 
 export function getPageArticleList({ page = 1, pageSize = 5 }) {
-  return axiosInstance.get('/article/', {
-    params: {
-      page,
-      pageSize,
-    },
-  })
+  return axiosInstance
+    .get('/article/', {
+      params: {
+        page,
+        pageSize,
+      },
+    })
+    .then((response) => {
+      if (Array.isArray(response.data)) {
+        response.data = {
+          list: response.data,
+          total: response.data.length,
+        }
+      }
+
+      return response
+    })
 }
 
 /**
