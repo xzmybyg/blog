@@ -9,7 +9,7 @@ const { articleCard, articleInfo, articleContent, articleTitle, articleTime, art
 
 function ArticleCard(props: CardProps) {
   const { id, title, topping, createTime, label, description, addClassName,banner } = props
-  const defaultBanner = '/banner.jpg'
+  const defaultBanner = `${import.meta.env.BASE_URL.replace(/\/?$/, '/')}banner.jpg`
   const [bannerSrc, setBannerSrc] = useState(
     banner && banner !== '404' ? `https://filespace.xzmybyg.cn/images/${banner}` : defaultBanner,
   )
