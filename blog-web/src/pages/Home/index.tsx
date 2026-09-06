@@ -1,4 +1,3 @@
-import useStore from '@/store'
 //api引入
 import { getPageArticleList } from '@/apis'
 
@@ -13,11 +12,12 @@ import { useTyped } from '@/hooks'
 import { ArrowDownOutlined, GithubOutlined, ReadOutlined } from '@ant-design/icons'
 
 function Home() {
-  const { aticleTotal } = useStore()
   const [page, setPage] = useState(1)
   const [pageSize] = useState(5)
   const params = { page, pageSize }
-  const { data: artList } = useRequest(getPageArticleList, params)
+  const { data: articlePage } = useRequest(getPageArticleList, params)
+  const artList = articlePage?.list ?? []
+  const articleTotal = articlePage?.total ?? 0
 
   const { homePage, articleWrap, aside, banerWrap, typed, slogan, Social_links, icon_gitee, jump } = Style
 
@@ -54,7 +54,7 @@ function Home() {
         <Space className={articleWrap} direction="vertical">
           <header className={Style.sectionHeader}>
             <div><span className={Style.eyebrow}>LATEST WRITING</span><h2>最近更新</h2></div>
-            <span className={Style.articleCount}>共 {aticleTotal || 0} 篇</span>
+            <span className={Style.articleCount}>共 {articleTotal} 篇</span>
           </header>
           {artList?.map((item: CardProps, i: number) => {
             return (
@@ -75,7 +75,7 @@ function Home() {
             defaultCurrent={1}
             current={page}
             defaultPageSize={pageSize}
-            total={aticleTotal > 0 ? aticleTotal : (artList?.length ?? 0)}
+            total={articleTotal}
             onChange={(page) => {
               setPage(page)
               document.getElementById('articles')?.scrollIntoView({ behavior: 'smooth' })

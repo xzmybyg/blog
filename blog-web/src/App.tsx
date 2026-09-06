@@ -1,6 +1,5 @@
 // import { Suspense } from "react";
 
-import useStore from '@/store'
 //api引入
 // import { getInfo } from "@/apis";
 //样式引入
@@ -9,14 +8,6 @@ import './App.scss'
 import RouterView from '@/router'
 
 function App() {
-  const { setTotal } = useStore()
-
-  useEffect(() => {
-    getInfo().then((res) => {
-      setTotal(res.data[0].total_rows)
-    })
-  }, [])
-
   return (
     <>
       {/* <div className="layout">

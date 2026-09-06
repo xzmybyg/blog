@@ -1,4 +1,5 @@
 .homePage {
+  :global(.pages) { padding-top: 24px; }
   .banerWrap {
     position: relative; width: 100%; min-height: calc(100vh - map.get($nav, height)); height: 620px; overflow: hidden;
     border-bottom: 1px solid $line;
@@ -20,7 +21,7 @@
   .jump { position: absolute; bottom: 34px; left: 50%; z-index: 1; transform: translateX(-50%);
     :global(.ant-btn) { width: 50px; height: 50px; color: $ink; border: 1px solid $line; border-radius: 50%; background: #fff; cursor: pointer; }
   }
-  .articleWrap { width: 100%; gap: 24px !important; padding-top: 8px; }
+  .articleWrap { width: 100%; gap: 24px !important; }
   .sectionHeader { display: flex; align-items: end; justify-content: space-between; margin: 4px 0 8px; padding: 0 0 18px 18px; border-bottom: 1px solid $line; border-left: 3px solid $signal;
     h2 { margin-top: 5px; color: $ink; font-family: $font-display; font-size: clamp(1.8rem, 3vw, 2.5rem); }
   }

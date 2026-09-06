@@ -10,22 +10,49 @@ const path = require('path')
 router.get('/', function (req, res, _next) {
   const { page, pageSize, allList } = req.query
 
-  let sql = allList
-    ? `SELECT * FROM article 
+  if (allList) {
+    const sql = `SELECT * FROM article
     ORDER BY topping DESC`
-    : `SELECT * FROM article 
-    WHERE hidden = 0
-    ORDER BY topping DESC 
-    LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize}`
 
-  db.query(sql, (err, data, _field) => {
-    if (err) {
-      console.error(err)
-      res.status(500).send('Server error')
-    } else {
-      data = articleDataProcessing(data)
-      res.send(data)
+    return db.query(sql, (err, data, _field) => {
+      if (err) {
+        console.error(err)
+        res.status(500).send('Server error')
+      } else {
+        res.send(articleDataProcessing(data))
+      }
+    })
+  }
+
+  const currentPage = Math.max(Number.parseInt(page, 10) || 1, 1)
+  const currentPageSize = Math.max(Number.parseInt(pageSize, 10) || 5, 1)
+  const articleSql = `SELECT * FROM article
+    WHERE hidden = 0
+    ORDER BY topping DESC
+    LIMIT ? OFFSET ?`
+  const countSql = `SELECT COUNT(*) AS total FROM article WHERE hidden = 0`
+
+  db.query(countSql, (countErr, countData) => {
+    if (countErr) {
+      console.error(countErr)
+      return res.status(500).send('Server error')
     }
+
+    db.query(
+      articleSql,
+      [currentPageSize, (currentPage - 1) * currentPageSize],
+      (err, data, _field) => {
+        if (err) {
+          console.error(err)
+          res.status(500).send('Server error')
+        } else {
+          res.send({
+            list: articleDataProcessing(data),
+            total: Number(countData[0].total),
+          })
+        }
+      },
+    )
   })
 })
 

@@ -100,7 +100,7 @@ export default function Article() {
 
   useEffect(() => {
     getPageArticleList({ pageSize: 10 }).then((res) => {
-      setData(res.data)
+      setData(res.data.list)
     })
   }, [])
 
