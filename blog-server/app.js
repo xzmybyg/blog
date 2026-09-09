@@ -22,6 +22,7 @@ var messageRouter = require('@routes/message')
 var replyRouter = require('@routes/reply')
 var qiniuRouter = require('@routes/qiniuSave')
 var certificateRouter = require('@routes/certificate')
+var aboutRouter = require('@routes/about')
 
 var app = express()
 
@@ -39,7 +40,7 @@ function startServer() {
   })
 
   app.use(logger('dev'))
-  app.use(express.json())
+  app.use(express.json({ limit: '2mb' }))
   app.use(express.urlencoded({ extended: false }))
   app.use(cookieParser())
   app.use(express.static(path.join(__dirname, 'public')))
@@ -55,6 +56,7 @@ function startServer() {
 
   app.use('/api/qiniu', qiniuRouter)
   app.use('/api/certificate', certificateRouter)
+  app.use('/api/about', aboutRouter)
 
   app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, 'public/blog/index.html'))

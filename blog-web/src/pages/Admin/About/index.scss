@@ -1,0 +1,92 @@
+@use '@/styleConfig/scssConfig.scss' as config;
+
+.about-admin {
+  padding: 28px;
+}
+
+.about-admin__heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid config.$line;
+
+  > div > span {
+    color: config.$accent;
+    font-family: config.$font-mono;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+
+  h1 {
+    margin: 8px 0 6px;
+    color: config.$ink;
+    font-size: 28px;
+  }
+
+  p {
+    margin: 0;
+    color: config.$muted;
+  }
+
+  .about-admin__save-button {
+    min-width: 120px;
+    color: #fff !important;
+
+    > span {
+      color: inherit !important;
+      font: inherit;
+      letter-spacing: normal;
+    }
+
+    &:not(:disabled):not(.ant-btn-disabled) {
+      color: #fff !important;
+
+      &:hover,
+      &:focus-visible,
+      &:active {
+        color: #fff !important;
+      }
+    }
+
+    &:disabled,
+    &.ant-btn-disabled {
+      color: config.$muted !important;
+      background: config.$paper-deep !important;
+      border-color: config.$line !important;
+      opacity: 1;
+    }
+  }
+}
+
+.about-admin__upload-panel {
+  .ant-upload-drag {
+    min-height: 220px;
+    background: #f8faff;
+    border-color: config.$line;
+
+    &:hover,
+    &:focus-within {
+      background: #f3f7ff;
+      border-color: config.$accent;
+    }
+  }
+
+  .ant-upload-drag-icon .anticon {
+    color: config.$accent !important;
+  }
+
+  .ant-alert {
+    margin-top: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-admin {
+    min-width: 680px;
+    padding: 20px;
+  }
+}

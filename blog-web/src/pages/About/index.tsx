@@ -1,45 +1,54 @@
+import ReactMarkdown from 'react-markdown'
+import { Alert, Skeleton } from 'antd'
+import 'github-markdown-css'
 import './index.scss'
+
 const baseURL = import.meta.env.VITE_BASE_URL
 
 function About() {
+  const [content, setContent] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [loadFailed, setLoadFailed] = useState(false)
+
+  const loadContent = useCallback(() => {
+    setLoading(true)
+    setLoadFailed(false)
+    getAboutContent()
+      .then((response) => setContent(response.data))
+      .catch(() => setLoadFailed(true))
+      .finally(() => setLoading(false))
+  }, [])
+
+  useEffect(() => {
+    loadContent()
+  }, [loadContent])
+
   return (
     <div id="aboutpage" className="pages">
-      <Card className="card" style={{ position: 'relative' }}>
+      <Card className="card">
         <img className="animal_avatars" src={`${baseURL}/animal_avatars.png`} alt="" aria-hidden="true" />
+        <header className="about-header">
+          <Avatar className="avatar jello" src={`${baseURL}/blog-icon.jpg`} alt="作者头像" size={80} />
+          <div>
+            <span className="aboutEyebrow">ABOUT THE AUTHOR</span>
+            <p>关于作者、技术栈与这个博客。</p>
+          </div>
+        </header>
 
-        <Avatar
-          className="avatar jello"
-          src={`${baseURL}/blog-icon.jpg`}
-          alt="作者头像"
-          size={{ xs: 40, sm: 40, md: 40, lg: 64, xl: 80, xxl: 100 }}
-          style={{
-            boxShadow: '0 0 5px rgba(0, 0, 0, 0.5)',
-          }}
-        />
-        <span className="aboutEyebrow">ABOUT THE AUTHOR</span>
-        <h1>关于我</h1>
-        <Divider className="divider" />
-        <ol>
-          <li>主要做前端开发，做过一段时间C++全栈</li>
-          <li>目前坐标北京</li>
-          <li>平时喜欢写一些小项目，通过新媒体了解一些前沿的技术</li>
-          <li>邮箱：1277215827@qq.com</li>
-        </ol>
-        <h2>我使用的技术</h2>
-        <Divider className="divider" />
-        <ol>
-          <li>前端：React、Vue、Typescript</li>
-          <li>后端：Node、Express、C++</li>
-          <li>数据库：MySQL、MongoDB</li>
-          <li>其他：Webpack、Vite</li>
-        </ol>
-        <h2>关于这个博客</h2>
-        <Divider className="divider" />
-        <ul>
-          <li>博客搭建</li>
-          <li>前端使用React、Vite、Ant Design、SCSS搭建</li>
-          <li>后端使用Node.js、Express搭建</li>
-        </ul>
+        {loading ? (
+          <Skeleton active paragraph={{ rows: 8 }} title={{ width: '42%' }} />
+        ) : loadFailed ? (
+          <Alert
+            type="error"
+            showIcon
+            message="关于页内容加载失败"
+            description={<Button type="link" onClick={loadContent}>重新加载</Button>}
+          />
+        ) : (
+          <article className="about-markdown markdown-body" aria-label="关于页正文">
+            <ReactMarkdown>{content}</ReactMarkdown>
+          </article>
+        )}
       </Card>
     </div>
   )

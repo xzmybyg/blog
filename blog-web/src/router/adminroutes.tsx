@@ -102,6 +102,17 @@ const adminRoutes = [
     },
   },
   {
+    path: '/admin/about',
+    component: lazy(() => import('@/pages/Admin/About')),
+    name: '关于页管理',
+    icon: 'icon-bianjiwenzhang_huaban',
+    meta: {
+      checkAuth: true,
+      showOnMenu: true,
+      layout: 'admin',
+    },
+  },
+  {
     path: '/admin/login',
     component: lazy(() => import('@/pages/Admin/Login')),
     name: '登录',
