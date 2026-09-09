@@ -2,11 +2,13 @@
 import { default as Barrage } from '@/components/Barrage'
 import Style from './index.module.scss'
 import useUserStore from '@/store/user'
+import useSiteBackground from '@/hooks/useSiteBackground'
 import { postMessage, getMessage } from '@/apis/lib/message'
 
 const { messagePage, sendWrap, formWarp } = Style
 
 function Message() {
+  const backgroundUrl = useSiteBackground('message')
   // const el = useTyped(["我是心中没有白月光,<br/>欢迎来到我的博客", ""], {
   //   loop: true,
   // })
@@ -31,7 +33,10 @@ function Message() {
   }
 
   return (
-    <div id={messagePage}>
+    <div
+      id={messagePage}
+      style={{ '--site-background': `url("${backgroundUrl}")` } as React.CSSProperties}
+    >
       <div className={sendWrap}>
         <span className={Style.eyebrow}>OPEN MESSAGE WALL</span>
         <h1>留言板</h1>

@@ -5,6 +5,7 @@ import { default as ArticleCard } from '@/components/ArticleCard'
 //样式引入
 import Style from './index.module.scss'
 import useRequest from '@/hooks/useRequest'
+import useSiteBackground from '@/hooks/useSiteBackground'
 
 const description = '本站使用React+Express搭建'
 
@@ -12,6 +13,7 @@ import { useTyped } from '@/hooks'
 import { ArrowDownOutlined, GithubOutlined, ReadOutlined } from '@ant-design/icons'
 
 function Home() {
+  const backgroundUrl = useSiteBackground('home')
   const [page, setPage] = useState(1)
   const [pageSize] = useState(5)
   const params = { page, pageSize }
@@ -25,7 +27,11 @@ function Home() {
 
   return (
     <div className={`${homePage} home-page`}>
-      <section className={`${banerWrap}`} aria-labelledby="home-title">
+      <section
+        className={`${banerWrap}`}
+        aria-labelledby="home-title"
+        style={{ '--site-background': `url("${backgroundUrl}")` } as React.CSSProperties}
+      >
         <div className={`${slogan}`}>
           <span className={Style.eyebrow}>FRONTEND FIELD NOTES · BEIJING</span>
           <h1 id="home-title">把复杂的问题，<br />写成清晰的答案。</h1>
