@@ -36,6 +36,47 @@
         text-underline-offset: 3px;
       }
     }
+    .chapterNavigation {
+      max-width: 72ch;
+      margin: 42px auto 8px;
+      padding-top: 22px;
+      border-top: 1px solid $line;
+    }
+    .chapterMeta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+
+      > div { display: grid; gap: 3px; }
+      span { color: $accent-deep; font-family: $font-mono; font-size: .75rem; letter-spacing: .06em; }
+      small { color: $muted; }
+    }
+    .chapterLink {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+
+      a {
+        display: flex;
+        min-height: 72px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 14px 16px;
+        border: 1px solid $line;
+        border-radius: 12px;
+        color: $ink;
+        transition: border-color .18s ease, background-color .18s ease;
+
+        &:hover { border-color: $accent; background: $paper; }
+        span { display: grid; min-width: 0; font-weight: 700; }
+        small { margin-bottom: 3px; color: $muted; font-family: $font-mono; font-size: .72rem; font-weight: 400; }
+      }
+      .chapterPrevious { grid-column: 1; }
+      .chapterNext { grid-column: 2; text-align: right; }
+    }
   }
   .affixNavbar {
     width: 300px;
@@ -57,6 +98,12 @@
     .topicWrap {
       width: 100%;
       padding: 24px;
+    }
+    .chapterMeta { align-items: stretch; flex-direction: column; }
+    .chapterLink {
+      grid-template-columns: 1fr;
+      .chapterPrevious,
+      .chapterNext { grid-column: 1; }
     }
     .affixNavbar {
       display: none;

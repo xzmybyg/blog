@@ -1,13 +1,14 @@
 //第三方库
 import ReactMarkdown from 'react-markdown'
 import MarkdownNavbar from 'markdown-navbar'
-import { Card, Affix } from 'antd'
+import { Affix, Button, Card } from 'antd'
+import { ArrowLeftOutlined, ArrowRightOutlined, DownloadOutlined } from '@ant-design/icons'
 const { TextArea } = Input
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { okaidia } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
 //api引入
-import { getTopic } from '@/apis'
+import { getArticleNavigation, getTopic } from '@/apis'
 
 import { default as CommentList } from '@/components/CommentList'
 
@@ -22,7 +23,7 @@ type TopicProps = {
 }
 
 export default function Topic() {
-  const { topic, topicWrap, markdownBody, affixNavbar, NavbarCard, Navbar } = Style
+  const { topic, topicWrap, markdownBody, affixNavbar, NavbarCard, Navbar, chapterNavigation, chapterLink, chapterMeta, chapterPrevious, chapterNext } = Style
   const { id } = useParams<TopicProps>()
   const article_id = parseInt(id as string, 10)
 
@@ -30,12 +31,16 @@ export default function Topic() {
 
   const [mdContent, setMdContent] = useState('')
   const [commentList, setCommentList] = useState<any[]>([])
+  const [navigation, setNavigation] = useState<ArticleNavigation | null>(null)
 
   useEffect(() => {
     getTopic(article_id).then((res) => {
       setMdContent(res.data)
     })
-  }, [])
+    getArticleNavigation(article_id)
+      .then((res) => setNavigation(res.data))
+      .catch(() => setNavigation(null))
+  }, [article_id])
 
   useEffect(() => {
     getComment(article_id).then((res) => {
@@ -86,6 +91,36 @@ export default function Topic() {
           }}
         />
         </article>
+        <nav className={chapterNavigation} aria-label="专题章节导航">
+          <div className={chapterMeta}>
+            <div>
+              <span>{navigation?.topic ? `专题 · ${navigation.topic.name}` : 'MARKDOWN'}</span>
+              {navigation?.topic && <small>第 {navigation.position} / {navigation.total} 章</small>}
+            </div>
+            <Button
+              href={`/api/topic?id=${article_id}&download=1`}
+              icon={<DownloadOutlined />}
+            >
+              下载 Markdown
+            </Button>
+          </div>
+          {navigation?.topic && (
+            <div className={chapterLink}>
+              {navigation.previous ? (
+                <Link className={chapterPrevious} to={`/topic/${navigation.previous.id}`}>
+                  <ArrowLeftOutlined aria-hidden="true" />
+                  <span><small>上一章</small>{navigation.previous.title}</span>
+                </Link>
+              ) : <span aria-hidden="true" />}
+              {navigation.next && (
+                <Link className={chapterNext} to={`/topic/${navigation.next.id}`}>
+                  <span><small>下一章</small>{navigation.next.title}</span>
+                  <ArrowRightOutlined aria-hidden="true" />
+                </Link>
+              )}
+            </div>
+          )}
+        </nav>
         <Divider />
         <div className="handleComment">
           <h2>评论</h2>

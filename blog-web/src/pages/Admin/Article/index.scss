@@ -1,0 +1,50 @@
+@use '@/styleConfig/scssConfig.scss' as config;
+
+.admin-article-filters {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) repeat(2, minmax(170px, 230px)) auto;
+  align-items: end;
+  gap: 16px;
+  padding: 8px 4px;
+
+  label {
+    display: grid;
+    grid-template-rows: 18px 42px;
+    gap: 8px;
+  }
+
+  label > span {
+    color: config.$muted;
+    font-family: config.$font-mono;
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: 0.04em;
+  }
+
+  .ant-input-affix-wrapper,
+  .ant-select { height: 42px; }
+  .ant-input-affix-wrapper { align-items: center; }
+  .ant-select { width: 100%; }
+  .ant-select-selector { height: 42px !important; align-items: center; }
+}
+
+.admin-article-filters__summary {
+  display: flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  color: config.$muted;
+  font-size: 13px;
+  white-space: nowrap;
+
+  .ant-btn { padding-inline: 8px; }
+}
+
+@media (max-width: 900px) {
+  .admin-article-filters {
+    grid-template-columns: 1fr;
+
+    .admin-article-filters__summary { justify-content: space-between; }
+  }
+}

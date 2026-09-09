@@ -18,6 +18,15 @@ const articleRoutes = [
       showOnMenu: true,
     },
   },
+  {
+    path: '/admin/article/topic',
+    name: '专题管理',
+    icon: 'icon-wenzhang',
+    component: lazy(() => import('@/pages/Admin/ArticleTopic')),
+    meta: {
+      showOnMenu: true,
+    },
+  },
 ]
 
 //管理系统路由

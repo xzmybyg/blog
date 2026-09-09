@@ -89,6 +89,25 @@
   margin-top: 12px;
 }
 
+.add-article__file-name {
+  .ant-input {
+    min-width: 0;
+  }
+}
+
+.add-article__file-extension {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  padding-inline: 11px;
+  border: 1px solid config.$line;
+  border-left: 0;
+  border-radius: 0 6px 6px 0;
+  background: config.$paper;
+  color: config.$muted;
+  font-family: config.$font-mono;
+}
+
 .add-article__title-row {
   display: flex;
   align-items: flex-start;

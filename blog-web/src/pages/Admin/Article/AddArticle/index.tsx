@@ -1,8 +1,8 @@
 import MdEditor from 'for-editor'
 import { FileMarkdownOutlined, InboxOutlined } from '@ant-design/icons'
-import { Alert, Modal, Select, Switch, Tabs, Upload } from 'antd'
+import { Alert, InputNumber, Modal, Select, Space, Switch, Tabs, Upload } from 'antd'
 import type { UploadProps } from 'antd'
-import { createArticle, getLabelList } from '@/apis'
+import { createArticle, getArticleTopicList, getLabelList } from '@/apis'
 import './index.scss'
 
 const MAX_MARKDOWN_SIZE = 2 * 1024 * 1024
@@ -14,9 +14,12 @@ export default function AddArticle() {
   const [importedFile, setImportedFile] = useState('')
   const [publishing, setPublishing] = useState(false)
   const [labels, setLabels] = useState<Label[]>([])
+  const [topics, setTopics] = useState<ArticleTopic[]>([])
   const [articleMeta, setArticleMeta] = useState({
     title: '',
     labelIds: [] as number[],
+    topicId: null as number | null,
+    topicOrder: 0,
     banner: '',
     topping: false,
     hidden: false,
@@ -24,6 +27,7 @@ export default function AddArticle() {
 
   useEffect(() => {
     getLabelList().then((res) => setLabels(res.data)).catch(() => message.error('标签列表加载失败'))
+    getArticleTopicList().then((res) => setTopics(res.data)).catch(() => message.error('专题列表加载失败'))
   }, [])
 
   const handleChange = (value) => {
@@ -67,6 +71,8 @@ export default function AddArticle() {
       setArticleMeta({
         title: '',
         labelIds: [],
+        topicId: null,
+        topicOrder: 0,
         banner: '',
         topping: false,
         hidden: false,
@@ -180,15 +186,39 @@ export default function AddArticle() {
           </Button>
         </div>
         <Form.Item label="文件名">
-          <Input
-            type="text"
-            placeholder="例如 react-hooks-guide"
-            addonAfter=".md"
-            value={fileName}
-            onChange={(e) => setFileName(e.target.value.replace(/\.md$/i, ''))}
-          />
+          <Space.Compact block className="add-article__file-name">
+            <Input
+              type="text"
+              placeholder="例如 react-hooks-guide"
+              value={fileName}
+              onChange={(e) => setFileName(e.target.value.replace(/\.md$/i, ''))}
+            />
+            <span className="add-article__file-extension" aria-hidden="true">.md</span>
+          </Space.Compact>
         </Form.Item>
         <div className="add-article__meta-grid">
+          <Form.Item label="专题">
+            <Select
+              allowClear
+              placeholder="请选择专题（可选）"
+              value={articleMeta.topicId ?? undefined}
+              options={topics.map((item) => ({ label: item.name, value: item.id }))}
+              onChange={(value) => setArticleMeta((current) => ({
+                ...current,
+                topicId: value ?? null,
+                topicOrder: value === undefined ? 0 : current.topicOrder,
+              }))}
+            />
+          </Form.Item>
+          <Form.Item label="章节顺序" extra="同一专题内按数字从小到大排列">
+            <InputNumber
+              min={0}
+              precision={0}
+              disabled={articleMeta.topicId === null}
+              value={articleMeta.topicOrder}
+              onChange={(value) => setArticleMeta((current) => ({ ...current, topicOrder: value ?? 0 }))}
+            />
+          </Form.Item>
           <Form.Item label="标签">
             <Select
               mode="multiple"

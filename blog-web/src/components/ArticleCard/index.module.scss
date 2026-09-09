@@ -68,6 +68,8 @@
       width: 100%;
       .articleLabel {
         display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
         margin: 10px 0 15px 0;
       }
     }

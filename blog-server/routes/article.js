@@ -8,9 +8,11 @@ const path = require('path')
 
 const articleSelect = `SELECT a.*,
   GROUP_CONCAT(DISTINCT l.label ORDER BY l.id SEPARATOR ',') AS label,
-  GROUP_CONCAT(DISTINCT l.id ORDER BY l.id SEPARATOR ',') AS labelIds
+  GROUP_CONCAT(DISTINCT l.id ORDER BY l.id SEPARATOR ',') AS labelIds,
+  t.name AS topicName
   FROM article a
-  LEFT JOIN label l ON FIND_IN_SET(l.id, a.label) > 0`
+  LEFT JOIN label l ON FIND_IN_SET(l.id, a.label) > 0
+  LEFT JOIN article_topic t ON t.id = a.topic_id`
 
 function normalizeLabelIds(labelIds) {
   if (!Array.isArray(labelIds)) return []
@@ -35,6 +37,26 @@ async function validateLabelIds(connection, labelIds) {
     error.statusCode = 400
     throw error
   }
+}
+
+async function validateTopicId(connection, topicId) {
+  if (topicId === null) return
+  const [rows] = await connection.query('SELECT id FROM article_topic WHERE id = ?', [topicId])
+  if (rows.length === 0) {
+    const error = new Error('Topic does not exist')
+    error.statusCode = 400
+    throw error
+  }
+}
+
+function normalizeTopicOrder(topicOrder) {
+  const value = Number(topicOrder ?? 0)
+  if (!Number.isInteger(value) || value < 0) {
+    const error = new Error('Invalid topic order')
+    error.statusCode = 400
+    throw error
+  }
+  return value
 }
 
 //获取文章列表
@@ -106,14 +128,65 @@ router.get('/admin', checkRole, function (_req, res) {
   })
 })
 
+// 获取同一专题内的上一篇和下一篇文章
+router.get('/navigation', function (req, res) {
+  const articleId = Number(req.query.id)
+  if (!Number.isInteger(articleId) || articleId <= 0) {
+    return res.status(400).send({ message: '文章 ID 无效' })
+  }
+
+  db.query(
+    `SELECT a.id, a.topic_id AS topicId, t.name AS topicName
+     FROM article a
+     LEFT JOIN article_topic t ON t.id = a.topic_id
+     WHERE a.id = ? AND a.hidden = 0`,
+    [articleId],
+    (currentError, currentRows) => {
+      if (currentError) {
+        console.error(currentError)
+        return res.status(500).send('Server error')
+      }
+      if (currentRows.length === 0) return res.status(404).send({ message: '文章不存在' })
+      const current = currentRows[0]
+      if (current.topicId === null) {
+        return res.send({ topic: null, position: null, total: 0, previous: null, next: null })
+      }
+
+      db.query(
+        `SELECT id, title
+         FROM article
+         WHERE topic_id = ? AND hidden = 0
+         ORDER BY topic_order ASC, createTime ASC, id ASC`,
+        [current.topicId],
+        (listError, rows) => {
+          if (listError) {
+            console.error(listError)
+            return res.status(500).send('Server error')
+          }
+          const index = rows.findIndex((item) => item.id === articleId)
+          res.send({
+            topic: { id: current.topicId, name: current.topicName },
+            position: index + 1,
+            total: rows.length,
+            previous: index > 0 ? rows[index - 1] : null,
+            next: index >= 0 && index < rows.length - 1 ? rows[index + 1] : null,
+          })
+        },
+      )
+    },
+  )
+})
+
 //新增文章
 router.post('/', checkRole, async function (req, res, _next) {
   // 从请求体中获取数据
   const {
     title, // 标题
-    description, // 描述
+    description = '', // 描述
     article, // 文章内容
     labelIds = [], // 标签 ID
+    topicId = null, // 专题 ID
+    topicOrder = 0, // 专题内章节顺序
     banner = '', // 封面
     topping = 0, // 是否置顶，默认为0
     createTime = new Date(), // 创建日期，默认为当前日期
@@ -125,15 +198,26 @@ router.post('/', checkRole, async function (req, res, _next) {
   }
 
   const normalizedLabelIds = normalizeLabelIds(labelIds)
+  const normalizedTopicId = topicId === null || topicId === undefined ? null : Number(topicId)
+  if (normalizedTopicId !== null && (!Number.isInteger(normalizedTopicId) || normalizedTopicId <= 0)) {
+    return res.status(400).send('Invalid topic id')
+  }
+  let normalizedTopicOrder
+  try {
+    normalizedTopicOrder = normalizeTopicOrder(topicOrder)
+  } catch (error) {
+    return res.status(error.statusCode).send(error.message)
+  }
   const connection = await db.promise().getConnection()
   try {
     await connection.beginTransaction()
     await validateLabelIds(connection, normalizedLabelIds)
+    await validateTopicId(connection, normalizedTopicId)
     await connection.query(
       `INSERT INTO article
-      (title, description, article, label, banner, topping, createTime, hidden)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      [title, description, article, serializeLabelIds(normalizedLabelIds), banner, topping ? 1 : 0, createTime, hidden ? 1 : 0],
+      (title, description, article, label, topic_id, topic_order, banner, topping, createTime, hidden)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [title, description, article, serializeLabelIds(normalizedLabelIds), normalizedTopicId, normalizedTopicOrder, banner, topping ? 1 : 0, createTime, hidden ? 1 : 0],
     )
     await connection.commit()
     res.status(201).send('Article created')
@@ -171,7 +255,7 @@ router.delete('/', checkRole, function (req, res, _next) {
 //修改文章
 router.put('/', checkRole, async function (req, res, _next) {
   // 从请求体中获取文章 ID 和新的文章数据
-  const { id, labelIds, ...requestedFields } = req.body
+  const { id, labelIds, topicId, topicOrder, ...requestedFields } = req.body
   const allowedFields = ['title', 'description', 'article', 'banner', 'topping', 'createTime', 'hidden']
   const fields = Object.fromEntries(Object.entries(requestedFields).filter(([key]) => allowedFields.includes(key)))
   if ('topping' in fields) fields.topping = fields.topping ? 1 : 0
@@ -192,7 +276,7 @@ router.put('/', checkRole, async function (req, res, _next) {
   }
 
   // 如果没有接收到任何字段，返回错误
-  if (setParts.length === 0 && labelIds === undefined) {
+  if (setParts.length === 0 && labelIds === undefined && topicId === undefined && topicOrder === undefined) {
     return res.status(400).send('No fields to update')
   }
 
@@ -211,6 +295,19 @@ router.put('/', checkRole, async function (req, res, _next) {
       const normalizedLabelIds = normalizeLabelIds(labelIds)
       await validateLabelIds(connection, normalizedLabelIds)
       await connection.query('UPDATE article SET label = ? WHERE id = ?', [serializeLabelIds(normalizedLabelIds), id])
+    }
+    if (topicId !== undefined) {
+      const normalizedTopicId = topicId === null ? null : Number(topicId)
+      if (normalizedTopicId !== null && (!Number.isInteger(normalizedTopicId) || normalizedTopicId <= 0)) {
+        const error = new Error('Invalid topic id')
+        error.statusCode = 400
+        throw error
+      }
+      await validateTopicId(connection, normalizedTopicId)
+      await connection.query('UPDATE article SET topic_id = ? WHERE id = ?', [normalizedTopicId, id])
+    }
+    if (topicOrder !== undefined) {
+      await connection.query('UPDATE article SET topic_order = ? WHERE id = ?', [normalizeTopicOrder(topicOrder), id])
     }
     await connection.commit()
     res.status(200).send('Article updated')

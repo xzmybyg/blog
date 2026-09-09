@@ -8,6 +8,10 @@ const articleDataProcessing = (data) => {
       item.label = []
     }
     item.labelIds = item.labelIds ? item.labelIds.split(',').map(Number) : []
+    item.topicId = item.topic_id === null ? null : Number(item.topic_id)
+    item.topicOrder = Number(item.topic_order || 0)
+    delete item.topic_id
+    delete item.topic_order
     return item
   })
 }

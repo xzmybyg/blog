@@ -1,14 +1,14 @@
 //第三方库
 import dayjs from 'dayjs'
 import { Link } from 'react-router-dom'
-import { TagOutlined, PushpinOutlined } from '@ant-design/icons'
+import { BookOutlined, TagOutlined, PushpinOutlined } from '@ant-design/icons'
 //样式引入
 import Style from './index.module.scss'
 
 const { articleCard, articleInfo, articleContent, articleTitle, articleTime, articleLabel, articleDescription } = Style
 
 function ArticleCard(props: CardProps) {
-  const { id, title, topping, createTime, label, description, addClassName,banner } = props
+  const { id, title, topping, createTime, label, topicName, description, addClassName,banner } = props
   const defaultBanner = `${import.meta.env.BASE_URL.replace(/\/?$/, '/')}banner.jpg`
   const [bannerSrc, setBannerSrc] = useState(
     banner && banner !== '404' ? `https://filespace.xzmybyg.cn/images/${banner}` : defaultBanner,
@@ -40,6 +40,12 @@ function ArticleCard(props: CardProps) {
             {topping && (
               <Tag color="#87d068" icon={<PushpinOutlined />}>
                 置顶
+              </Tag>
+            )}
+
+            {topicName && (
+              <Tag color="blue" icon={<BookOutlined />}>
+                专题 · {topicName}
               </Tag>
             )}
 
