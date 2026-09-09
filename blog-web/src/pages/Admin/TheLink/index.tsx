@@ -83,14 +83,7 @@ export default function TheLink() {
     updateLink({ id, state: 1 })
       .then(() => {
         message.success('通过')
-        setLinkList(
-          linkList.map((item) => {
-            if (item.id === id) {
-              item.state = 1
-            }
-            return item
-          }),
-        )
+        setLinkList((current) => current.map((item) => (item.id === id ? { ...item, state: 1 } : item)))
       })
       .catch(() => {
         message.error('操作失败')
@@ -101,14 +94,7 @@ export default function TheLink() {
     updateLink({ id, state: 2 })
       .then(() => {
         message.success('已拒绝')
-        setLinkList(
-          linkList.map((item) => {
-            if (item.id === id) {
-              item.state = 0
-            }
-            return item
-          }),
-        )
+        setLinkList((current) => current.map((item) => (item.id === id ? { ...item, state: 2 } : item)))
       })
       .catch(() => {
         message.error('操作失败')
@@ -119,7 +105,7 @@ export default function TheLink() {
     deleteLink(id)
       .then(() => {
         message.success('删除成功')
-        setLinkList(linkList.filter((item) => item.id !== id))
+        setLinkList((current) => current.filter((item) => item.id !== id))
       })
       .catch(() => {
         message.error('删除失败')
