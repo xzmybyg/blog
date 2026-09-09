@@ -65,27 +65,24 @@ router.delete('/', checkRole, function (req, res, next) {
 })
 
 router.put('/', checkToken, function (req, res, next) {
-  //TODO: 更新用户信息
-  const { ...fields } = req.body
-  const { id, role } = req.user
+  const { id: requestedId, ...fields } = req.body
+  const { id: currentUserId, role } = req.user
   const isAdmin = role === 'admin'
+  const targetUserId = isAdmin && requestedId !== undefined ? Number(requestedId) : Number(currentUserId)
+  const allowedFields = isAdmin
+    ? ['nickname', 'avatar', 'password', 'role', 'email', 'commentLimit']
+    : ['nickname', 'avatar', 'password']
 
-  // 创建 SQL 查询的 SET 部分
+  if (!Number.isInteger(targetUserId) || targetUserId <= 0) {
+    return res.status(400).send('Invalid user id')
+  }
+
   const setParts = []
   const values = []
   for (const [key, value] of Object.entries(fields)) {
-    if (!isAdmin && !['nickname', 'avatar', 'password'].includes(key)) {
-      continue
-    }
-
-    // if (key === "createTime") {
-    //   setParts.push(`${key} =FROM_UNIXTIME(?)`)
-    //   const date = new Date(value)
-    //   values.push(Math.floor(date.getTime() / 1000))
-    // } else {
+    if (!allowedFields.includes(key)) continue
     setParts.push(`${key} = ?`)
-    values.push(value)
-    // }
+    values.push(key === 'commentLimit' ? (value ? 1 : 0) : value)
   }
 
   // 如果没有接收到任何字段，返回错误
@@ -99,7 +96,7 @@ router.put('/', checkToken, function (req, res, next) {
   WHERE id = ?`
 
   // 执行 SQL 查询
-  db.query(sql, [...values, id], (err, result) => {
+  db.query(sql, [...values, targetUserId], (err, result) => {
     if (err) {
       console.error(err)
       res.status(500).send('Server error')

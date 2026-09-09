@@ -3,11 +3,18 @@ import dayjs from 'dayjs'
 
 export default function User() {
   const [userList, setUserList] = useState<User[]>([])
-  useEffect(() => {
-    getUserList().then((res) => {
-      setUserList(res.data)
-    })
+  const [loading, setLoading] = useState(true)
+  const loadUsers = useCallback(() => {
+    setLoading(true)
+    return getUserList()
+      .then((res) => setUserList(res.data))
+      .catch(() => message.error('用户列表加载失败，请稍后重试'))
+      .finally(() => setLoading(false))
   }, [])
+
+  useEffect(() => {
+    void loadUsers()
+  }, [loadUsers])
   const columns = [
     {
       title: 'id',
@@ -40,11 +47,12 @@ export default function User() {
             updateUser({
               id: record.id,
               commentLimit: checked,
-            }).then((res) => {
-              console.log(res)
-
-              setUserList(userList.map((item) => (item.id === record.id ? { ...item, commentLimit: checked } : item)))
             })
+              .then(() => {
+                setUserList((current) => current.map((item) => (item.id === record.id ? { ...item, commentLimit: checked } : item)))
+                message.success('评论权限已更新')
+              })
+              .catch(() => message.error('评论权限更新失败'))
           }}
         />
       ),
@@ -89,19 +97,34 @@ export default function User() {
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [currentUser, setCurrentUser] = useState<User | null>(null)
+  const [saving, setSaving] = useState(false)
 
   const showModal = (User: User) => {
-    setCurrentUser(User)
+    setCurrentUser({ ...User })
 
     setIsModalOpen(true)
   }
 
-  const handleOk = () => {
-    updateUser(currentUser).then(() => {
-      setUserList(userList.map((item) => (item.id === currentUser?.id ? { ...item, ...currentUser } : item)))
-    })
-
-    setIsModalOpen(false)
+  const handleOk = async () => {
+    if (!currentUser?.id) return
+    setSaving(true)
+    try {
+      await updateUser({
+        id: currentUser.id,
+        nickname: currentUser.nickname,
+        role: currentUser.role,
+        email: currentUser.email,
+        avatar: currentUser.avatar,
+        commentLimit: currentUser.commentLimit,
+      })
+      await loadUsers()
+      setIsModalOpen(false)
+      message.success('用户信息已更新')
+    } catch {
+      message.error('用户信息更新失败，请稍后重试')
+    } finally {
+      setSaving(false)
+    }
   }
 
   const handleCancel = () => {
@@ -114,7 +137,7 @@ export default function User() {
 
   const handleDeleteUser = (id: number) => {
     deleteUser(id).then(() => {
-      setUserList(userList.filter((item) => item.id !== id))
+      setUserList((current) => current.filter((item) => item.id !== id))
     })
   }
 
@@ -123,6 +146,7 @@ export default function User() {
       <div style={{ width: '100%', height: '100%' }}>
         <Table
           rowKey={(record) => record.id || record.username}
+          loading={loading}
           columns={columns}
           dataSource={userList}
           size="large"
@@ -131,10 +155,15 @@ export default function User() {
       </div>
 
       <Modal
-        title="编辑文章"
+        title="编辑用户"
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
+        okButtonProps={{ loading: saving }}
+        cancelButtonProps={{ disabled: saving }}
+        closable={!saving}
+        maskClosable={!saving}
+        keyboard={!saving}
         okText="确定"
         cancelText="取消"
       >
@@ -193,7 +222,7 @@ export default function User() {
             <Switch
               checkedChildren="是"
               unCheckedChildren="否"
-              defaultChecked={currentUser?.commentLimit}
+              checked={currentUser?.commentLimit}
               onChange={(checked) =>
                 setCurrentUser({
                   ...(currentUser as User),
