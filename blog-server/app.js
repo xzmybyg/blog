@@ -21,6 +21,7 @@ var commentRouter = require('@routes/comment')
 var messageRouter = require('@routes/message')
 var replyRouter = require('@routes/reply')
 var qiniuRouter = require('@routes/qiniuSave')
+var certificateRouter = require('@routes/certificate')
 
 var app = express()
 
@@ -53,6 +54,7 @@ function startServer() {
   app.use('/api/reply', replyRouter)
 
   app.use('/api/qiniu', qiniuRouter)
+  app.use('/api/certificate', certificateRouter)
 
   app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, 'public/blog/index.html'))

@@ -1,0 +1,117 @@
+@use '@/styleConfig/scssConfig.scss' as config;
+
+.admin-dashboard {
+  position: relative;
+  min-height: 320px;
+  padding: 44px;
+  overflow: hidden;
+  background: config.$surface;
+  border: 1px solid config.$line;
+  border-radius: 14px;
+  box-shadow: 0 10px 28px rgba(18, 32, 51, 0.07);
+
+  &::after {
+    position: absolute;
+    right: -72px;
+    bottom: -92px;
+    width: 280px;
+    height: 280px;
+    border: 48px solid #edf3ff;
+    border-radius: 50%;
+    content: '';
+  }
+  h1 { margin: 12px 0 8px; color: config.$ink; font-size: clamp(32px, 5vw, 52px); letter-spacing: -0.04em; }
+  > p { margin: 0; color: config.$muted; font-size: 16px; }
+}
+
+.admin-dashboard__eyebrow {
+  color: config.$accent;
+  font-family: config.$font-mono;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.admin-dashboard__guide {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: fit-content;
+  gap: 6px;
+  margin-top: 56px;
+  padding-left: 14px;
+  border-left: 3px solid config.$signal;
+
+  span { color: config.$muted; font-family: config.$font-mono; font-size: 13px; }
+}
+
+.certificate-status {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(180px, 0.75fr) minmax(300px, 1.25fr);
+  gap: 28px;
+  margin-top: 40px;
+  padding: 24px;
+  background: #f8faff;
+  border: 1px solid config.$line;
+  border-left: 4px solid config.$success;
+  border-radius: 12px;
+}
+
+.certificate-status--warning { border-left-color: #c77900; }
+.certificate-status--danger { border-left-color: config.$danger; }
+.certificate-status--loading { border-left-color: config.$line; }
+
+.certificate-status__heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: config.$success;
+
+  > .anticon { font-size: 28px; }
+  span { color: config.$muted; font-family: config.$font-mono; font-size: 11px; letter-spacing: 0.12em; }
+  h2 { margin: 3px 0 0; color: config.$ink; font-size: 18px; }
+}
+
+.certificate-status__summary {
+  display: grid;
+  align-content: space-between;
+  gap: 20px;
+
+  .ant-btn { width: fit-content; min-width: 112px; }
+}
+
+.certificate-status__details {
+  display: grid;
+  grid-template-columns: auto minmax(220px, 1fr);
+  align-items: center;
+  gap: 28px;
+}
+
+.certificate-status__days {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  white-space: nowrap;
+
+  strong { color: config.$ink; font-family: config.$font-mono; font-size: 36px; line-height: 1; }
+  span { color: config.$muted; font-size: 13px; }
+}
+
+.certificate-status dl { display: grid; gap: 8px; margin: 0; }
+.certificate-status dl > div { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 12px; }
+.certificate-status dt { color: config.$muted; font-size: 13px; }
+.certificate-status dd { margin: 0; color: config.$ink; font-family: config.$font-mono; font-size: 13px; overflow-wrap: anywhere; }
+.certificate-status__error { align-self: center; margin: 0; color: config.$danger; }
+.certificate-update-confirm { margin: 8px 0 0; color: config.$muted; line-height: 1.8; }
+.certificate-update-confirm strong { color: config.$ink; font-family: config.$font-mono; }
+
+@media (max-width: 860px) {
+  .admin-dashboard { padding: 28px; }
+  .certificate-status { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 560px) {
+  .certificate-status__details { grid-template-columns: 1fr; gap: 18px; }
+}
