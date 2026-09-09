@@ -1,10 +1,14 @@
 import { setUserInfo } from '@/store/user'
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons'
+import { Alert } from 'antd'
+import { getSafeAdminRedirect } from '@/utils/auth'
 
 import './index.scss'
 
 export default function Login() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const sessionExpired = searchParams.get('reason') === 'expired'
   //是否已有账号
   const [haveAccount, setHaveAccount] = useState(true)
 
@@ -20,7 +24,7 @@ export default function Login() {
           values = { username: values.username, password: values.password }
           login(values).then((res) => {
             setUserInfo(res.data)
-            navigate('/admin')
+            navigate(getSafeAdminRedirect(searchParams.get('redirect')), { replace: true })
           })
         })
         .catch((err) => {
@@ -31,8 +35,23 @@ export default function Login() {
 
   return (
     <div className="loginPage">
+      <div className="loginPage__intro">
+        <span className="loginPage__mark">&lt;/&gt;</span>
+        <p>BLOG CONSOLE</p>
+        <h1>内容管理工作台</h1>
+        <span>管理文章、评论与站点内容。</span>
+      </div>
       <div className="CardWrap">
-        <Card title={haveAccount ? '登录' : '注册'}>
+        <Card title={haveAccount ? '登录后台' : '注册账号'}>
+          {sessionExpired && (
+            <Alert
+              className="loginPage__session-alert"
+              type="warning"
+              showIcon
+              message="登录状态已失效"
+              description="请重新登录，完成后将返回之前的管理页面。"
+            />
+          )}
           <Form form={form} name={haveAccount ? 'login' : 'register'}>
             <Form.Item
               label="账号"
@@ -80,17 +99,20 @@ export default function Login() {
               </Form.Item>
             )}
             <Form.Item>
-              <Button onClick={() => handleSubmit()}>{haveAccount ? '登录' : '注册'}</Button>
+              <Button type="primary" htmlType="submit" onClick={() => handleSubmit()}>
+                {haveAccount ? '登录' : '注册'}
+              </Button>
             </Form.Item>
           </Form>
-          <a
+          <button
+            type="button"
             className="changeLogin"
             onClick={() => {
               setHaveAccount(!haveAccount)
             }}
           >
-            {haveAccount ? '还没有账号？去注册-->' : '已有账号？去登录-->'}
-          </a>
+            {haveAccount ? '还没有账号？去注册' : '已有账号？去登录'}
+          </button>
         </Card>
       </div>
     </div>

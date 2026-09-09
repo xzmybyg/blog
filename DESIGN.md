@@ -34,6 +34,7 @@ components:
   card: {}
   article-list: {}
   form: {}
+  admin-shell: {}
 ---
 
 # 心中没有白月光 Design System
@@ -50,7 +51,7 @@ components:
 - **Target market(s) and evidence:** 中文互联网；现有路由、内容和备案信息均为中文，未声明日本市场或其他受监管场景。
 - **Locale(s) and language policy:** 界面使用简体中文；技术名词保留行业通用英文写法。
 - **Usage scene:** 桌面端深度阅读与移动端碎片浏览并重，页面内容密度中等。
-- **Register:** 公共内容型品牌站点；后台管理保持现有产品界面，不在本轮视觉改造范围内。
+- **Register:** 公共内容型品牌站点与登录后的内容管理工作台；后台复用同一语义令牌，以更紧凑的密度承载表格与表单任务。
 - **Memorable signature:** 标题和文章信息旁的“代码行号 / 测量刻度”信息轨，只在关键位置出现。
 - **Restraint:** 正文、表单与导航保持安静；不使用大面积渐变、玻璃卡片或到处漂浮的动效。
 - **Anti-references:** 避免暖米色＋高对比衬线＋陶土色的通用编辑风；避免暗色终端＋荧光色的刻板开发者主题；避免新闻报纸式密集分栏。

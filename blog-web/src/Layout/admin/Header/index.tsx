@@ -1,6 +1,6 @@
 import useUserStore from '@/store/user'
 import './index.scss'
-import { Breadcrumb, Layout, Popover, theme } from 'antd'
+import { Breadcrumb, Layout, Popover } from 'antd'
 import routes from '@/router/routes'
 const { Header } = Layout
 
@@ -8,9 +8,6 @@ export default function AdminHeader() {
   const { id, username, nickname, avatar } = useUserStore()
   const navigate = useNavigate()
   const router = useLocation()
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken()
 
   const getBreadcrumbItems = (currentPath: string): { title: string }[] => {
     const pathnames = currentPath.split('/').filter((x) => x)
@@ -34,36 +31,32 @@ export default function AdminHeader() {
   }
 
   return (
-    <Header
-      className="header"
-      style={{
-        background: colorBgContainer,
-        padding: '5px',
-        borderRadius: borderRadiusLG,
-      }}
-    >
-      <Breadcrumb
-        style={{
-          margin: '5px 10px',
-        }}
-        items={getBreadcrumbItems(router.pathname)}
-      />
+    <Header className="header admin-header">
+      <div className="admin-header__context">
+        <span className="admin-header__eyebrow">WORKSPACE / 管理后台</span>
+        <Breadcrumb items={getBreadcrumbItems(router.pathname)} />
+      </div>
       {id ? (
-        <div>
-          <Popover placement="bottomRight" content={<div onClick={logoutInfo}>退出</div>}>
+        <Popover
+          placement="bottomRight"
+          content={<button className="admin-header__logout" type="button" onClick={logoutInfo}>退出登录</button>}
+        >
+          <button className="admin-header__user" type="button">
             <Avatar src={avatar} icon={avatar ? null : <i className="iconfont icon-tuichu" />} />
             <span>{nickname || username}</span>
-          </Popover>
-        </div>
+          </button>
+        </Popover>
       ) : (
-        <div
+        <button
+          className="admin-header__user"
+          type="button"
           onClick={() => {
-            navigate('/login')
+            navigate('/admin/login')
           }}
         >
           <i className="iconfont icon-denglu1" />
           登录
-        </div>
+        </button>
       )}
     </Header>
   )

@@ -1,0 +1,109 @@
+@use '@/styleConfig/scssConfig.scss' as config;
+
+.admin-shell {
+  min-height: 100vh;
+  background: config.$paper;
+}
+
+.admin-sider {
+  position: sticky !important;
+  top: 0;
+  height: 100vh;
+  box-shadow: 10px 0 28px rgba(13, 43, 85, 0.1);
+
+  .ant-layout-sider-children { display: flex; flex-direction: column; }
+  .ant-layout-sider-trigger { border-top: 1px solid rgba(255, 255, 255, 0.1); }
+}
+
+.admin-brand {
+  display: flex;
+  min-height: 80px;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 22px;
+  color: #fff;
+  overflow: hidden;
+}
+
+.admin-brand__mark {
+  flex: 0 0 auto;
+  color: #7da8ff;
+  font-family: config.$font-mono;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.admin-brand__copy {
+  display: grid;
+  min-width: 132px;
+  gap: 2px;
+
+  strong { font-family: config.$font-mono; font-size: 13px; letter-spacing: 0.12em; }
+  small { color: #9fb2cc; font-size: 12px; }
+}
+
+.admin-menu {
+  flex: 1;
+  padding: 4px 10px;
+  border-inline-end: 0 !important;
+
+  .ant-menu-item, .ant-menu-submenu-title { min-height: 44px; }
+  .ant-menu-item-selected::before {
+    position: absolute;
+    left: 0;
+    width: 3px;
+    height: 18px;
+    background: config.$signal;
+    border-radius: 2px;
+    content: '';
+  }
+}
+
+.admin-main {
+  min-width: 0;
+  background-color: config.$paper;
+  background-image:
+    linear-gradient(rgba(24, 87, 217, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(24, 87, 217, 0.035) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.admin-content {
+  min-width: 0;
+  margin: 20px 24px 32px;
+
+  > div:not(.ant-spin-nested-loading), > .ant-spin-nested-loading, > form { max-width: 1440px; }
+  .ant-table-wrapper, > .ant-card, > form {
+    overflow: hidden;
+    background: config.$surface;
+    border: 1px solid config.$line;
+    border-radius: 14px;
+    box-shadow: 0 10px 28px rgba(18, 32, 51, 0.07);
+  }
+  .ant-table { color: config.$ink; }
+  .ant-table-thead > tr > th {
+    color: config.$muted;
+    font-family: config.$font-mono;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    background: #f8faff;
+  }
+  .ant-table-tbody > tr > td { border-bottom-color: #e8edf4; }
+  .ant-pagination { padding-inline: 16px; }
+  .ant-form { padding: 24px; }
+  :where(button, a, input, textarea, [tabindex]):focus-visible {
+    outline: 3px solid config.$focus-ring;
+    outline-offset: 2px;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-content { margin: 12px; overflow-x: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-shell *, .admin-shell *::before, .admin-shell *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

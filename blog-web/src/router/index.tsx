@@ -5,7 +5,8 @@ import { Suspense } from 'react'
 import AdminLayout from '@/Layout/admin/AdminLayout'
 import MyLayout from '@/Layout/blog/MyLayout'
 
-import useUserStore from '@/store/user'
+import useUserStore, { logoutInfo } from '@/store/user'
+import { getAdminLoginUrl, isTokenExpired } from '@/utils/auth'
 
 /* 统一渲染的组件：在这里可以做一些事情，「例如权限/登录态校验，传递路由信息的属性...」 */
 const Element = function Element(props) {
@@ -25,12 +26,20 @@ const Element = function Element(props) {
   }, [props.name])
 
   useEffect(() => {
-    if (props.meta.checkAuth && !token) {
-      navigate('/admin/login')
+    if (!props.meta.checkAuth) {
+      setHasCheckedAuth(true)
+      return
+    }
+
+    if (!token) {
+      navigate('/admin/login', { replace: true })
+    } else if (isTokenExpired(token)) {
+      logoutInfo()
+      navigate(getAdminLoginUrl(`${location.pathname}${location.search}`), { replace: true })
     } else {
       setHasCheckedAuth(true)
     }
-  }, [token])
+  }, [location.pathname, location.search, navigate, props.meta.checkAuth, token])
 
   if (!hasCheckedAuth && props.name !== '登录') {
     return <Loading />

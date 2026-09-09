@@ -1,5 +1,55 @@
-.header {
+@use '@/styleConfig/scssConfig.scss' as config;
+
+.admin-header {
   display: flex;
+  height: auto;
+  min-height: 80px;
   justify-content: space-between;
   align-items: center;
+  margin: 0;
+  padding: 14px 24px;
+  line-height: 1.4;
+  background: rgba(255, 255, 255, 0.96);
+  border-bottom: 1px solid config.$line;
+}
+
+.admin-header__context { display: grid; gap: 6px; }
+.admin-header__eyebrow {
+  color: config.$accent;
+  font-family: config.$font-mono;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+.admin-header__user, .admin-header__logout {
+  appearance: none;
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+}
+.admin-header__user {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 10px;
+  color: config.$ink;
+  background: transparent;
+  border-radius: 10px;
+
+  &:hover { background: #eef3fb; }
+}
+.admin-header__logout {
+  min-height: 36px;
+  padding: 6px 10px;
+  color: config.$danger;
+  background: transparent;
+  border-radius: 6px;
+
+  &:hover { background: #fff1f0; }
+}
+
+@media (max-width: 768px) {
+  .admin-header { min-height: 68px; padding: 10px 12px; }
+  .admin-header__eyebrow, .admin-header__user span { display: none; }
 }

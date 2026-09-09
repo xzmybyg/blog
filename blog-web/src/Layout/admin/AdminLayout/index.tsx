@@ -1,5 +1,6 @@
 import adminroutes from '@/router/adminroutes'
 import { ConfigProvider, FloatButton, Layout, Menu } from 'antd'
+import './index.scss'
 
 const { Content, Sider } = Layout
 
@@ -7,6 +8,7 @@ import AdminHeader from '@/Layout/admin/Header'
 
 export default function AdminLayout({ children }) {
   const navigate = useNavigate()
+  const location = useLocation()
   const menuItems = adminroutes.map((item) => {
     if (item.meta?.showOnMenu === false) return null
     return {
@@ -41,44 +43,66 @@ export default function AdminLayout({ children }) {
       <ConfigProvider
         theme={{
           token: {
-            colorPrimary: '#aaa8fb',
+            colorPrimary: '#1857d9',
+            colorInfo: '#1857d9',
+            colorSuccess: '#18794e',
+            colorError: '#c83b31',
+            colorText: '#122033',
+            colorTextSecondary: '#58677c',
+            colorBorder: '#d9e1ec',
+            colorBgLayout: '#f4f7fb',
+            borderRadius: 10,
+            fontFamily: "'Microsoft YaHei', 'PingFang SC', system-ui, sans-serif",
           },
           components: {
             Layout: {
-              siderBg: '#aaa8fb',
-              triggerBg: '#aaa8fb',
+              siderBg: '#0d2b55',
+              triggerBg: '#092344',
             },
             Menu: {
-              itemBg: '#aaa8fb',
-              itemColor: '#fff',
-              itemSelectedColor: '#000',
+              darkItemBg: '#0d2b55',
+              darkSubMenuItemBg: '#092344',
+              darkItemColor: '#c9d6e8',
+              darkItemHoverBg: '#163b6b',
+              darkItemSelectedBg: '#1857d9',
+              darkItemSelectedColor: '#fff',
+              itemBorderRadius: 8,
             },
           },
         }}
       >
-        <Layout
-          style={{
-            minHeight: '100vh',
-          }}
-        >
-          <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+        <Layout className="admin-shell">
+          <Sider
+            className="admin-sider"
+            width={232}
+            collapsible
+            collapsed={collapsed}
+            onCollapse={(value) => setCollapsed(value)}
+          >
+            <div className="admin-brand" aria-label="博客管理后台">
+              <span className="admin-brand__mark">&lt;/&gt;</span>
+              {!collapsed && (
+                <span className="admin-brand__copy">
+                  <strong>BLOG CONSOLE</strong>
+                  <small>内容管理工作台</small>
+                </span>
+              )}
+            </div>
             <Menu
+              className="admin-menu"
+              theme="dark"
               selectedKeys={[location.pathname]}
               mode="inline"
               items={menuItems}
-              openKeys={openKeys(menuItems)}
+              defaultOpenKeys={openKeys(menuItems)}
               onClick={(item) => {
                 navigate(item.key)
               }}
             />
           </Sider>
-          <Layout>
+          <Layout className="admin-main">
             <AdminHeader />
-            <Content
-              style={{
-                margin: '5px 16px',
-              }}
-            >
+            <Content className="admin-content">
               {children}
             </Content>
           </Layout>

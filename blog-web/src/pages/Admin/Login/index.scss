@@ -1,28 +1,88 @@
+@use '@/styleConfig/scssConfig.scss' as config;
+
 .loginPage {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(260px, 420px) minmax(320px, 400px);
+  gap: 72px;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: #f0f2f5;
-  .CardWrap {
-    width: 400px;
-    // padding: 20px;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    .title {
-      font-size: 20px;
+  min-height: 100vh;
+  padding: 32px;
+  color: config.$ink;
+  background-color: config.$paper;
+  background-image:
+    linear-gradient(rgba(24, 87, 217, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(24, 87, 217, 0.05) 1px, transparent 1px);
+  background-size: 32px 32px;
+
+  &::before {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    background: config.$signal;
+    content: '';
+  }
+
+  &__intro {
+    p {
+      margin: 20px 0 8px;
+      color: config.$accent;
+      font-family: config.$font-mono;
+      font-size: 13px;
       font-weight: 700;
-      text-align: center;
-      margin-bottom: 20px;
+      letter-spacing: 0.16em;
     }
-    .loginForm {
-      .ant-form-item {
-        margin-bottom: 20px;
-      }
-      .ant-btn {
-        width: 100%;
-      }
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(34px, 5vw, 54px);
+      letter-spacing: -0.04em;
     }
+    > span:last-child { color: config.$muted; }
+  }
+
+  &__mark {
+    color: config.$accent;
+    font-family: config.$font-mono;
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  .CardWrap {
+    width: 100%;
+    .ant-card { border: 1px solid config.$line; border-radius: 16px; box-shadow: 0 18px 42px rgba(18, 32, 51, 0.12); }
+    .ant-card-head-title { padding: 18px 0; font-size: 20px; }
+    .ant-card-body { padding: 28px; }
+    .ant-btn { width: 100%; min-height: 44px; }
+  }
+  .changeLogin {
+    min-height: 44px;
+    padding: 0;
+    color: config.$accent;
+    background: transparent;
+    border: 0;
+    font: inherit;
+    cursor: pointer;
+
+    &:hover { color: config.$accent-deep; }
+    &:focus-visible { outline: 3px solid config.$focus-ring; outline-offset: 2px; }
+  }
+
+  &__session-alert {
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 820px) {
+  .loginPage { grid-template-columns: minmax(280px, 400px); gap: 32px; }
+}
+
+@media (max-width: 480px) {
+  .loginPage {
+    align-content: center;
+    padding: 20px;
+    &__intro h1 { font-size: 32px; }
+    .CardWrap .ant-card-body { padding: 22px; }
   }
 }

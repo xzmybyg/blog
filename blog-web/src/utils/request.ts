@@ -1,5 +1,6 @@
 import { AxiosResponse } from 'axios'
-import useUserStore from '@/store/user'
+import useUserStore, { logoutInfo } from '@/store/user'
+import { ADMIN_LOGIN_PATH, getAdminLoginUrl } from './auth'
 
 const devBaseUrl = '/api'
 const proBaseUrl = '/api'
@@ -10,9 +11,9 @@ const axiosInstance = axios.create({
   timeout: 5000, // 请求超时时间
 })
 
-const token = useUserStore.getState()?.token || localStorage.getItem('token')
 axiosInstance.interceptors.request.use(
   (config) => {
+    const token = useUserStore.getState().token
     if (token) {
       config.headers['Authorization'] = token
     }
@@ -47,14 +48,24 @@ axiosInstance.interceptors.response.use(
     // 删除重复的请求
     // error.config && removePending(error.config);
 
+    const status = error.response?.status
     let text = ''
-    if (error.response.status) {
-      switch (error.response.status) {
+    if (status) {
+      switch (status) {
         case 400:
           text = '请求错误(400)，请重新申请'
           break
         case 401:
           text = '登录错误(401)，请重新登录'
+          if (useUserStore.getState().token) {
+            logoutInfo()
+            const currentPath = `${window.location.pathname}${window.location.search}${window.location.hash}`
+            const isAdminPage = window.location.pathname.startsWith('/admin')
+            const isLoginPage = window.location.pathname === ADMIN_LOGIN_PATH
+            if (isAdminPage && !isLoginPage) {
+              window.location.replace(getAdminLoginUrl(currentPath))
+            }
+          }
           break
         case 403:
           text = '拒绝访问(403)'
