@@ -68,6 +68,12 @@ export default function AdminLayout({ children }) {
               darkItemSelectedColor: '#fff',
               itemBorderRadius: 8,
             },
+            Pagination: {
+              itemBg: '#fff',
+              itemLinkBg: '#fff',
+              itemActiveBg: '#fff',
+              itemActiveColor: '#1857d9',
+            },
           },
         }}
       >

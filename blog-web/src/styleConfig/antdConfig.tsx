@@ -15,8 +15,9 @@ const Theme: ThemeConfig = {
     Pagination: {
       /* here is component tokens */
       itemActiveBg: '#fff',
-      itemBg: '#000',
-      itemLinkBg: '#000',
+      itemActiveColor: '#1857d9',
+      itemBg: '#fff',
+      itemLinkBg: '#fff',
     },
     Timeline: {
       itemPaddingBottom: 50,

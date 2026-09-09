@@ -61,6 +61,16 @@ export default function AddArticle() {
         message.error('Markdown 文件已保存，但文章信息创建失败，请检查后重试')
         return
       }
+      setFileName('')
+      setMarkdown('')
+      setImportedFile('')
+      setArticleMeta({
+        title: '',
+        labelIds: [],
+        banner: '',
+        topping: false,
+        hidden: false,
+      })
       message.success('发布成功')
     } catch {
       message.error('发布失败，请稍后重试')
@@ -81,6 +91,10 @@ export default function AddArticle() {
       setMarkdown(content)
       setImportedFile(file.name)
       setFileName(nextFileName)
+      setArticleMeta((current) => ({
+        ...current,
+        title: current.title.trim() ? current.title : nextFileName,
+      }))
       message.success(`已导入 ${file.name}`)
     } catch {
       message.error('文件读取失败，请确认文件编码为 UTF-8 后重试')
