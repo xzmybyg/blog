@@ -27,10 +27,10 @@ export default function Article() {
       title: '标签',
       key: 'label',
       dataIndex: 'label',
-      render: (tags) => (
-        <>
-          <Tag key={tags}>{tags}</Tag>
-        </>
+      render: (tags: string[] = []) => (
+        <Space size={[0, 4]} wrap>
+          {tags.map((tag) => <Tag key={tag}>{tag}</Tag>)}
+        </Space>
       ),
     },
     {
@@ -106,6 +106,7 @@ export default function Article() {
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [currentArticle, setCurrentArticle] = useState<Article | null>(null)
+  const [labelList, setLabelList] = useState<Label[]>([])
 
   const showModal = (article: Article) => {
     setCurrentArticle(article)
@@ -136,6 +137,7 @@ export default function Article() {
       console.log(res)
       setArticleFileList(res.data)
     })
+    getLabelList().then((res) => setLabelList(res.data))
   }, [])
 
   const [articleFileList, setArticleFileList] = useState<string[]>([])
@@ -188,12 +190,15 @@ export default function Article() {
             />
           </Form.Item>
           <Form.Item label="标签">
-            <Input
-              value={currentArticle?.label}
-              onChange={(e) =>
+            <Select
+              mode="multiple"
+              placeholder="请选择标签"
+              value={currentArticle?.labelIds}
+              options={labelList.map((item) => ({ label: item.label, value: item.id }))}
+              onChange={(value) =>
                 setCurrentArticle({
                   ...(currentArticle as Article),
-                  label: e.target.value,
+                  labelIds: value,
                 })
               }
             />

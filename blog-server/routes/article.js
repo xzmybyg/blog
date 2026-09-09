@@ -6,13 +6,45 @@ const checkRole = require('@middleware/checkRole')
 const fs = require('fs')
 const path = require('path')
 
+const articleSelect = `SELECT a.*,
+  GROUP_CONCAT(DISTINCT l.label ORDER BY l.id SEPARATOR ',') AS label,
+  GROUP_CONCAT(DISTINCT l.id ORDER BY l.id SEPARATOR ',') AS labelIds
+  FROM article a
+  LEFT JOIN label l ON FIND_IN_SET(l.id, a.label) > 0`
+
+function normalizeLabelIds(labelIds) {
+  if (!Array.isArray(labelIds)) return []
+  return [...new Set(labelIds.map(Number).filter(Number.isInteger).filter((id) => id > 0))]
+}
+
+function serializeLabelIds(labelIds) {
+  const value = labelIds.join(',')
+  if (value.length > 15) {
+    const error = new Error('标签数量超出文章字段限制')
+    error.statusCode = 400
+    throw error
+  }
+  return value
+}
+
+async function validateLabelIds(connection, labelIds) {
+  if (labelIds.length === 0) return
+  const [rows] = await connection.query('SELECT id FROM label WHERE id IN (?)', [labelIds])
+  if (rows.length !== labelIds.length) {
+    const error = new Error('One or more labels do not exist')
+    error.statusCode = 400
+    throw error
+  }
+}
+
 //获取文章列表
 router.get('/', function (req, res, _next) {
   const { page, pageSize, allList } = req.query
 
   if (allList) {
-    const sql = `SELECT * FROM article
-    ORDER BY topping DESC`
+    const sql = `${articleSelect}
+    GROUP BY a.id
+    ORDER BY a.topping DESC`
 
     return db.query(sql, (err, data, _field) => {
       if (err) {
@@ -26,9 +58,10 @@ router.get('/', function (req, res, _next) {
 
   const currentPage = Math.max(Number.parseInt(page, 10) || 1, 1)
   const currentPageSize = Math.max(Number.parseInt(pageSize, 10) || 5, 1)
-  const articleSql = `SELECT * FROM article
-    WHERE hidden = 0
-    ORDER BY topping DESC
+  const articleSql = `${articleSelect}
+    WHERE a.hidden = 0
+    GROUP BY a.id
+    ORDER BY a.topping DESC
     LIMIT ? OFFSET ?`
   const countSql = `SELECT COUNT(*) AS total FROM article WHERE hidden = 0`
 
@@ -57,28 +90,43 @@ router.get('/', function (req, res, _next) {
 })
 
 //新增文章
-router.post('/', checkRole, function (req, res, _next) {
+router.post('/', checkRole, async function (req, res, _next) {
   // 从请求体中获取数据
   const {
     title, // 标题
     description, // 描述
     article, // 文章内容
-    label, // 标签
+    labelIds = [], // 标签 ID
+    banner = '', // 封面
     topping = 0, // 是否置顶，默认为0
     createTime = new Date(), // 创建日期，默认为当前日期
+    hidden = 0, // 是否隐藏，默认为0
   } = req.body
 
-  const sql = `INSERT INTO article 
-  (title, description, article, label, topping, createTime) 
-  VALUES (?, ?, ?, ?, ?, ?)`
-  db.query(sql, [title, description, article, label, topping, createTime], (err, result) => {
-    if (err) {
-      console.error(err)
-      res.status(500).send('Server error')
-    } else {
-      res.status(201).send('Article created')
-    }
-  })
+  if (!title || !article) {
+    return res.status(400).send('Incorrect fields')
+  }
+
+  const normalizedLabelIds = normalizeLabelIds(labelIds)
+  const connection = await db.promise().getConnection()
+  try {
+    await connection.beginTransaction()
+    await validateLabelIds(connection, normalizedLabelIds)
+    await connection.query(
+      `INSERT INTO article
+      (title, description, article, label, banner, topping, createTime, hidden)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      [title, description, article, serializeLabelIds(normalizedLabelIds), banner, topping ? 1 : 0, createTime, hidden ? 1 : 0],
+    )
+    await connection.commit()
+    res.status(201).send('Article created')
+  } catch (error) {
+    await connection.rollback()
+    console.error(error)
+    res.status(error.statusCode || 500).send(error.statusCode ? error.message : 'Server error')
+  } finally {
+    connection.release()
+  }
 })
 
 //删除文章
@@ -104,14 +152,13 @@ router.delete('/', checkRole, function (req, res, _next) {
 })
 
 //修改文章
-router.put('/', checkRole, function (req, res, _next) {
+router.put('/', checkRole, async function (req, res, _next) {
   // 从请求体中获取文章 ID 和新的文章数据
-  const { id, ...fields } = req.body
-  fields.topping = fields.topping ? 1 : 0
-  fields.hidden = fields.hidden ? 1 : 0
-  if (Array.isArray(fields.label)) {
-    fields.label = fields.label.join(',')
-  }
+  const { id, labelIds, ...requestedFields } = req.body
+  const allowedFields = ['title', 'description', 'article', 'banner', 'topping', 'createTime', 'hidden']
+  const fields = Object.fromEntries(Object.entries(requestedFields).filter(([key]) => allowedFields.includes(key)))
+  if ('topping' in fields) fields.topping = fields.topping ? 1 : 0
+  if ('hidden' in fields) fields.hidden = fields.hidden ? 1 : 0
 
   // 创建 SQL 查询的 SET 部分
   const setParts = []
@@ -128,37 +175,50 @@ router.put('/', checkRole, function (req, res, _next) {
   }
 
   // 如果没有接收到任何字段，返回错误
-  if (setParts.length === 0) {
+  if (setParts.length === 0 && labelIds === undefined) {
     return res.status(400).send('No fields to update')
   }
 
-  // 创建 SQL 查询
-  const sql = `UPDATE article
-  SET ${setParts.join(', ')}
-  WHERE id = ?`
-
-  // 添加文章 ID 到参数列表
-  values.push(id)
-
-  // 执行 SQL 查询
-  db.query(sql, values, (err, result) => {
-    if (err) {
-      console.error(err)
-      res.status(500).send('Server error')
-    } else if (result.affectedRows === 0) {
-      res.status(404).send('Article not found')
-    } else {
-      res.status(200).send('Article updated')
+  const connection = await db.promise().getConnection()
+  try {
+    await connection.beginTransaction()
+    const [articles] = await connection.query('SELECT id FROM article WHERE id = ? FOR UPDATE', [id])
+    if (articles.length === 0) {
+      await connection.rollback()
+      return res.status(404).send('Article not found')
     }
-  })
+    if (setParts.length > 0) {
+      await connection.query(`UPDATE article SET ${setParts.join(', ')} WHERE id = ?`, [...values, id])
+    }
+    if (labelIds !== undefined) {
+      const normalizedLabelIds = normalizeLabelIds(labelIds)
+      await validateLabelIds(connection, normalizedLabelIds)
+      await connection.query('UPDATE article SET label = ? WHERE id = ?', [serializeLabelIds(normalizedLabelIds), id])
+    }
+    await connection.commit()
+    res.status(200).send('Article updated')
+  } catch (error) {
+    await connection.rollback()
+    console.error(error)
+    res.status(error.statusCode || 500).send(error.statusCode ? error.message : 'Server error')
+  } finally {
+    connection.release()
+  }
 })
 
 //上传文章
 router.post('/upload', checkRole, function (req, res, _next) {
   // 从请求体中获取文章 ID 和新的文章数据
   const { title, content } = req.body
+  const fileName = String(title || '')
+    .trim()
+    .replace(/\.md$/i, '')
 
-  fs.writeFile(`./public/article/${title}.md`, content, (err) => {
+  if (!fileName || /[\\/:*?"<>|]/.test(fileName) || typeof content !== 'string') {
+    return res.status(400).send('Invalid article file')
+  }
+
+  fs.writeFile(path.join(process.cwd(), 'public', 'article', `${fileName}.md`), content, (err) => {
     if (err) {
       console.error(err)
       res.status(500).send('Server error')

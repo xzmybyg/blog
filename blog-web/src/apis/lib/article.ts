@@ -68,6 +68,10 @@ export function updateArticle(data) {
   return axiosInstance.put('/article', data)
 }
 
+export function createArticle(data) {
+  return axiosInstance.post('/article', data)
+}
+
 //上传文章文件
 export function uploadArticleFile(data) {
   return axiosInstance.post('/article/upload', data)

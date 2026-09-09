@@ -93,6 +93,9 @@ export default function LabelAdmin() {
   const delLabel = (id: number) => {
     deleteLabel(id).then(() => {
       setLabelList(labelList.filter((item) => item.id !== id))
+      message.success('标签已删除')
+    }).catch((error) => {
+      message.error(error.response?.data?.message || '标签删除失败')
     })
   }
 

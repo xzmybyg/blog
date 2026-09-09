@@ -5,6 +5,7 @@ declare type Article = {
   createTime?: Date
   topping?: boolean
   label?: string[] | string
+  labelIds?: number[]
   banner?: string
   hidden?: boolean
   article?: string

@@ -1,0 +1,142 @@
+@use '@/styleConfig/scssConfig.scss' as config;
+
+.add-article {
+  .ant-form {
+    padding: 28px;
+  }
+
+  .ant-form-item-row {
+    flex-wrap: nowrap;
+  }
+
+  .ant-form-item-label {
+    flex: 0 0 80px;
+    max-width: 80px;
+    padding-inline-end: 8px;
+    text-align: left;
+  }
+
+  .ant-form-item-control {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: none;
+  }
+
+  .ant-form-item-label > label {
+    width: 100%;
+    color: config.$ink;
+    font-weight: 600;
+    justify-content: flex-start;
+  }
+
+  .ant-upload-wrapper .ant-upload-drag {
+    min-height: 176px;
+    background: #f8faff;
+    border-color: config.$line;
+
+    &:hover,
+    &:focus-within {
+      border-color: config.$accent;
+      background: #f3f7ff;
+    }
+  }
+
+  .ant-upload-drag-icon {
+    margin-bottom: 10px !important;
+
+    .anticon {
+      color: config.$accent !important;
+      font-size: 36px !important;
+    }
+  }
+
+  .ant-upload-text {
+    color: config.$ink !important;
+    font-weight: 600;
+  }
+
+  .ant-upload-hint {
+    color: config.$muted !important;
+  }
+}
+
+.add-article__heading {
+  margin-bottom: 28px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid config.$line;
+
+  span {
+    color: config.$accent;
+    font-family: config.$font-mono;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+
+  h1 {
+    margin: 8px 0 6px;
+    color: config.$ink;
+    font-size: 28px;
+  }
+
+  p {
+    margin: 0;
+    color: config.$muted;
+  }
+}
+
+.add-article__file-status {
+  margin-top: 12px;
+}
+
+.add-article__title-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+
+  .ant-form-item {
+    flex: 1;
+    min-width: 0;
+  }
+
+  > .ant-btn {
+    min-width: 112px;
+  }
+}
+
+.add-article__meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 24px;
+  margin-bottom: 8px;
+}
+
+.add-article__switches {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-column: 1 / -1;
+  gap: 24px;
+
+}
+
+.add-article__tabs {
+  .ant-tabs-nav {
+    margin-bottom: 24px;
+  }
+
+  .ant-tabs-tab {
+    min-height: 44px;
+    font-weight: 600;
+  }
+}
+
+@media (max-width: 768px) {
+  .add-article .ant-form {
+    min-width: 680px;
+    padding: 20px;
+  }
+
+  .add-article__meta-grid {
+    grid-template-columns: 1fr;
+  }
+}

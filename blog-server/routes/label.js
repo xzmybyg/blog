@@ -57,19 +57,25 @@ router.delete('/', checkRole, function (req, res, _next) {
   // 从查询参数中获取标签 ID
   const { id } = req.query
 
-  // 创建 SQL 查询
-  const sql = `DELETE FROM label WHERE id = ?`
-
-  // 执行 SQL 查询
-  db.query(sql, [id], (err, result) => {
-    if (err) {
-      console.error(err)
-      res.status(500).send('Server error')
-    } else if (result.affectedRows === 0) {
-      res.status(404).send('Label not found')
-    } else {
-      res.status(200).send('Label deleted')
+  db.query('SELECT COUNT(*) AS count FROM article WHERE FIND_IN_SET(?, label) > 0', [id], (countErr, rows) => {
+    if (countErr) {
+      console.error(countErr)
+      return res.status(500).send('Server error')
     }
+    if (Number(rows[0].count) > 0) {
+      return res.status(409).send({ message: '该标签仍有关联文章，无法删除' })
+    }
+
+    db.query('DELETE FROM label WHERE id = ?', [id], (err, result) => {
+      if (err) {
+        console.error(err)
+        res.status(500).send('Server error')
+      } else if (result.affectedRows === 0) {
+        res.status(404).send('Label not found')
+      } else {
+        res.status(200).send('Label deleted')
+      }
+    })
   })
 })
 

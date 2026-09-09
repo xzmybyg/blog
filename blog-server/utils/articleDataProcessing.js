@@ -4,7 +4,10 @@ const articleDataProcessing = (data) => {
     item.hidden = item.hidden === 1
     if (item.label) {
       item.label = item.label.split(',')
+    } else {
+      item.label = []
     }
+    item.labelIds = item.labelIds ? item.labelIds.split(',').map(Number) : []
     return item
   })
 }
