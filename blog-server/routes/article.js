@@ -43,6 +43,7 @@ router.get('/', function (req, res, _next) {
 
   if (allList) {
     const sql = `${articleSelect}
+    WHERE a.hidden = 0
     GROUP BY a.id
     ORDER BY a.topping DESC`
 
@@ -86,6 +87,22 @@ router.get('/', function (req, res, _next) {
         }
       },
     )
+  })
+})
+
+// 管理系统获取全部文章，包括隐藏文章
+router.get('/admin', checkRole, function (_req, res) {
+  const sql = `${articleSelect}
+    GROUP BY a.id
+    ORDER BY a.topping DESC, a.createTime DESC`
+
+  db.query(sql, (err, data) => {
+    if (err) {
+      console.error(err)
+      res.status(500).send('Server error')
+    } else {
+      res.send(articleDataProcessing(data))
+    }
   })
 })
 

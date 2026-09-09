@@ -59,6 +59,7 @@ declare global {
   const editArticle: typeof import('../apis/lib/article')['editArticle']
   const forwardRef: typeof import('react')['forwardRef']
   const getAboutContent: typeof import('../apis/lib/about')['getAboutContent']
+  const getAdminArticleList: typeof import('../apis/lib/article')['getAdminArticleList']
   const getAdminLoginUrl: typeof import('../utils/auth')['getAdminLoginUrl']
   const getAllArticleList: typeof import('../apis/lib/article')['getAllArticleList']
   const getAllLinkList: typeof import('../apis/lib/link')['getAllLinkList']

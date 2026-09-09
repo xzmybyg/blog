@@ -1,6 +1,6 @@
 import { Button, Select, Space, Table, Tag } from 'antd'
 import { useEffect } from 'react'
-import { getPageArticleList } from '@/apis'
+import { getAdminArticleList } from '@/apis'
 import dayjs from 'dayjs'
 
 export default function Article() {
@@ -99,8 +99,8 @@ export default function Article() {
   const [data, setData] = useState<Article[]>([])
 
   useEffect(() => {
-    getPageArticleList({ pageSize: 10 }).then((res) => {
-      setData(res.data.list)
+    getAdminArticleList().then((res) => {
+      setData(res.data)
     })
   }, [])
 

@@ -68,6 +68,10 @@ export function updateArticle(data) {
   return axiosInstance.put('/article', data)
 }
 
+export function getAdminArticleList() {
+  return axiosInstance.get('/article/admin')
+}
+
 export function createArticle(data) {
   return axiosInstance.post('/article', data)
 }
