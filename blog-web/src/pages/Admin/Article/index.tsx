@@ -35,11 +35,17 @@ export default function Article() {
       title: '标签',
       key: 'label',
       dataIndex: 'label',
-      render: (tags: string[] = []) => (
-        <Space size={[0, 4]} wrap>
-          {tags.map((tag) => <Tag key={tag}>{tag}</Tag>)}
-        </Space>
-      ),
+      render: (tags: string[] | string | null) => {
+        const normalizedTags = Array.isArray(tags)
+          ? tags
+          : String(tags ?? '').split(',').filter(Boolean)
+
+        return (
+          <Space size={[0, 4]} wrap>
+            {normalizedTags.map((tag) => <Tag key={tag}>{tag}</Tag>)}
+          </Space>
+        )
+      },
     },
     {
       title: '封面',
@@ -114,7 +120,7 @@ export default function Article() {
   const loadArticles = useCallback(() => {
     setLoading(true)
     return getAdminArticleList()
-      .then((res) => setData(res.data))
+      .then((res) => setData(Array.isArray(res.data) ? res.data : []))
       .catch(() => message.error('文章列表加载失败，请稍后重试'))
       .finally(() => setLoading(false))
   }, [])
@@ -165,12 +171,11 @@ export default function Article() {
   }
 
   useEffect(() => {
-    getArticleFiles().then((res) => {
-      console.log(res)
-      setArticleFileList(res.data)
-    })
-    getLabelList().then((res) => setLabelList(res.data))
-    getArticleTopicList().then((res) => setTopicList(res.data)).catch(() => message.error('专题列表加载失败'))
+    getArticleFiles().then((res) => setArticleFileList(Array.isArray(res.data) ? res.data : []))
+    getLabelList().then((res) => setLabelList(Array.isArray(res.data) ? res.data : []))
+    getArticleTopicList()
+      .then((res) => setTopicList(Array.isArray(res.data) ? res.data : []))
+      .catch(() => message.error('专题列表加载失败'))
   }, [])
 
   const [articleFileList, setArticleFileList] = useState<string[]>([])
