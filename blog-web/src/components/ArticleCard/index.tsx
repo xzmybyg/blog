@@ -10,8 +10,11 @@ const { articleCard, articleInfo, articleContent, articleTitle, articleTime, art
 function ArticleCard(props: CardProps) {
   const { id, title, topping, createTime, label, topicName, description, addClassName,banner } = props
   const defaultBanner = `${import.meta.env.BASE_URL.replace(/\/?$/, '/')}banner.jpg`
+  const optimizedBanner = banner && banner !== '404'
+    ? `https://filespace.xzmybyg.cn/images/${banner}?imageMogr2/thumbnail/960x/format/webp/quality/78`
+    : defaultBanner
   const [bannerSrc, setBannerSrc] = useState(
-    banner && banner !== '404' ? `https://filespace.xzmybyg.cn/images/${banner}` : defaultBanner,
+    optimizedBanner,
   )
   return (
     <article className={`${articleCard} ${addClassName && Style[addClassName as string]}`}>
@@ -19,6 +22,8 @@ function ArticleCard(props: CardProps) {
         <img
           src={bannerSrc}
           alt={title || '文章封面'}
+          loading="lazy"
+          decoding="async"
           onError={() => {
             if (bannerSrc !== defaultBanner) {
               setBannerSrc(defaultBanner)
