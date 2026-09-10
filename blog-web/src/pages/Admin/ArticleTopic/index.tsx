@@ -99,7 +99,13 @@ export default function ArticleTopicAdmin() {
           <h1>专题管理</h1>
           <p>专题用于组织一组相关文章，每篇文章最多属于一个专题。</p>
         </div>
-        <Button type="primary" onClick={() => setEditingTopic({ ...emptyTopic })}>新建专题</Button>
+        <Button
+          className="article-topic-admin__create-button"
+          type="primary"
+          onClick={() => setEditingTopic({ ...emptyTopic })}
+        >
+          新建专题
+        </Button>
       </header>
       <Table
         rowKey="id"
