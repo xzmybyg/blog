@@ -18,15 +18,24 @@ function Article() {
 
   useEffect(() => {
     getAllArticleList()
-      .then((res) => setArticleList(res.data))
+      .then((res) => {
+        if (!Array.isArray(res.data)) throw new Error('文章列表响应格式错误')
+        setArticleList(res.data)
+      })
       .catch(() => setLoadFailed(true))
       .finally(() => setLoading(false))
 
     getLabelList()
-      .then((res) => setLabelList(res.data))
+      .then((res) => {
+        if (!Array.isArray(res.data)) throw new Error('标签列表响应格式错误')
+        setLabelList(res.data)
+      })
       .catch(() => message.error('标签列表加载失败，暂时无法按标签筛选'))
     getArticleTopicList()
-      .then((res) => setTopicList(res.data))
+      .then((res) => {
+        if (!Array.isArray(res.data)) throw new Error('专题列表响应格式错误')
+        setTopicList(res.data)
+      })
       .catch(() => message.error('专题列表加载失败，暂时无法按专题筛选'))
   }, [])
 
