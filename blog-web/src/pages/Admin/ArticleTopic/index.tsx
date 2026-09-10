@@ -26,10 +26,14 @@ export default function ArticleTopicAdmin() {
     setLoading(true)
     return Promise.all([getArticleTopicList(), getAdminArticleList()])
       .then(([topicResponse, articleResponse]) => {
-        setTopics(topicResponse.data)
-        setArticles(articleResponse.data)
+        setTopics(Array.isArray(topicResponse.data) ? topicResponse.data : [])
+        setArticles(Array.isArray(articleResponse.data) ? articleResponse.data : [])
       })
-      .catch(() => message.error('专题列表加载失败，请稍后重试'))
+      .catch(() => {
+        setTopics([])
+        setArticles([])
+        message.error('专题列表加载失败，请稍后重试')
+      })
       .finally(() => setLoading(false))
   }, [])
 

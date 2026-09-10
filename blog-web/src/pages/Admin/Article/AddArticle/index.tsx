@@ -26,8 +26,18 @@ export default function AddArticle() {
   })
 
   useEffect(() => {
-    getLabelList().then((res) => setLabels(res.data)).catch(() => message.error('标签列表加载失败'))
-    getArticleTopicList().then((res) => setTopics(res.data)).catch(() => message.error('专题列表加载失败'))
+    getLabelList()
+      .then((res) => setLabels(Array.isArray(res.data) ? res.data : []))
+      .catch(() => {
+        setLabels([])
+        message.error('标签列表加载失败')
+      })
+    getArticleTopicList()
+      .then((res) => setTopics(Array.isArray(res.data) ? res.data : []))
+      .catch(() => {
+        setTopics([])
+        message.error('专题列表加载失败')
+      })
   }, [])
 
   const handleChange = (value) => {
