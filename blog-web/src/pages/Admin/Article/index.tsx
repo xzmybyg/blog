@@ -1,4 +1,4 @@
-import { Button, Empty, Input, InputNumber, Select, Space, Table, Tag } from 'antd'
+import { Button, Empty, Input, Select, Space, Table, Tag } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
 import { useEffect } from 'react'
 import { getAdminArticleList, getArticleTopicList } from '@/apis'
@@ -30,13 +30,6 @@ export default function Article() {
       dataIndex: 'topicName',
       key: 'topicName',
       render: (topicName) => topicName ? <Tag color="blue">{topicName}</Tag> : <span>—</span>,
-    },
-    {
-      title: '章节顺序',
-      dataIndex: 'topicOrder',
-      key: 'topicOrder',
-      width: 100,
-      render: (topicOrder, record) => record.topicId ? topicOrder : '—',
     },
     {
       title: '标签',
@@ -344,34 +337,6 @@ export default function Article() {
                   ...(currentArticle as Article),
                   topicId: value ?? null,
                   topicOrder: value === undefined ? 0 : currentArticle?.topicOrder,
-                })
-              }
-            />
-          </Form.Item>
-          <Form.Item label="章节顺序" extra="同一专题内按数字从小到大排列">
-            <InputNumber
-              min={0}
-              precision={0}
-              disabled={!currentArticle?.topicId}
-              value={currentArticle?.topicOrder ?? 0}
-              onChange={(value) =>
-                setCurrentArticle({
-                  ...(currentArticle as Article),
-                  topicOrder: value ?? 0,
-                })
-              }
-            />
-          </Form.Item>
-          <Form.Item label="章节顺序" extra="同一专题内按数字从小到大排列">
-            <InputNumber
-              min={0}
-              precision={0}
-              disabled={!currentArticle?.topicId}
-              value={currentArticle?.topicOrder ?? 0}
-              onChange={(value) =>
-                setCurrentArticle({
-                  ...(currentArticle as Article),
-                  topicOrder: value ?? 0,
                 })
               }
             />

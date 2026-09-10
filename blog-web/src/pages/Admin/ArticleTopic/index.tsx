@@ -1,20 +1,34 @@
+import { ArrowDownOutlined, ArrowUpOutlined, HolderOutlined } from '@ant-design/icons'
 import { Button, Empty, Form, Input, Modal, Space, Table, message } from 'antd'
 import dayjs from 'dayjs'
-import { addArticleTopic, deleteArticleTopic, getArticleTopicList, updateArticleTopic } from '@/apis'
+import {
+  addArticleTopic,
+  deleteArticleTopic,
+  getAdminArticleList,
+  getArticleTopicList,
+  reorderArticleTopic,
+  updateArticleTopic,
+} from '@/apis'
 import './index.scss'
 
 const emptyTopic = { id: 0, name: '', description: '' }
 
 export default function ArticleTopicAdmin() {
   const [topics, setTopics] = useState<ArticleTopic[]>([])
+  const [articles, setArticles] = useState<Article[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [orderingTopicId, setOrderingTopicId] = useState<number | null>(null)
+  const [draggedArticleId, setDraggedArticleId] = useState<number | null>(null)
   const [editingTopic, setEditingTopic] = useState<ArticleTopic | null>(null)
 
   const loadTopics = useCallback(() => {
     setLoading(true)
-    return getArticleTopicList()
-      .then((response) => setTopics(response.data))
+    return Promise.all([getArticleTopicList(), getAdminArticleList()])
+      .then(([topicResponse, articleResponse]) => {
+        setTopics(topicResponse.data)
+        setArticles(articleResponse.data)
+      })
       .catch(() => message.error('专题列表加载失败，请稍后重试'))
       .finally(() => setLoading(false))
   }, [])
@@ -73,6 +87,109 @@ export default function ArticleTopicAdmin() {
     })
   }
 
+  const getTopicArticles = (topicId: number) => articles
+    .filter((article) => article.topicId === topicId)
+    .sort((left, right) => (
+      (left.topicOrder ?? 0) - (right.topicOrder ?? 0)
+      || dayjs(left.createTime).valueOf() - dayjs(right.createTime).valueOf()
+      || left.id - right.id
+    ))
+
+  const saveArticleOrder = async (topicId: number, orderedArticles: Article[]) => {
+    if (orderingTopicId !== null) return
+    const previousArticles = articles
+    const orderById = new Map(orderedArticles.map((article, index) => [article.id, index + 1]))
+    setArticles((current) => current.map((article) => (
+      orderById.has(article.id) ? { ...article, topicOrder: orderById.get(article.id) } : article
+    )))
+    setOrderingTopicId(topicId)
+    try {
+      await reorderArticleTopic(topicId, orderedArticles.map((article) => article.id))
+      message.success('文章顺序已保存')
+    } catch (error: any) {
+      setArticles(previousArticles)
+      message.error(error.response?.data?.message || '文章排序保存失败，已恢复原顺序')
+    } finally {
+      setOrderingTopicId(null)
+      setDraggedArticleId(null)
+    }
+  }
+
+  const moveArticle = (topicId: number, articleId: number, offset: -1 | 1) => {
+    const topicArticles = getTopicArticles(topicId)
+    const currentIndex = topicArticles.findIndex((article) => article.id === articleId)
+    const nextIndex = currentIndex + offset
+    if (currentIndex < 0 || nextIndex < 0 || nextIndex >= topicArticles.length) return
+    const nextArticles = [...topicArticles]
+    const [movedArticle] = nextArticles.splice(currentIndex, 1)
+    nextArticles.splice(nextIndex, 0, movedArticle)
+    void saveArticleOrder(topicId, nextArticles)
+  }
+
+  const dropArticle = (topicId: number, targetArticleId: number) => {
+    if (draggedArticleId === null || draggedArticleId === targetArticleId) return
+    const topicArticles = getTopicArticles(topicId)
+    const sourceIndex = topicArticles.findIndex((article) => article.id === draggedArticleId)
+    const targetIndex = topicArticles.findIndex((article) => article.id === targetArticleId)
+    if (sourceIndex < 0 || targetIndex < 0) return
+    const nextArticles = [...topicArticles]
+    const [movedArticle] = nextArticles.splice(sourceIndex, 1)
+    nextArticles.splice(targetIndex, 0, movedArticle)
+    void saveArticleOrder(topicId, nextArticles)
+  }
+
+  const renderTopicArticles = (topic: ArticleTopic) => {
+    const topicArticles = getTopicArticles(topic.id)
+    if (topicArticles.length === 0) {
+      return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="该专题暂无文章" />
+    }
+
+    return (
+      <ol className="article-topic-order" aria-label={`${topic.name}文章顺序`} aria-busy={orderingTopicId === topic.id}>
+        {topicArticles.map((article, index) => (
+          <li
+            key={article.id}
+            className={draggedArticleId === article.id ? 'article-topic-order__item article-topic-order__item--dragging' : 'article-topic-order__item'}
+            draggable={orderingTopicId === null}
+            onDragStart={(event) => {
+              setDraggedArticleId(article.id)
+              event.dataTransfer.effectAllowed = 'move'
+            }}
+            onDragOver={(event) => {
+              event.preventDefault()
+              event.dataTransfer.dropEffect = 'move'
+            }}
+            onDrop={(event) => {
+              event.preventDefault()
+              dropArticle(topic.id, article.id)
+            }}
+            onDragEnd={() => setDraggedArticleId(null)}
+          >
+            <span className="article-topic-order__handle" aria-hidden="true"><HolderOutlined /></span>
+            <span className="article-topic-order__position">{String(index + 1).padStart(2, '0')}</span>
+            <strong>{article.title}</strong>
+            <Space size={4}>
+              <Button
+                type="text"
+                icon={<ArrowUpOutlined />}
+                aria-label={`上移文章：${article.title}`}
+                disabled={index === 0 || orderingTopicId !== null}
+                onClick={() => moveArticle(topic.id, article.id, -1)}
+              />
+              <Button
+                type="text"
+                icon={<ArrowDownOutlined />}
+                aria-label={`下移文章：${article.title}`}
+                disabled={index === topicArticles.length - 1 || orderingTopicId !== null}
+                onClick={() => moveArticle(topic.id, article.id, 1)}
+              />
+            </Space>
+          </li>
+        ))}
+      </ol>
+    )
+  }
+
   const columns = [
     { title: '专题名称', dataIndex: 'name', key: 'name' },
     { title: '说明', dataIndex: 'description', key: 'description', render: (value) => value || '—' },
@@ -112,6 +229,10 @@ export default function ArticleTopicAdmin() {
         loading={loading}
         columns={columns}
         dataSource={topics}
+        expandable={{
+          expandedRowRender: renderTopicArticles,
+          rowExpandable: (topic) => Boolean(topic.articleCount),
+        }}
         locale={{ emptyText: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="暂无专题" /> }}
       />
       <Modal

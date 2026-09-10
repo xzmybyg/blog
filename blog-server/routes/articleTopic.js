@@ -65,6 +65,44 @@ router.put('/', checkRole, function (req, res) {
   })
 })
 
+router.put('/:id/order', checkRole, async function (req, res) {
+  const topicId = Number(req.params.id)
+  const articleIds = Array.isArray(req.body.articleIds) ? req.body.articleIds.map(Number) : []
+  const uniqueArticleIds = [...new Set(articleIds)]
+  if (!Number.isInteger(topicId) || topicId <= 0 || articleIds.some((id) => !Number.isInteger(id) || id <= 0)) {
+    return res.status(400).send({ message: '专题或文章 ID 无效' })
+  }
+  if (uniqueArticleIds.length !== articleIds.length) {
+    return res.status(400).send({ message: '文章顺序中存在重复项' })
+  }
+
+  const connection = await db.promise().getConnection()
+  try {
+    await connection.beginTransaction()
+    const [articles] = await connection.query(
+      'SELECT id FROM article WHERE topic_id = ? ORDER BY topic_order ASC, createTime ASC, id ASC FOR UPDATE',
+      [topicId],
+    )
+    const currentIds = articles.map((article) => Number(article.id))
+    if (currentIds.length !== articleIds.length || currentIds.some((id) => !uniqueArticleIds.includes(id))) {
+      await connection.rollback()
+      return res.status(409).send({ message: '专题文章已发生变化，请刷新后重试' })
+    }
+
+    for (const [index, articleId] of articleIds.entries()) {
+      await connection.query('UPDATE article SET topic_order = ? WHERE id = ? AND topic_id = ?', [index + 1, articleId, topicId])
+    }
+    await connection.commit()
+    res.send({ articleIds })
+  } catch (error) {
+    await connection.rollback()
+    console.error(error)
+    res.status(500).send('Server error')
+  } finally {
+    connection.release()
+  }
+})
+
 router.delete('/', checkRole, function (req, res) {
   const id = Number(req.query.id)
   if (!Number.isInteger(id) || id <= 0) return res.status(400).send({ message: '专题 ID 无效' })

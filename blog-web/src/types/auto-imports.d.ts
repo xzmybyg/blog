@@ -90,6 +90,7 @@ declare global {
   const message: typeof import('antd')['message']
   const postMessage: typeof import('../apis/lib/message')['postMessage']
   const register: typeof import('../apis/lib/user')['register']
+  const reorderArticleTopic: typeof import('../apis/lib/articleTopic')['reorderArticleTopic']
   const request: typeof import('../utils/request')['default']
   const setUserInfo: typeof import('../store/user')['setUserInfo']
   const startTransition: typeof import('react')['startTransition']

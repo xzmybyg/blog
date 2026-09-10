@@ -13,3 +13,7 @@ export function updateArticleTopic(data: Pick<ArticleTopic, 'id' | 'name' | 'des
 export function deleteArticleTopic(id: number) {
   return axiosInstance.delete('/article-topic', { params: { id } })
 }
+
+export function reorderArticleTopic(id: number, articleIds: number[]) {
+  return axiosInstance.put(`/article-topic/${id}/order`, { articleIds })
+}
