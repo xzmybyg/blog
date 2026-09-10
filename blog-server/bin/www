@@ -75,10 +75,7 @@ function onError(error) {
       break
     case 'EADDRINUSE':
       console.error(bind + ' is already in use')
-      port++;
-      console.log('Trying to listen on port ' + port);
-      server.listen(port);
-      // process.exit(1)
+      process.exit(1)
       break
     default:
       throw error
