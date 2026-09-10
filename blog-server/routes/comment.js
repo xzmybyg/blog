@@ -116,7 +116,7 @@ router.delete('/', checkRole, function (req, res, _next) {
   })
 })
 
-router.get('/commentList', function (req, res, _next) {
+router.get('/commentList', checkRole, function (req, res, _next) {
   const sql = `select 
   comment.id,comment.content,comment.like,comment.createTime,comment.article_id,
   user.id user_id,user.username,user.avatar,user.nickname user_nickName,

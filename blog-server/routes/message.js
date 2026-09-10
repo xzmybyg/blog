@@ -15,6 +15,22 @@ router.get('/', function (req, res, _next) {
   })
 })
 
+router.get('/admin', checkRole, function (_req, res) {
+  const sql = `SELECT message.*, user.username, user.nickname
+    FROM message
+    LEFT JOIN user ON user.id = message.user_id
+    ORDER BY message.createTime DESC`
+
+  db.query(sql, (err, data) => {
+    if (err) {
+      console.error(err)
+      res.status(500).send('Server error')
+    } else {
+      res.send(data)
+    }
+  })
+})
+
 router.post('/', checkToken, function (req, res, _next) {
   const { id: user_id, content, createTime = new Date() } = req.body
   const sql = `INSERT INTO message (user_id, content, createTime) VALUES (?, ?, ?)`

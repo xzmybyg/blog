@@ -16,10 +16,15 @@ export default function MessageAdmin() {
       render: (text) => <a>{text}</a>,
     },
     {
-      title: '用户id',
+      title: '用户 ID',
       dataIndex: 'user_id',
       key: 'user_id',
-      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: '用户名',
+      dataIndex: 'username',
+      key: 'username',
+      render: (username) => username || '用户已注销',
     },
     {
       title: '内容',

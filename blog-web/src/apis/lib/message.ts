@@ -13,7 +13,7 @@ export function postMessage(id: number, content: string) {
 
 //获取留言列表
 export function getMessageList() {
-  return axiosInstance.get('/message')
+  return axiosInstance.get('/message/admin')
 }
 
 //删除留言

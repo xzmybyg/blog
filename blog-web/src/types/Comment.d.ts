@@ -36,6 +36,7 @@ declare type Reply = {
 
 declare type CommentAdmin = {
   article_id: number
+  user_id: number
   avatar: string
   comment_id: number
   comment_to_article_id: number
@@ -44,6 +45,7 @@ declare type CommentAdmin = {
   createTime: Date
   like: number
   nickname: string
+  username: string
   replyList: {
     avatar: string
     content: string

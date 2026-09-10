@@ -29,10 +29,15 @@ export default function Comment() {
       render: (text) => <a>{text}</a>,
     },
     {
-      title: '评论用户',
+      title: '用户 ID',
+      dataIndex: 'user_id',
+      key: 'user_id',
+    },
+    {
+      title: '用户名',
       dataIndex: 'username',
       key: 'username',
-      render: (text) => <a>{text}</a>,
+      render: (username) => username || '用户已注销',
     },
     {
       title: '评论内容',
@@ -72,10 +77,15 @@ export default function Comment() {
         render: (text) => <a>{text}</a>,
       },
       {
-        title: '回复用户',
+        title: '用户 ID',
+        dataIndex: 'user_id',
+        key: 'user_id',
+      },
+      {
+        title: '用户名',
         dataIndex: 'username',
         key: 'username',
-        render: (text) => <a>{text}</a>,
+        render: (username) => username || '用户已注销',
       },
       {
         title: '回复内容',
