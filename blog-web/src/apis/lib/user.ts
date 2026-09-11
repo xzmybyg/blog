@@ -1,10 +1,5 @@
 export function login({ username, password }: loginParams) {
-  return axiosInstance.get('/users', {
-    params: {
-      username,
-      password,
-    },
-  })
+  return axiosInstance.post('/users/login', { username, password })
 }
 
 export function register({ username, password, email }: registerParams) {

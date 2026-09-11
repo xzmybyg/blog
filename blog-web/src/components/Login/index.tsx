@@ -1,6 +1,5 @@
 import { forwardRef, useImperativeHandle } from 'react'
-import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons'
-// import Style from "./index.module.scss";
+import { EyeInvisibleOutlined, EyeTwoTone, LockOutlined, MailOutlined, UserOutlined } from '@ant-design/icons'
 import './index.scss'
 import { login, register } from '@/apis'
 
@@ -73,13 +72,18 @@ const Login = forwardRef<LoginHandle>((_props, ref) => {
       open={isModalOpen}
       onOk={handleSubmit}
       onCancel={handleCancel}
-      okText="确认"
+      okText={haveAccount ? '登录' : '创建账号'}
       cancelText="取消"
+      width={460}
+      centered
     >
-      <div>
-        <h1>{haveAccount ? '登录' : '注册'}</h1>
-
-        <Form form={form} name={haveAccount ? 'login' : 'register'}>
+      <div className="loginPanel">
+        <header className="loginPanel__header">
+          <span>MEMBER ACCESS / 用户入口</span>
+          <h1>{haveAccount ? '欢迎回来' : '创建账号'}</h1>
+          <p>{haveAccount ? '登录后参与评论与留言互动。' : '注册后即可参与博客内容交流。'}</p>
+        </header>
+        <Form form={form} layout="vertical" requiredMark={false} name={haveAccount ? 'login' : 'register'}>
           <Form.Item
             label="账号"
             name="username"
@@ -94,7 +98,7 @@ const Login = forwardRef<LoginHandle>((_props, ref) => {
             // hasFeedback={!haveAccount}
             // validateStatus="success"
           >
-            <Input placeholder="账号" />
+            <Input size="large" prefix={<UserOutlined />} placeholder="请输入账号" autoComplete="username" />
           </Form.Item>
           <Form.Item
             label="密码"
@@ -108,9 +112,12 @@ const Login = forwardRef<LoginHandle>((_props, ref) => {
                 : []
             }
           >
-            <Input.Password
-              iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-              placeholder="密码"
+              <Input.Password
+                size="large"
+                prefix={<LockOutlined />}
+                iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+                placeholder="请输入密码"
+                autoComplete={haveAccount ? 'current-password' : 'new-password'}
             />
           </Form.Item>
           {!haveAccount && (
@@ -122,18 +129,20 @@ const Login = forwardRef<LoginHandle>((_props, ref) => {
                 { type: 'email', message: '请输入有效的邮箱地址!' },
               ]}
             >
-              <Input placeholder="邮箱" />
+              <Input size="large" prefix={<MailOutlined />} placeholder="请输入邮箱" autoComplete="email" />
             </Form.Item>
           )}
         </Form>
-        <p
+        <button
+          type="button"
           className="changeLogin"
           onClick={() => {
             setHaveAccount(!haveAccount)
           }}
         >
-          {haveAccount ? '还没有账号？去注册-->' : '已有账号？去登录-->'}
-        </p>
+          {haveAccount ? '还没有账号？创建一个' : '已有账号？返回登录'}
+          <span aria-hidden="true">→</span>
+        </button>
       </div>
       {/* <div id="wx_login_container"></div> */}
     </Modal>

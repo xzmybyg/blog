@@ -1,7 +1,119 @@
+@use '@/styleConfig/scssConfig.scss' as config;
+
 .loginWrap {
-  .changeLogin {
-    margin: 5px 0;
-    color: #1890ff;
-    cursor: pointer;
+  .ant-modal-content {
+    overflow: hidden;
+    padding: 0;
+    border: 1px solid config.$line;
+    border-radius: 18px;
+    box-shadow: 0 24px 70px rgba(18, 32, 51, .2);
+  }
+
+  .ant-modal-close {
+    top: 18px;
+    right: 20px;
+    color: config.$muted;
+    border-radius: 50%;
+
+    &:hover { color: config.$ink; background: config.$paper; }
+  }
+
+  .ant-modal-body { padding: 32px 34px 20px; }
+
+  .ant-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin: 0;
+    padding: 18px 34px 26px;
+    background: #f8faff;
+    border-top: 1px solid config.$line;
+
+    .ant-btn {
+      min-width: 92px;
+      height: 40px;
+      margin-inline-start: 0;
+      font-weight: 700;
+      border-radius: 9px;
+    }
+
+    .ant-btn-primary,
+    .ant-btn-primary:hover,
+    .ant-btn-primary:focus-visible {
+      color: #fff;
+    }
+  }
+
+  .ant-form-item { margin-bottom: 18px; }
+  .ant-form-item-label { padding-bottom: 7px; }
+  .ant-form-item-label > label { color: config.$ink; font-size: 13px; font-weight: 700; }
+
+  .ant-input-affix-wrapper {
+    min-height: 44px;
+    padding-inline: 13px;
+    background: #f8faff;
+    border-color: config.$line;
+    border-radius: 9px;
+    box-shadow: none;
+
+    > .anticon { margin-right: 7px; color: config.$accent; }
+
+    &:hover,
+    &:focus,
+    &-focused {
+      background: config.$surface;
+      border-color: config.$accent;
+      box-shadow: 0 0 0 3px rgba(24, 87, 217, .1);
+    }
+  }
+}
+
+.loginPanel__header {
+  padding-right: 36px;
+  margin-bottom: 26px;
+
+  > span {
+    color: config.$accent;
+    font-family: config.$font-mono;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .13em;
+  }
+
+  h1 {
+    margin: 7px 0 5px;
+    color: config.$ink;
+    font-size: 28px;
+    line-height: 1.2;
+    letter-spacing: -.03em;
+  }
+
+  p { margin: 0; color: config.$muted; font-size: 13px; }
+}
+
+.changeLogin {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 2px;
+  padding: 0;
+  color: config.$accent;
+  font-size: 13px;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+
+  span { transition: transform .18s ease; }
+
+  &:hover span { transform: translateX(3px); }
+  &:focus-visible { outline: 2px solid rgba(24, 87, 217, .25); outline-offset: 4px; }
+}
+
+@media (max-width: 520px) {
+  .loginWrap {
+    max-width: calc(100vw - 28px);
+
+    .ant-modal-body { padding: 28px 22px 18px; }
+    .ant-modal-footer { padding: 16px 22px 22px; }
   }
 }

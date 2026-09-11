@@ -7,14 +7,18 @@ const key = require('@config/key')
 const checkRole = require('@middleware/checkRole')
 const checkToken = require('@middleware/checkToken')
 
-/* GET users listing. */
-router.get('/', function (req, res, next) {
-  const { username, password } = req.query
+router.post('/login', function (req, res) {
+  const { username, password } = req.body || {}
+  if (typeof username !== 'string' || !username.trim() || typeof password !== 'string' || !password) {
+    return res.status(400).send('Username and password are required')
+  }
+
   db.query(
     `SELECT 
     id,username,role,avatar,nickname,commentLimit,email
     FROM user
-    WHERE username='${username}' AND password='${password}'`,
+    WHERE username = ? AND password = ?`,
+    [username.trim(), password],
     (err, data, _field) => {
       if (err) {
         console.error(err)
@@ -33,6 +37,7 @@ router.get('/', function (req, res, next) {
               expiresIn: 60 * 60 * 24 * 7,
             },
           )
+          res.set('Cache-Control', 'no-store')
           res.send({ token, ...data[0] })
         } else {
           res.status(401).send('Unauthorized')
