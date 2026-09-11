@@ -1,58 +1,71 @@
 import { Avatar, Popover } from 'antd'
-import { GithubOutlined, LinkOutlined, WechatOutlined } from '@ant-design/icons'
+import { EnvironmentOutlined, GithubOutlined, MailOutlined, WechatOutlined } from '@ant-design/icons'
 
 import PublicNotice from './PublicNotice'
 import Website from './Website'
 import LabelCard from './LabelCard'
 
 import Style from './index.module.scss'
-const { introduction, wechat, jello } = Style
+const {
+  introduction,
+  profileHeader,
+  profileIdentity,
+  profileMeta,
+  profileActions,
+  githubAction,
+  wechatAction,
+  giteeAction,
+  wechat,
+  jello,
+} = Style
 const baseURL = import.meta.env.VITE_BASE_URL
 
 function Wechat() {
   const WechatContent = <img className={wechat} src="/MyWechat.jpg" alt="加载失败" />
   return (
-    <Popover content={WechatContent}>
-      <WechatOutlined />
+    <Popover content={WechatContent} title="微信二维码">
+      <button className={wechatAction} type="button" aria-label="查看微信二维码">
+        <WechatOutlined />
+      </button>
     </Popover>
   )
 }
 
 function MyGithub() {
-  const github = 'https://github.com/xzmybyg'
-
   return (
-    <GithubOutlined
-      onClick={() => {
-        window.open(github)
-      }}
-    />
+    <a className={githubAction} href="https://github.com/xzmybyg" target="_blank" rel="noreferrer" aria-label="访问 GitHub">
+      <GithubOutlined />
+    </a>
   )
 }
 function BlogAside() {
-  const IntroductionActions = [<MyGithub key="github" />, <Wechat key="wechat" />, <LinkOutlined key="gitee" />]
-
   return (
-    <>
-      <Card className={introduction} style={{ width: 300 }} actions={IntroductionActions}>
-        <Space wrap size={16}>
+      <Card className={introduction} style={{ width: 300 }}>
+        <div className={profileHeader}>
           <Avatar
             className={jello}
-            size={64}
+            size={60}
             src={`${baseURL}/blog-icon.jpg`}
             alt="加载失败"
-            style={{
-              boxShadow: '0 0 5px rgba(0, 0, 0, 0.5)',
-              marginBottom: 10,
-            }}
           />
-          <b>心中没有白月光</b>
-        </Space>
-        <p>前端开发</p>
-        <p>现居：北京</p>
-        <p>邮箱：1277215827@qq.com</p>
+          <div className={profileIdentity}>
+            <span>AUTHOR / 博主</span>
+            <strong>心中没有白月光</strong>
+            <small>Frontend Developer</small>
+          </div>
+        </div>
+        <div className={profileMeta}>
+          <span><EnvironmentOutlined aria-hidden="true" />北京</span>
+          <a href="mailto:1277215827@qq.com"><MailOutlined aria-hidden="true" />1277215827@qq.com</a>
+        </div>
+        <div className={profileActions}>
+          <MyGithub />
+          <Wechat />
+          <a className={giteeAction} href="https://gitee.com/lv-chengye" target="_blank" rel="noreferrer" aria-label="访问 Gitee">
+            <i className="iconfont icon-gitee" aria-hidden="true" />
+          </a>
+        </div>
       </Card>
-    </>
   )
 }
 BlogAside.PublicNotice = PublicNotice

@@ -1,21 +1,114 @@
 .introduction {
+  overflow: hidden;
+  border-color: $line;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(18, 32, 51, .08);
+
   :global(.ant-card-body) {
-    padding: 24px;
+    padding: 22px 22px 0;
+  }
+}
+
+.profileHeader {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+}
+
+.profileIdentity {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+
+  span {
+    color: $accent;
+    font-family: $font-mono;
+    font-size: .62rem;
+    font-weight: 700;
+    letter-spacing: .11em;
   }
 
-  p {
-    margin: 8px 0;
+  strong {
+    overflow: hidden;
+    color: $ink;
+    font-size: .92rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  small { color: $muted; font-family: $font-mono; font-size: .65rem; }
+}
+
+.profileMeta {
+  display: grid;
+  gap: 9px;
+  margin-top: 20px;
+  padding: 15px 0 18px;
+  border-top: 1px solid $line;
+
+  span,
+  a {
+    display: flex;
+    align-items: center;
+    gap: 9px;
     color: $muted;
-    font-size: 0.9rem;
+    font-size: .78rem;
+    text-decoration: none;
   }
 
-  :global(.ant-card-actions) {
-    background: $surface;
-    border-top-color: $line;
+  :global(.anticon) { color: $accent; }
+  a:hover { color: $accent-deep; }
+}
 
-    li {
-      color: $accent;
-    }
+.profileActions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 0 -22px;
+  border-top: 1px solid $line;
+
+  > a,
+  button {
+    display: grid;
+    min-height: 46px;
+    place-items: center;
+    padding: 0;
+    color: $muted;
+    background: $surface;
+    border: 0;
+    cursor: pointer;
+    transition: color .18s ease, background-color .18s ease;
+
+    &:hover,
+    &:focus-visible { color: $accent; background: $paper; }
+    &:focus-visible { outline: 2px solid $focus-ring; outline-offset: -2px; }
+  }
+
+  > * + * {
+    border-left: 1px solid $line;
+  }
+
+  > .githubAction {
+    color: #24292f;
+
+    &:hover,
+    &:focus-visible { color: #000; background: #f2f3f5; }
+  }
+
+  > .wechatAction {
+    color: #07c160;
+
+    &:hover,
+    &:focus-visible { color: #059b4d; background: #effbf4; }
+  }
+
+  > .giteeAction {
+    color: #c71d23;
+
+    &:hover,
+    &:focus-visible { color: #a9151b; background: #fff2f2; }
+
+    i { font-size: 1rem; }
   }
 }
 .wechat {
@@ -24,5 +117,5 @@
 
 .jello {
   border: 3px solid $surface;
-  box-shadow: 0 8px 20px rgba(18, 32, 51, 0.16) !important;
+  box-shadow: 0 7px 18px rgba(18, 32, 51, .15) !important;
 }

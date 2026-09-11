@@ -2,14 +2,22 @@ import { getLinkList, applyLink } from '@/apis'
 import type { FormValues } from '@/apis/lib/link'
 
 import { Avatar } from 'antd'
-const { Meta } = Card
+import { ExportOutlined } from '@ant-design/icons'
 
 import Style from './index.module.scss'
 
-function TheLink() {
-  const { linkPage, listWrap, linkItem, content, formWrap, notice, linkForm, formItem, aside } = Style
+function getHostname(url: string) {
+  try {
+    return new URL(url).hostname.replace(/^www\\./, '')
+  } catch {
+    return url
+  }
+}
 
-  const [linkList, setLinkList] = useState([])
+function TheLink() {
+  const { linkPage, pageHeader, siteCount, listWrap, linkItem, linkCopy, emptyList, content, applySection, formWrap, notice, linkForm, formItem, aside } = Style
+
+  const [linkList, setLinkList] = useState<Link[]>([])
   useEffect(() => {
     getLinkList().then((res) => {
       setLinkList(res.data)
@@ -38,49 +46,70 @@ function TheLink() {
     <div id={linkPage} className={`pages`}>
       {contextHolder}
       <Card className={content}>
-        <h1>友链</h1>
-        <div className={listWrap}>
-          {linkList.map((item: any) => (
-            <a key={item.id} className={linkItem} href={item.url} target="_blank" rel="noreferrer" aria-label={`访问 ${item.title}（新标签页）`}>
-            <Card>
-              {/* <Skeleton avatar active> */}
-              <Meta avatar={<Avatar src={item.logo} />} title={item.title} description={item.describe} />
-              {/* </Skeleton> */}
-            </Card>
-            </a>
-          ))}
-        </div>
-        <Divider>申请友链</Divider>
-        <div className={formWrap}>
-          <div className={notice}>
-            <h2>友链格式：</h2>
-            <p>标题：心中没有白月光</p>
-            <p>描述：孩儿立志出乡关，学不成名誓不还</p>
-            <p>网址：https://www.xzmybyg.com</p>
-            <p>头像：https://www.xzmybyg.com/logo.png</p>
+        <header className={pageHeader}>
+          <div>
+            <span>LINK EXCHANGE / 友链目录</span>
+            <h1>在独立站点之间，<br />保留一条可抵达的路。</h1>
+            <p>这里收录持续创作的个人博客与技术站点。</p>
           </div>
-          <div className={linkForm}>
-            <Form onFinish={(values) => submit(values)} noValidate layout="vertical">
-              <Form.Item className={formItem} label="标题" name="title" rules={[{ required: true, message: '请输入网站名称' }]}>
-                <Input placeholder="网站名称" />
-              </Form.Item>
-              <Form.Item className={formItem} label="描述" name="describe" rules={[{ required: true, message: '请输入网站描述' }]}>
-                <Input placeholder="网站描述" />
-              </Form.Item>
-              <Form.Item className={formItem} label="网址" name="url" rules={[{ required: true, message: '请输入网站地址' }, { type: 'url', message: '请输入完整的 https:// 地址' }]}>
-                <Input placeholder="网站地址" />
-              </Form.Item>
-              <Form.Item className={formItem} label="头像" name="logo" rules={[{ required: true, message: '请输入头像地址' }, { type: 'url', message: '请输入完整的图片地址' }]}>
-                <Input placeholder="网站logo" />
-              </Form.Item>
-              <Form.Item className={formItem}>
-                <Button type="primary" htmlType="submit">
-                  申请友链
-                </Button>
-              </Form.Item>
-            </Form>
+          <strong className={siteCount}><b>{linkList.length}</b><span>SITES</span></strong>
+        </header>
+
+        {linkList.length > 0 ? (
+          <div className={listWrap}>
+            {linkList.map((item) => (
+              <a key={item.id} className={linkItem} href={item.url} target="_blank" rel="noreferrer" aria-label={`访问 ${item.title}（新标签页）`}>
+                <Avatar size={54} src={item.logo}>{item.title.slice(0, 1)}</Avatar>
+                <div className={linkCopy}>
+                  <strong>{item.title}</strong>
+                  <p>{item.describe || '去看看这个站点最近在写什么。'}</p>
+                  <span>{getHostname(item.url)}</span>
+                </div>
+                <ExportOutlined aria-hidden="true" />
+              </a>
+            ))}
           </div>
-        </div>
+        ) : (
+          <div className={emptyList}><strong>目录暂时为空</strong><span>欢迎成为这里的第一位邻居。</span></div>
+        )}
+
+        <section className={applySection}>
+          <header>
+            <span>ADD YOUR SITE / 申请收录</span>
+            <h2>交换一张网络名片</h2>
+            <p>提交后会进入审核，通过后展示在上方目录中。</p>
+          </header>
+          <div className={formWrap}>
+            <aside className={notice}>
+              <strong>本站信息</strong>
+              <dl>
+                <div><dt>名称</dt><dd>心中没有白月光</dd></div>
+                <div><dt>描述</dt><dd>孩儿立志出乡关，学不成名誓不还</dd></div>
+                <div><dt>网址</dt><dd>https://www.xzmybyg.cn</dd></div>
+                <div><dt>头像</dt><dd>https://www.xzmybyg.cn/blog/blog-icon.jpg</dd></div>
+              </dl>
+            </aside>
+            <div className={linkForm}>
+              <Form onFinish={(values) => submit(values)} noValidate layout="vertical">
+                <Form.Item className={formItem} label="网站名称" name="title" rules={[{ required: true, message: '请输入网站名称' }]}>
+                  <Input placeholder="例如：我的技术笔记" />
+                </Form.Item>
+                <Form.Item className={formItem} label="一句话描述" name="describe" rules={[{ required: true, message: '请输入网站描述' }]}>
+                  <Input placeholder="这个站点主要分享什么？" />
+                </Form.Item>
+                <Form.Item className={formItem} label="网站地址" name="url" rules={[{ required: true, message: '请输入网站地址' }, { type: 'url', message: '请输入完整的 https:// 地址' }]}>
+                  <Input placeholder="https://example.com" />
+                </Form.Item>
+                <Form.Item className={formItem} label="头像地址" name="logo" rules={[{ required: true, message: '请输入头像地址' }, { type: 'url', message: '请输入完整的图片地址' }]}>
+                  <Input placeholder="https://example.com/avatar.png" />
+                </Form.Item>
+                <Form.Item className={formItem}>
+                  <Button type="primary" htmlType="submit">提交申请</Button>
+                </Form.Item>
+              </Form>
+            </div>
+          </div>
+        </section>
       </Card>
 
       <div className={`aside ${aside}`}>

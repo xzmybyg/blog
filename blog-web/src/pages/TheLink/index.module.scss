@@ -1,6 +1,7 @@
 #linkPage {
   min-height: 70vh;
   padding: 0;
+
   .content {
     width: 100%;
     padding: clamp(24px, 4vw, 44px);
@@ -8,81 +9,257 @@
     border: 1px solid $line;
     border-radius: $card-radius;
     box-shadow: none;
-    .listWrap {
-      width: 100%;
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      gap: 16px;
+
+    > :global(.ant-card-body) { padding: 0; }
+  }
+
+  .pageHeader {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 32px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid $line;
+
+    > div > span {
+      color: $accent;
+      font-family: $font-mono;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .13em;
+    }
+
+    h1 {
+      margin: 10px 0 9px;
+      color: $ink;
+      font-family: $font-display;
+      font-size: clamp(2rem, 4vw, 3.35rem);
+      line-height: 1.12;
+      letter-spacing: -.045em;
+    }
+
+    p { margin: 0; color: $muted; line-height: 1.7; }
+  }
+
+  .siteCount {
+    display: grid;
+    flex: 0 0 auto;
+    justify-items: end;
+    color: $accent;
+    font-family: $font-mono;
+
+    b {
+      color: $ink;
+      min-width: 2ch;
+      font-family: Arial, 'Microsoft YaHei', sans-serif;
+      font-size: clamp(2rem, 3.6vw, 3.25rem);
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: -.035em;
+      text-align: right;
+    }
+
+    span { margin-top: 8px; font-size: .68rem; letter-spacing: .18em; }
+  }
+
+  .listWrap {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    width: 100%;
+    margin-top: 30px;
+  }
+
+  .linkItem {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 15px;
+    min-height: 126px;
+    padding: 20px;
+    overflow: hidden;
+    color: $ink;
+    background: $paper;
+    border: 1px solid $line;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: transform .2s ease, border-color .2s ease, background-color .2s ease;
+
+    &::after {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 3px;
+      background: $accent;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .2s ease;
+      content: '';
+    }
+
+    &:hover {
+      color: $ink;
+      background: #f8faff;
+      border-color: rgba(24, 87, 217, .45);
+      transform: translateY(-3px);
+
+      &::after { transform: scaleX(1); }
+      > :global(.anticon) { color: $accent; transform: translate(2px, -2px); }
+    }
+
+    &:focus-visible { outline: 3px solid $focus-ring; outline-offset: 3px; }
+
+    > :global(.ant-avatar) {
+      color: $surface;
+      background: $accent;
+      border: 3px solid $surface;
+      box-shadow: 0 0 0 1px $line;
+    }
+
+    > :global(.anticon) {
+      color: $muted;
+      transition: color .2s ease, transform .2s ease;
+    }
+  }
+
+  .linkCopy {
+    min-width: 0;
+
+    strong {
+      display: block;
       overflow: hidden;
-      margin-top: 20px;
-      .linkItem {
-        display: block;
-        width: calc(50% - 8px);
-        min-height: 104px;
-        border-radius: 12px;
-        transition: transform 0.2s ease, border-color 0.2s ease;
-        &:hover {
-          border-color: rgba(24, 87, 217, 0.45);
-          transform: translateY(-3px);
-        }
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        .textWrap {
-          width: 80%;
-        }
-        :global(.ant-card) { height: 100%; border: 1px solid $line; box-shadow: none; }
-      }
+      font-size: 1rem;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
-    .formWrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 56px;
-      .notice {
-        h2 {
-          margin-bottom: 20px;
-          color: $ink;
-        }
-        p {
-          margin-bottom: 10px;
-          color: $muted;
-        }
-      }
-      .linkForm {
-        margin-top: 20px;
-        width: min(460px, 100%);
-      }
+
+    p {
+      min-height: 2.8em;
+      margin: 5px 0 8px;
+      overflow: hidden;
+      color: $muted;
+      font-size: .82rem;
+      line-height: 1.4;
     }
+
+    span {
+      display: block;
+      overflow: hidden;
+      color: $accent-deep;
+      font-family: $font-mono;
+      font-size: .7rem;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .emptyList {
+    display: grid;
+    justify-items: center;
+    gap: 6px;
+    margin-top: 30px;
+    padding: 52px 24px;
+    color: $muted;
+    background: $paper;
+    border: 1px dashed $line;
+    border-radius: 12px;
+
+    strong { color: $ink; }
+  }
+
+  .applySection {
+    margin-top: 64px;
+    padding-top: 30px;
+    border-top: 1px solid $line;
+
+    > header {
+      span {
+        color: $signal;
+        font-family: $font-mono;
+        font-size: .7rem;
+        font-weight: 700;
+        letter-spacing: .13em;
+      }
+
+      h2 {
+        margin: 7px 0 5px;
+        color: $ink;
+        font-family: $font-display;
+        font-size: clamp(1.6rem, 3vw, 2.2rem);
+        letter-spacing: -.035em;
+      }
+
+      p { margin: 0; color: $muted; }
+    }
+  }
+
+  .formWrap {
+    display: grid;
+    grid-template-columns: minmax(0, .85fr) minmax(320px, 1.15fr);
+    gap: 30px;
+    align-items: start;
+    margin-top: 24px;
+  }
+
+  .notice {
+    padding: 22px;
+    background: $paper;
+    border-left: 3px solid $signal;
+    border-radius: 0 10px 10px 0;
+
+    > strong { color: $ink; }
+    dl { display: grid; gap: 12px; margin: 18px 0 0; }
+    dl > div { display: grid; gap: 3px; }
+    dt { color: $muted; font-size: .72rem; }
+    dd {
+      margin: 0;
+      overflow-wrap: anywhere;
+      color: $ink;
+      font-family: $font-mono;
+      font-size: .76rem;
+      line-height: 1.5;
+    }
+  }
+
+  .linkForm {
+    width: 100%;
+
+    :global(.ant-input) { min-height: 42px; border-color: $line; }
+    :global(.ant-input:hover),
+    :global(.ant-input:focus) { border-color: $accent; }
+    :global(.ant-btn-primary) { min-width: 128px; color: #fff; font-weight: 700; }
   }
 }
 
 @media screen and (max-width: $hiddenSomeSize) {
   #linkPage {
-    .content {
-      padding: 24px 18px;
+    .content { padding: 24px 18px; }
+    .pageHeader { align-items: flex-start; }
+    .listWrap { grid-template-columns: 1fr; }
+    .formWrap { grid-template-columns: 1fr; }
+    .formItem { margin-bottom: 14px; }
+  }
+}
+
+@media screen and (max-width: 520px) {
+  #linkPage {
+    .pageHeader {
+      display: grid;
+
+      .siteCount { justify-items: start; }
     }
-    .listWrap .linkItem {
-      width: 100%;
-    }
-    .formWrap {
-      .notice {
-        h2 {
-          margin-bottom: 5px;
-        }
-        p {
-          margin-bottom: 5px;
-        }
-      }
-      .linkForm {
-        .formItem {
-          margin-bottom: 5px;
-          .ant-row {
-            flex-wrap: nowrap !important;
-          }
-        }
-      }
-    }
+
+    .linkItem { min-height: 116px; padding: 16px; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #linkPage {
+    .linkItem,
+    .linkItem::after,
+    .linkItem > :global(.anticon) { transition: none; }
   }
 }
