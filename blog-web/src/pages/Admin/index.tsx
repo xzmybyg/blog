@@ -1,20 +1,146 @@
 import './index.scss'
-import { InboxOutlined, PictureOutlined, ReloadOutlined, SafetyCertificateOutlined } from '@ant-design/icons'
+import { FileTextOutlined, InboxOutlined, NotificationOutlined, PictureOutlined, ReloadOutlined, SafetyCertificateOutlined } from '@ant-design/icons'
 import { Modal, Upload } from 'antd'
 import type { UploadProps } from 'antd'
 import {
   getCertificateStatus,
+  getHomeContent,
+  getSiteStatistics,
+  getSiteNotice,
   getSiteBackgroundInfo,
   getSiteBackgroundUrl,
   triggerCertificateUpdate,
+  updateHomeContent,
+  updateSiteNotice,
   uploadSiteBackground,
   type CertificateStatus,
+  type HomeContent,
+  type SiteNotice,
   type SiteBackgroundInfo,
   type SiteBackgroundType,
 } from '@/apis'
 
 const MAX_BACKGROUND_SIZE = 8 * 1024 * 1024
 const ACCEPTED_IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp'])
+
+type HomeContentFormValues = Omit<HomeContent, 'typedTexts'> & {
+  typedTexts: string
+}
+
+function HomeContentManager() {
+  const [form] = Form.useForm<HomeContentFormValues>()
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+
+  useEffect(() => {
+    getHomeContent()
+      .then((response) => {
+        form.setFieldsValue({ ...response.data, typedTexts: response.data.typedTexts.join('\n') })
+      })
+      .catch(() => message.error('首页文案加载失败，请检查后端服务'))
+      .finally(() => setLoading(false))
+  }, [form])
+
+  const saveContent = async (values: HomeContentFormValues) => {
+    const content = {
+      ...values,
+      typedTexts: values.typedTexts.split('\n').map((text) => text.trim()).filter(Boolean),
+    }
+    setSaving(true)
+    try {
+      const response = await updateHomeContent(content)
+      form.setFieldsValue({ ...response.data, typedTexts: response.data.typedTexts.join('\n') })
+      message.success('首页文案已保存')
+    } catch (error: any) {
+      message.error(error.response?.data?.message || '首页文案保存失败')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <section id="home-content" className="home-content-management" aria-labelledby="home-content-title" aria-busy={loading || saving}>
+      <header>
+        <FileTextOutlined aria-hidden="true" />
+        <div>
+          <span>HOME COPY / 首页文案</span>
+          <h2 id="home-content-title">首屏内容</h2>
+          <p>编辑首页主视觉中的标题、简介与轮播身份。</p>
+        </div>
+      </header>
+      <Form form={form} layout="vertical" disabled={loading} onFinish={saveContent}>
+        <div className="home-content-management__grid">
+          <Form.Item label="眉题" name="eyebrow" rules={[{ required: true, message: '请输入眉题' }, { max: 80 }]}>
+            <Input maxLength={80} showCount placeholder="例如：FRONTEND FIELD NOTES · BEIJING" />
+          </Form.Item>
+          <Form.Item label="作者名" name="authorName" rules={[{ required: true, message: '请输入作者名' }, { max: 40 }]}>
+            <Input maxLength={40} showCount />
+          </Form.Item>
+        </div>
+        <Form.Item label="主标题" name="title" rules={[{ required: true, message: '请输入主标题' }, { max: 120 }]}>
+          <Input.TextArea rows={2} maxLength={120} showCount placeholder="换行会保留在首页标题中" />
+        </Form.Item>
+        <Form.Item label="简介" name="description" rules={[{ required: true, message: '请输入简介' }, { max: 300 }]}>
+          <Input.TextArea rows={3} maxLength={300} showCount />
+        </Form.Item>
+        <Form.Item
+          label="轮播身份"
+          name="typedTexts"
+          extra="每行一条，最多 8 条。"
+          rules={[{ required: true, message: '请至少填写一条轮播身份' }]}
+        >
+          <Input.TextArea rows={4} placeholder={'一名前端开发工程师\nA Web <Developer />'} />
+        </Form.Item>
+        <Button type="primary" htmlType="submit" loading={saving}>保存首页文案</Button>
+      </Form>
+    </section>
+  )
+}
+
+function SiteNoticeManager() {
+  const [form] = Form.useForm<SiteNotice>()
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+
+  useEffect(() => {
+    getSiteNotice()
+      .then((response) => form.setFieldsValue(response.data))
+      .catch(() => message.error('站点公告加载失败，请检查后端服务'))
+      .finally(() => setLoading(false))
+  }, [form])
+
+  const saveNotice = async (values: SiteNotice) => {
+    setSaving(true)
+    try {
+      const response = await updateSiteNotice(values)
+      form.setFieldsValue(response.data)
+      message.success('站点公告已保存')
+    } catch (error: any) {
+      message.error(error.response?.data?.message || '站点公告保存失败')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <section id="site-notice" className="site-notice-management" aria-labelledby="site-notice-title" aria-busy={loading || saving}>
+      <header>
+        <NotificationOutlined aria-hidden="true" />
+        <div>
+          <span>SITE NOTE / 站点公告</span>
+          <h2 id="site-notice-title">侧栏公告</h2>
+          <p>编辑公开页面侧栏中展示的纯文本公告。</p>
+        </div>
+      </header>
+      <Form form={form} layout="vertical" disabled={loading} onFinish={saveNotice}>
+        <Form.Item label="公告内容" name="content" rules={[{ required: true, message: '请输入公告内容' }, { max: 500 }]}>
+          <Input.TextArea rows={5} maxLength={500} showCount placeholder="输入要在侧栏展示的公告文字" />
+        </Form.Item>
+        <Button type="primary" htmlType="submit" loading={saving}>保存站点公告</Button>
+      </Form>
+    </section>
+  )
+}
 
 type BackgroundManagerProps = {
   type: SiteBackgroundType
@@ -133,6 +259,8 @@ function BackgroundManager({ type, title, description }: BackgroundManagerProps)
 export default function Home() {
   const [certificate, setCertificate] = useState<CertificateStatus | null>(null)
   const [certificateError, setCertificateError] = useState(false)
+  const [statistics, setStatistics] = useState<{ pageViews: number; uniqueVisitors: number } | null>(null)
+  const [statisticsError, setStatisticsError] = useState(false)
   const [confirmUpdateOpen, setConfirmUpdateOpen] = useState(false)
   const [updatingCertificate, setUpdatingCertificate] = useState(false)
 
@@ -140,6 +268,10 @@ export default function Home() {
     getCertificateStatus()
       .then((response) => setCertificate(response.data))
       .catch(() => setCertificateError(true))
+
+    getSiteStatistics()
+      .then((response) => setStatistics(response.data))
+      .catch(() => setStatisticsError(true))
   }, [])
 
   const expiryDate = certificate
@@ -183,7 +315,33 @@ export default function Home() {
         <strong>快速开始</strong>
         <span>文章管理 · 用户管理 · 互动管理</span>
       </div>
-      <section className={`certificate-status certificate-status--${certificateTone}`} aria-live="polite">
+      <nav className="admin-dashboard__anchors" aria-label="首页区块导航">
+        <a href="#traffic-overview">访问统计</a>
+        <a href="#certificate-status">证书状态</a>
+        <a href="#home-content">首页文案</a>
+        <a href="#site-notice">站点公告</a>
+        <a href="#background-management">背景图</a>
+      </nav>
+      <section id="traffic-overview" className="traffic-overview" aria-labelledby="traffic-overview-title" aria-live="polite">
+        <header>
+          <span>TRAFFIC / 访问概览</span>
+          <h2 id="traffic-overview-title">累计流量</h2>
+          <p>{statisticsError ? '统计接口不可用，请检查后端服务和数据库迁移。' : '公开页面的累计浏览与独立访客。'}</p>
+        </header>
+        <dl>
+          <div>
+            <dt>PV</dt>
+            <dd>{statistics ? statistics.pageViews.toLocaleString('zh-CN') : '--'}</dd>
+            <span>页面浏览量</span>
+          </div>
+          <div>
+            <dt>UV</dt>
+            <dd>{statistics ? statistics.uniqueVisitors.toLocaleString('zh-CN') : '--'}</dd>
+            <span>独立访客数</span>
+          </div>
+        </dl>
+      </section>
+      <section id="certificate-status" className={`certificate-status certificate-status--${certificateTone}`} aria-live="polite">
         <div className="certificate-status__summary">
           <div className="certificate-status__heading">
             <SafetyCertificateOutlined aria-hidden="true" />
@@ -215,7 +373,9 @@ export default function Home() {
           </div>
         )}
       </section>
-      <section className="background-management" aria-labelledby="background-management-title">
+      <HomeContentManager />
+      <SiteNoticeManager />
+      <section id="background-management" className="background-management" aria-labelledby="background-management-title">
         <header>
           <span>VISUAL ASSETS / 页面背景</span>
           <h2 id="background-management-title">背景图管理</h2>

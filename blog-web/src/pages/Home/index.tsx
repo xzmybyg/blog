@@ -1,5 +1,5 @@
 //api引入
-import { getPageArticleList } from '@/apis'
+import { DEFAULT_HOME_CONTENT, getHomeContent, getPageArticleList } from '@/apis'
 
 import { default as ArticleCard } from '@/components/ArticleCard'
 //样式引入
@@ -14,6 +14,7 @@ import { ArrowDownOutlined, GithubOutlined, ReadOutlined } from '@ant-design/ico
 
 function Home() {
   const backgroundUrl = useSiteBackground('home')
+  const [homeContent, setHomeContent] = useState(DEFAULT_HOME_CONTENT)
   const [page, setPage] = useState(1)
   const [pageSize] = useState(5)
   const params = { page, pageSize }
@@ -23,7 +24,13 @@ function Home() {
 
   const { homePage, articleWrap, aside, banerWrap, typed, slogan, Social_links, icon_gitee, jump } = Style
 
-  const el = useTyped(['一名前端开发工程师', 'A Web &lt;Developer /&gt;'], { loop: true })
+  const el = useTyped(homeContent.typedTexts, { loop: true, contentType: 'null' })
+
+  useEffect(() => {
+    getHomeContent()
+      .then((response) => setHomeContent(response.data))
+      .catch(() => setHomeContent(DEFAULT_HOME_CONTENT))
+  }, [])
 
   return (
     <div className={`${homePage} home-page`}>
@@ -33,11 +40,11 @@ function Home() {
         style={{ '--site-background': `url("${backgroundUrl}")` } as React.CSSProperties}
       >
         <div className={`${slogan}`}>
-          <span className={Style.eyebrow}>FRONTEND FIELD NOTES · BEIJING</span>
-          <h1 id="home-title">把复杂的问题，<br />写成清晰的答案。</h1>
+          <span className={Style.eyebrow}>{homeContent.eyebrow}</span>
+          <h1 id="home-title" style={{ whiteSpace: 'pre-line' }}>{homeContent.title}</h1>
           <p className={Style.intro}>
-            我是<em>心中没有白月光</em>，<span className={`${typed}`} ref={el}></span>。
-            这里记录前端工程、产品体验和持续学习中的真实解法。
+            我是<em>{homeContent.authorName}</em>，<span className={`${typed}`} ref={el}></span>。
+            {homeContent.description}
           </p>
           <div className={`${Social_links}`}>
             <Button href="#articles" type="primary" icon={<ReadOutlined />}>阅读最新文章</Button>
