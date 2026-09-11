@@ -115,9 +115,7 @@ export default function AdminLayout({ children }) {
           <FloatButton.Group shape="circle">
             <FloatButton
               tooltip={<div>跳转到博客</div>}
-              onClick={() => {
-                window.location.href = import.meta.env.VITE_BLOG_URL
-              }}
+              href={import.meta.env.VITE_BLOG_URL || '/'}
             />
             <FloatButton.BackTop visibilityHeight={0} />
           </FloatButton.Group>
