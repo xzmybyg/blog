@@ -25,6 +25,9 @@ var qiniuRouter = require('@routes/qiniuSave')
 var certificateRouter = require('@routes/certificate')
 var aboutRouter = require('@routes/about')
 var siteBackgroundRouter = require('@routes/siteBackground')
+var siteStatisticsRouter = require('@routes/siteStatistics')
+var homeContentRouter = require('@routes/homeContent')
+var siteNoticeRouter = require('@routes/siteNotice')
 
 var app = express()
 
@@ -61,6 +64,9 @@ function startServer() {
   app.use('/api/certificate', certificateRouter)
   app.use('/api/about', aboutRouter)
   app.use('/api/site-background', siteBackgroundRouter)
+  app.use('/api/site-statistics', siteStatisticsRouter)
+  app.use('/api/home-content', homeContentRouter)
+  app.use('/api/site-notice', siteNoticeRouter)
 
   app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, 'public/blog/index.html'))

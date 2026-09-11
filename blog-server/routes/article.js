@@ -5,6 +5,7 @@ const articleDataProcessing = require('@utils/articleDataProcessing')
 const checkRole = require('@middleware/checkRole')
 const fs = require('fs')
 const path = require('path')
+const hashVisitorId = require('@utils/visitorId')
 
 const articleSelect = `SELECT a.*,
   GROUP_CONCAT(DISTINCT l.label ORDER BY l.id SEPARATOR ',') AS label,
@@ -171,6 +172,69 @@ router.get('/navigation', function (req, res) {
             previous: index > 0 ? rows[index - 1] : null,
             next: index >= 0 && index < rows.length - 1 ? rows[index + 1] : null,
           })
+        },
+      )
+    },
+  )
+})
+
+router.get('/likes', function (req, res) {
+  const articleId = Number(req.query.id)
+  if (!Number.isInteger(articleId) || articleId <= 0) {
+    return res.status(400).send({ message: '文章 ID 无效' })
+  }
+
+  db.query(
+    `SELECT a.id, COUNT(al.article_id) AS likes
+     FROM article a
+     LEFT JOIN article_like al ON al.article_id = a.id
+     WHERE a.id = ? AND a.hidden = 0
+     GROUP BY a.id`,
+    [articleId],
+    (error, rows) => {
+      if (error) {
+        console.error(error)
+        return res.status(500).send('Server error')
+      }
+      if (rows.length === 0) return res.status(404).send({ message: '文章不存在' })
+
+      res.send({ likes: Number(rows[0].likes) })
+    },
+  )
+})
+
+router.post('/like', function (req, res) {
+  const articleId = Number(req.body?.articleId)
+  const visitorHash = hashVisitorId(req.body?.visitorId)
+  if (!Number.isInteger(articleId) || articleId <= 0 || !visitorHash) {
+    return res.status(400).send({ message: '点赞信息无效' })
+  }
+
+  db.query(
+    `INSERT IGNORE INTO article_like (article_id, visitor_hash)
+     SELECT id, ? FROM article WHERE id = ? AND hidden = 0`,
+    [visitorHash, articleId],
+    (insertError) => {
+      if (insertError) {
+        console.error(insertError)
+        return res.status(500).send('Server error')
+      }
+
+      db.query(
+        `SELECT a.id, COUNT(al.article_id) AS likes
+         FROM article a
+         LEFT JOIN article_like al ON al.article_id = a.id
+         WHERE a.id = ? AND a.hidden = 0
+         GROUP BY a.id`,
+        [articleId],
+        (countError, rows) => {
+          if (countError) {
+            console.error(countError)
+            return res.status(500).send('Server error')
+          }
+          if (rows.length === 0) return res.status(404).send({ message: '文章不存在' })
+
+          res.send({ likes: Number(rows[0].likes), liked: true })
         },
       )
     },

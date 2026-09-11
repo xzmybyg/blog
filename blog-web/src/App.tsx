@@ -6,10 +6,27 @@
 import './App.scss'
 // import { routerList } from "@/utils";
 import RouterView from '@/router'
+import { recordPageView } from '@/apis'
+import { getVisitorId } from '@/utils/visitorId'
+
+function PageViewTracker() {
+  const location = useLocation()
+
+  useEffect(() => {
+    if (!location.pathname.startsWith('/admin')) {
+      recordPageView(getVisitorId())
+        .then(() => window.dispatchEvent(new Event('site-statistics-updated')))
+        .catch(() => undefined)
+    }
+  }, [location.pathname, location.search])
+
+  return null
+}
 
 function App() {
   return (
     <>
+      <PageViewTracker />
       {/* <div className="layout">
         <Suspense fallback={<Loading />}>
           <Routes>

@@ -2,13 +2,14 @@
 import ReactMarkdown from 'react-markdown'
 import MarkdownNavbar from 'markdown-navbar'
 import { Affix, Button, Card } from 'antd'
-import { ArrowLeftOutlined, ArrowRightOutlined, DownloadOutlined } from '@ant-design/icons'
+import { ArrowLeftOutlined, ArrowRightOutlined, DownloadOutlined, HeartFilled, HeartOutlined } from '@ant-design/icons'
 const { TextArea } = Input
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { okaidia } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
 //api引入
-import { getArticleNavigation, getTopic } from '@/apis'
+import { getArticleLikes, getArticleNavigation, getTopic, likeArticle } from '@/apis'
+import { getVisitorId } from '@/utils/visitorId'
 
 import { default as CommentList } from '@/components/CommentList'
 
@@ -22,8 +23,24 @@ type TopicProps = {
   id: string
 }
 
+function hasLikedArticle(articleId: number) {
+  try {
+    return localStorage.getItem(`blog-article-liked-${articleId}`) === '1'
+  } catch {
+    return false
+  }
+}
+
+function markArticleLiked(articleId: number) {
+  try {
+    localStorage.setItem(`blog-article-liked-${articleId}`, '1')
+  } catch {
+    // 服务端仍会根据匿名访客 ID 阻止重复点赞。
+  }
+}
+
 export default function Topic() {
-  const { topic, topicWrap, markdownBody, affixNavbar, NavbarCard, Navbar, chapterNavigation, chapterLink, chapterMeta, chapterPrevious, chapterNext } = Style
+  const { topic, topicWrap, markdownBody, affixNavbar, NavbarCard, Navbar, articleLike, articleLikeActive, chapterNavigation, chapterLink, chapterMeta, chapterPrevious, chapterNext } = Style
   const { id } = useParams<TopicProps>()
   const article_id = parseInt(id as string, 10)
 
@@ -32,6 +49,9 @@ export default function Topic() {
   const [mdContent, setMdContent] = useState('')
   const [commentList, setCommentList] = useState<any[]>([])
   const [navigation, setNavigation] = useState<ArticleNavigation | null>(null)
+  const [likes, setLikes] = useState<number | null>(null)
+  const [liked, setLiked] = useState(false)
+  const [liking, setLiking] = useState(false)
 
   useEffect(() => {
     getTopic(article_id).then((res) => {
@@ -40,6 +60,10 @@ export default function Topic() {
     getArticleNavigation(article_id)
       .then((res) => setNavigation(res.data))
       .catch(() => setNavigation(null))
+    getArticleLikes(article_id)
+      .then((res) => setLikes(Number(res.data.likes) || 0))
+      .catch(() => setLikes(null))
+    setLiked(hasLikedArticle(article_id))
   }, [article_id])
 
   useEffect(() => {
@@ -68,6 +92,29 @@ export default function Topic() {
     })
   }
 
+  const handleLike = async () => {
+    if (liked || liking) return
+
+    const visitorId = getVisitorId()
+    if (!visitorId) {
+      message.error('浏览器存储不可用，暂时无法点赞')
+      return
+    }
+
+    setLiking(true)
+    try {
+      const response = await likeArticle(article_id, visitorId)
+      setLikes(Number(response.data.likes) || 0)
+      setLiked(true)
+      markArticleLiked(article_id)
+      message.success('感谢你的喜欢')
+    } catch {
+      message.error('点赞失败，请稍后重试')
+    } finally {
+      setLiking(false)
+    }
+  }
+
   return (
     <div id={topic} className={`pages`}>
       <div className={topicWrap}>
@@ -91,6 +138,18 @@ export default function Topic() {
           }}
         />
         </article>
+        <div className={`${articleLike} ${liked ? articleLikeActive : ''}`}>
+          <Button
+            type="text"
+            icon={liked ? <HeartFilled /> : <HeartOutlined />}
+            loading={liking}
+            aria-pressed={liked}
+            onClick={handleLike}
+          >
+            {liked ? '已喜欢' : '喜欢这篇'}
+            <span>{likes === null ? '--' : likes.toLocaleString('zh-CN')}</span>
+          </Button>
+        </div>
         <nav className={chapterNavigation} aria-label="专题章节导航">
           <div className={chapterMeta}>
             <div>

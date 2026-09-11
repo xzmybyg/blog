@@ -76,6 +76,14 @@ export function getArticleNavigation(id: number) {
   return axiosInstance.get<ArticleNavigation>('/article/navigation', { params: { id } })
 }
 
+export function getArticleLikes(id: number) {
+  return axiosInstance.get<{ likes: number }>('/article/likes', { params: { id } })
+}
+
+export function likeArticle(articleId: number, visitorId: string) {
+  return axiosInstance.post<{ likes: number; liked: boolean }>('/article/like', { articleId, visitorId })
+}
+
 export function createArticle(data) {
   return axiosInstance.post('/article', data)
 }
