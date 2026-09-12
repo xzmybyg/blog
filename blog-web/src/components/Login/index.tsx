@@ -12,6 +12,7 @@ const Login = forwardRef<LoginHandle>((_props, ref) => {
   const [haveAccount, setHaveAccount] = useState(true)
   //登录对话框是否打开
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
   const handleCancel = () => {
     setIsModalOpen(false)
   }
@@ -26,6 +27,8 @@ const Login = forwardRef<LoginHandle>((_props, ref) => {
    */
   const handleSubmit = () => {
     form.validateFields().then(async (values) => {
+      if (submitting) return
+      setSubmitting(true)
       try {
         if (!haveAccount) await register(values)
 
@@ -36,6 +39,8 @@ const Login = forwardRef<LoginHandle>((_props, ref) => {
         setIsModalOpen(false)
       } catch (error: any) {
         message.error(error.response?.data?.message || '操作失败，请稍后重试')
+      } finally {
+        setSubmitting(false)
       }
     })
   }
@@ -71,6 +76,7 @@ const Login = forwardRef<LoginHandle>((_props, ref) => {
       onCancel={handleCancel}
       okText={haveAccount ? '登录' : '创建账号'}
       cancelText="取消"
+      confirmLoading={submitting}
       width={460}
       centered
     >
@@ -133,6 +139,7 @@ const Login = forwardRef<LoginHandle>((_props, ref) => {
         <button
           type="button"
           className="changeLogin"
+          disabled={submitting}
           onClick={() => {
             setHaveAccount(!haveAccount)
           }}

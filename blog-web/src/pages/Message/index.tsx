@@ -14,6 +14,8 @@ function Message() {
   // })
   const { id } = useUserStore()
   const [comments, setComments] = useState<TheComment[]>([])
+  const [sending, setSending] = useState(false)
+  const [form] = Form.useForm()
 
   useEffect(() => {
     getMessage().then((res) => {
@@ -21,15 +23,21 @@ function Message() {
     })
   }, [])
 
-  const sendMessage = (values: any) => {
+  const sendMessage = async (values: any) => {
     if (!id) {
       message.error('请先登录')
       return
     }
-    // 返回 postMessage 的调用
-    postMessage(id, values.content).then((res) => {
-      setComments((comments) => [...comments, res.data])
-    })
+    setSending(true)
+    try {
+      const response = await postMessage(id, values.content)
+      setComments((comments) => [...comments, response.data])
+      form.resetFields()
+    } catch (error: any) {
+      message.error(error.response?.data?.message || '留言失败，请稍后重试')
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
@@ -41,13 +49,13 @@ function Message() {
         <span className={Style.eyebrow}>OPEN MESSAGE WALL</span>
         <h1>留言板</h1>
         <p>分享一个想法、问题，或者简单打个招呼。</p>
-        <Form className={formWarp} onFinish={sendMessage} noValidate>
+        <Form form={form} className={formWarp} onFinish={sendMessage} noValidate>
           <Space.Compact block>
             <Form.Item name="content" rules={[{ required: true, message: '请输入留言内容' }]}>
               <Input aria-label="留言内容" placeholder="写下你的留言…" maxLength={200} />
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit" loading={sending}>
                 发送
               </Button>
             </Form.Item>

@@ -92,6 +92,7 @@ declare global {
   const getTopic: typeof import('../apis/lib/topic')['getTopic']
   const getUserList: typeof import('../apis/lib/user')['getUserList']
   const getVisitorId: typeof import('../utils/visitorId')['getVisitorId']
+  const isRequestThrottled: typeof import('../utils/requestThrottle')['isRequestThrottled']
   const isTokenExpired: typeof import('../utils/auth')['isTokenExpired']
   const lazy: typeof import('react')['lazy']
   const likeArticle: typeof import('../apis/lib/article')['likeArticle']

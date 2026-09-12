@@ -76,6 +76,9 @@ axiosInstance.interceptors.response.use(
         case 408:
           text = '请求超时(408)'
           break
+        case 429:
+          text = error.response?.data?.message || '请求过于频繁，请稍后重试'
+          break
         case 500:
           text = '服务器错误(500)，请重启软件或切换功能页！'
           break

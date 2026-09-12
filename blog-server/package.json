@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon ./bin/www",
-    "start": "cross-env NODE_ENV=production node ./bin/www"
+    "start": "cross-env NODE_ENV=production node ./bin/www",
+    "test": "node --test test/*.test.js"
   },
   "_moduleAliases": {
     "@routes": "routes",

@@ -10,6 +10,7 @@ import { okaidia } from 'react-syntax-highlighter/dist/esm/styles/prism'
 //api引入
 import { getArticleLikes, getArticleNavigation, getTopic, likeArticle } from '@/apis'
 import { getVisitorId } from '@/utils/visitorId'
+import { isRequestThrottled } from '@/utils/requestThrottle'
 
 import { default as CommentList } from '@/components/CommentList'
 
@@ -52,6 +53,8 @@ export default function Topic() {
   const [likes, setLikes] = useState<number | null>(null)
   const [liked, setLiked] = useState(false)
   const [liking, setLiking] = useState(false)
+  const [commenting, setCommenting] = useState(false)
+  const [commentForm] = Form.useForm()
 
   useEffect(() => {
     getTopic(article_id).then((res) => {
@@ -72,18 +75,24 @@ export default function Topic() {
     })
   }, [article_id])
 
-  const handleComment = (values: any) => {
+  const handleComment = async (values: any) => {
     if (!user_id) {
       message.error('请先登录')
       return
     }
     const params = { ...values, article_id, user_id }
-    addComments(params).then(() => {
+    setCommenting(true)
+    try {
+      await addComments(params)
       message.success('评论成功')
-      getComment(article_id).then((res) => {
-        setCommentList(res.data)
-      })
-    })
+      commentForm.resetFields()
+      const response = await getComment(article_id)
+      setCommentList(response.data)
+    } catch (error: any) {
+      message.error(error.response?.data?.message || '评论失败，请稍后重试')
+    } finally {
+      setCommenting(false)
+    }
   }
 
   const handleDataUpdate = () => {
@@ -94,6 +103,7 @@ export default function Topic() {
 
   const handleLike = async () => {
     if (liked || liking) return
+    if (isRequestThrottled(`article-like:${article_id}`, 1000)) return
 
     const visitorId = getVisitorId()
     if (!visitorId) {
@@ -108,8 +118,8 @@ export default function Topic() {
       setLiked(true)
       markArticleLiked(article_id)
       message.success('感谢你的喜欢')
-    } catch {
-      message.error('点赞失败，请稍后重试')
+    } catch (error: any) {
+      message.error(error.response?.data?.message || '点赞失败，请稍后重试')
     } finally {
       setLiking(false)
     }
@@ -183,12 +193,12 @@ export default function Topic() {
         <Divider />
         <div className="handleComment">
           <h2>评论</h2>
-          <Form onFinish={handleComment} noValidate>
+          <Form form={commentForm} onFinish={handleComment} noValidate>
             <Form.Item name="content" label="评论内容" rules={[{ required: true, message: '请写下评论内容' }]}>
               <TextArea rows={5} placeholder="分享你的想法或补充…" maxLength={1000} showCount />
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit" loading={commenting}>
                 提交评论
               </Button>
             </Form.Item>

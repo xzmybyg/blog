@@ -10,6 +10,7 @@ var path = require('path')
 var cookieParser = require('cookie-parser')
 var logger = require('morgan')
 const db = require('@utils/mysqlUtils')
+const { globalApiLimiter } = require('@middleware/rateLimit')
 
 var indexRouter = require('@routes/index')
 var usersRouter = require('@routes/users')
@@ -31,6 +32,10 @@ var siteNoticeRouter = require('@routes/siteNotice')
 
 var app = express()
 
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1)
+}
+
 function startServer() {
   app.all('*', function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*')
@@ -39,12 +44,14 @@ function startServer() {
       'Access-Control-Allow-Headers',
       'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild',
     )
+    res.header('Access-Control-Expose-Headers', 'Retry-After, RateLimit-Limit, RateLimit-Remaining, RateLimit-Reset')
     res.header('X-Powered-By', ' 3.2.1')
     // res.header("Content-Type", "application/json;charset=utf-8")
     next()
   })
 
   app.use(logger('dev'))
+  app.use('/api', globalApiLimiter)
   app.use(express.json({ limit: '2mb' }))
   app.use(express.urlencoded({ extended: false }))
   app.use(cookieParser())

@@ -8,12 +8,16 @@ import './App.scss'
 import RouterView from '@/router'
 import { recordPageView } from '@/apis'
 import { getVisitorId } from '@/utils/visitorId'
+import { isRequestThrottled } from '@/utils/requestThrottle'
 
 function PageViewTracker() {
   const location = useLocation()
 
   useEffect(() => {
     if (!location.pathname.startsWith('/admin')) {
+      const pageKey = `page-view:${location.pathname}${location.search}`
+      if (isRequestThrottled(pageKey, 10 * 1000)) return
+
       recordPageView(getVisitorId())
         .then(() => window.dispatchEvent(new Event('site-statistics-updated')))
         .catch(() => undefined)

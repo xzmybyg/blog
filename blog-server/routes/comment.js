@@ -3,6 +3,7 @@ var router = express.Router()
 const db = require('@utils/mysqlUtils')
 const checkRole = require('@middleware/checkRole')
 const checkToken = require('@middleware/checkToken')
+const { interactionLimiter, likeLimiter } = require('@middleware/rateLimit')
 
 function transformData(data) {
   return data.reduce((acc, cur) => {
@@ -69,8 +70,9 @@ router.get('/', function (req, res, _next) {
   })
 })
 
-router.post('/', checkToken, function (req, res, _next) {
-  const { user_id, article_id, content, createTime = new Date() } = req.body.params
+router.post('/', checkToken, interactionLimiter, function (req, res, _next) {
+  const { article_id, content, createTime = new Date() } = req.body.params
+  const user_id = req.user.id
   const sql = `INSERT INTO comment (user_id, article_id, content, createTime) VALUES (?, ?, ?, ?)`
   db.query(sql, [user_id, article_id, content, createTime], (err, result) => {
     if (err) {
@@ -90,7 +92,7 @@ router.post('/', checkToken, function (req, res, _next) {
   // res.send("ok");
 })
 
-router.put('/', function (req, res, _next) {
+router.put('/', likeLimiter, function (req, res, _next) {
   const { id, like } = req.body.params
   const sql = `UPDATE comment SET like = ? WHERE id = ?`
   db.query(sql, [like, id], (err, _result) => {

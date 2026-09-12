@@ -2,6 +2,7 @@ const express = require('express')
 const fs = require('fs/promises')
 const path = require('path')
 const checkRole = require('@middleware/checkRole')
+const { uploadLimiter } = require('@middleware/rateLimit')
 
 const router = express.Router()
 const backgroundDirectory = path.join(__dirname, '../public/site-backgrounds')
@@ -99,6 +100,7 @@ router.put(
   '/:type',
   validateBackgroundType,
   checkRole,
+  uploadLimiter,
   readImageBody,
   async function (req, res) {
     if (!Buffer.isBuffer(req.body) || req.body.length === 0) {

@@ -1,6 +1,7 @@
 const express = require('express')
 const db = require('@utils/mysqlUtils')
 const hashVisitorId = require('@utils/visitorId')
+const { pageViewLimiter } = require('@middleware/rateLimit')
 
 const router = express.Router()
 
@@ -23,7 +24,7 @@ router.get('/', function (_req, res) {
   )
 })
 
-router.post('/view', async function (req, res) {
+router.post('/view', pageViewLimiter, async function (req, res) {
   const visitorHash = hashVisitorId(req.body.visitorId)
   let connection
 

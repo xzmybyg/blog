@@ -6,6 +6,7 @@ const checkRole = require('@middleware/checkRole')
 const fs = require('fs')
 const path = require('path')
 const hashVisitorId = require('@utils/visitorId')
+const { likeLimiter, uploadLimiter } = require('@middleware/rateLimit')
 
 const articleSelect = `SELECT a.*,
   GROUP_CONCAT(DISTINCT l.label ORDER BY l.id SEPARATOR ',') AS label,
@@ -203,7 +204,7 @@ router.get('/likes', function (req, res) {
   )
 })
 
-router.post('/like', function (req, res) {
+router.post('/like', likeLimiter, function (req, res) {
   const articleId = Number(req.body?.articleId)
   const visitorHash = hashVisitorId(req.body?.visitorId)
   if (!Number.isInteger(articleId) || articleId <= 0 || !visitorHash) {
@@ -385,7 +386,7 @@ router.put('/', checkRole, async function (req, res, _next) {
 })
 
 //上传文章
-router.post('/upload', checkRole, function (req, res, _next) {
+router.post('/upload', checkRole, uploadLimiter, function (req, res, _next) {
   // 从请求体中获取文章 ID 和新的文章数据
   const { title, content } = req.body
   const fileName = String(title || '')

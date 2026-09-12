@@ -20,6 +20,7 @@ function CommentList({ data, onDataUpdate }: { data: any; onDataUpdate: () => vo
   } = data
 
   const [isReplying, setIsReplying] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
   const handleReplyClick = () => {
     setIsReplying(true)
   }
@@ -27,17 +28,24 @@ function CommentList({ data, onDataUpdate }: { data: any; onDataUpdate: () => vo
     setIsReplying(false)
   }
 
-  const handleReply = (values: any) => {
+  const handleReply = async (values: any) => {
     if (!user_id) {
       message.error('请先登录')
       return
     }
 
     const params = { ...values, user_id, reply_comment_id, reply_user_id }
-    addReply(params).then(() => {
+    setSubmitting(true)
+    try {
+      await addReply(params)
       message.success('回复成功')
+      setIsReplying(false)
       onDataUpdate()
-    })
+    } catch (error: any) {
+      message.error(error.response?.data?.message || '回复失败，请稍后重试')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -63,7 +71,7 @@ function CommentList({ data, onDataUpdate }: { data: any; onDataUpdate: () => vo
                   <Button type="primary" onClick={cancelReply}>
                     取消
                   </Button>
-                  <Button type="primary" htmlType="submit">
+                  <Button type="primary" htmlType="submit" loading={submitting}>
                     提交评论
                   </Button>
                 </Space>
@@ -96,23 +104,31 @@ function Reply({ item, onDataUpdate }: { item: any; onDataUpdate: () => void }) 
     reply_comment_id,
   } = item
   const [isReplying, setIsReplying] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
   const handleReplyClick = () => {
     setIsReplying(true)
   }
   const cancelReply = () => {
     setIsReplying(false)
   }
-  const handleReply = (values: any) => {
+  const handleReply = async (values: any) => {
     if (!user_id) {
       message.error('请先登录')
       return
     }
 
     const params = { ...values, user_id, reply_comment_id, reply_user_id }
-    addReply(params).then(() => {
+    setSubmitting(true)
+    try {
+      await addReply(params)
       message.success('回复成功')
+      setIsReplying(false)
       onDataUpdate()
-    })
+    } catch (error: any) {
+      message.error(error.response?.data?.message || '回复失败，请稍后重试')
+    } finally {
+      setSubmitting(false)
+    }
   }
   return (
     <div>
@@ -142,7 +158,7 @@ function Reply({ item, onDataUpdate }: { item: any; onDataUpdate: () => void }) 
               <Button type="primary" onClick={cancelReply}>
                 取消
               </Button>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit" loading={submitting}>
                 提交评论
               </Button>
             </Space>

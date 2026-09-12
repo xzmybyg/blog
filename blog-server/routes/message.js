@@ -3,6 +3,7 @@ var router = express.Router()
 const db = require('@utils/mysqlUtils')
 const checkRole = require('@middleware/checkRole')
 const checkToken = require('@middleware/checkToken')
+const { interactionLimiter } = require('@middleware/rateLimit')
 
 router.get('/', function (req, res, _next) {
   const sql = `SELECT * FROM message`
@@ -31,8 +32,9 @@ router.get('/admin', checkRole, function (_req, res) {
   })
 })
 
-router.post('/', checkToken, function (req, res, _next) {
-  const { id: user_id, content, createTime = new Date() } = req.body
+router.post('/', checkToken, interactionLimiter, function (req, res, _next) {
+  const { content, createTime = new Date() } = req.body
+  const user_id = req.user.id
   const sql = `INSERT INTO message (user_id, content, createTime) VALUES (?, ?, ?)`
   db.query(sql, [user_id, content, createTime], (err, result) => {
     if (err) {

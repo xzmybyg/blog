@@ -2,9 +2,12 @@ var express = require('express')
 var router = express.Router()
 const db = require('@utils/mysqlUtils')
 const checkRole = require('@middleware/checkRole')
+const checkToken = require('@middleware/checkToken')
+const { interactionLimiter } = require('@middleware/rateLimit')
 
-router.post('/', function (req, res, _next) {
-  const { user_id, reply_comment_id, reply_user_id, content, createTime = new Date() } = req.body.params
+router.post('/', checkToken, interactionLimiter, function (req, res, _next) {
+  const { reply_comment_id, reply_user_id, content, createTime = new Date() } = req.body.params
+  const user_id = req.user.id
 
   const sql = `INSERT INTO reply 
   (user_id, reply_comment_id, reply_user_id, content, createTime)

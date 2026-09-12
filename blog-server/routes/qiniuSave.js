@@ -4,6 +4,7 @@ const db = require('@utils/mysqlUtils')
 const fs = require('fs')
 const path = require('path')
 const checkRole = require('@middleware/checkRole')
+const { uploadLimiter } = require('@middleware/rateLimit')
 
 var qiniu = require('qiniu')
 var qiniuconfig = require('../config/qiniuconfig')
@@ -22,7 +23,7 @@ config.regionsProvider = qiniu.httpc.Region.fromRegionId(fromRegionId)
 const formUploader = new qiniu.form_up.FormUploader(config)
 const putExtra = new qiniu.form_up.PutExtra()
 
-router.post('/', checkRole, async function (req, res, _next) {
+router.post('/', checkRole, uploadLimiter, async function (req, res, _next) {
   const { fileName, content } = req.body
   const dir = 'public/article'
   if (!fs.existsSync(dir)) {

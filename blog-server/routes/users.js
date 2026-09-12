@@ -6,8 +6,9 @@ const db = require('@utils/mysqlUtils')
 const key = require('@config/key')
 const checkRole = require('@middleware/checkRole')
 const checkToken = require('@middleware/checkToken')
+const { loginLimiter, registerLimiter, authenticatedWriteLimiter } = require('@middleware/rateLimit')
 
-router.post('/login', function (req, res) {
+router.post('/login', loginLimiter, function (req, res) {
   const { username, password } = req.body || {}
   if (typeof username !== 'string' || !username.trim() || typeof password !== 'string' || !password) {
     return res.status(400).send('Username and password are required')
@@ -47,7 +48,7 @@ router.post('/login', function (req, res) {
   )
 })
 
-router.post('/', function (req, res, next) {
+router.post('/', registerLimiter, function (req, res, next) {
   const { username, password, email } = req.body?.params || req.body || {}
   if (typeof username !== 'string' || !username.trim() || typeof password !== 'string' || !password || typeof email !== 'string' || !email) {
     return res.status(400).send({ message: '账号、密码和邮箱不能为空' })
@@ -84,7 +85,7 @@ router.delete('/', checkRole, function (req, res, next) {
   //TODO: 删除用户
 })
 
-router.put('/', checkToken, function (req, res, next) {
+router.put('/', checkToken, authenticatedWriteLimiter, function (req, res, next) {
   const { id: requestedId, ...fields } = req.body
   const { id: currentUserId, role } = req.user
   if (role === 'viewer') return res.status(403).send('Forbidden')

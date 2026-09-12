@@ -12,11 +12,14 @@ export default function Login() {
   const sessionExpired = searchParams.get('reason') === 'expired'
   //是否已有账号
   const [haveAccount, setHaveAccount] = useState(true)
+  const [submitting, setSubmitting] = useState(false)
 
   const [form] = Form.useForm()
 
   const handleSubmit = () => {
     form.validateFields().then(async (values) => {
+      if (submitting) return
+      setSubmitting(true)
       try {
         if (!haveAccount) {
           await register(values)
@@ -34,6 +37,8 @@ export default function Login() {
         navigate(getSafeAdminRedirect(searchParams.get('redirect')), { replace: true })
       } catch (error: any) {
         message.error(error.response?.data?.message || '登录失败，请检查账号和密码')
+      } finally {
+        setSubmitting(false)
       }
     })
   }
@@ -104,7 +109,7 @@ export default function Login() {
               </Form.Item>
             )}
             <Form.Item>
-              <Button type="primary" htmlType="submit" onClick={() => handleSubmit()}>
+              <Button type="primary" htmlType="submit" loading={submitting} onClick={() => handleSubmit()}>
                 {haveAccount ? '登录' : '注册'}
               </Button>
             </Form.Item>
@@ -112,6 +117,7 @@ export default function Login() {
           <button
             type="button"
             className="changeLogin"
+            disabled={submitting}
             onClick={() => {
               setHaveAccount(!haveAccount)
             }}
