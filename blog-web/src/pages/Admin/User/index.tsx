@@ -3,6 +3,12 @@ import dayjs from 'dayjs'
 import { DEFAULT_USER_AVATAR } from '@/utils/avatar'
 import useUserStore from '@/store/user'
 
+const ROLE_LABELS: Record<string, string> = {
+  user: '普通用户',
+  admin: '管理员',
+  viewer: '只读访客',
+}
+
 export default function User() {
   const readOnly = useUserStore((state) => state.role === 'viewer')
   const [userList, setUserList] = useState<User[]>([])
@@ -35,7 +41,7 @@ export default function User() {
       title: '角色',
       dataIndex: 'role',
       key: 'role',
-      render: (role) => <>{role}</>,
+      render: (role) => <>{ROLE_LABELS[role] || role || '未知角色'}</>,
     },
     {
       title: '评论权限',
