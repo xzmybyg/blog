@@ -43,6 +43,7 @@ function Message() {
   return (
     <div
       id={messagePage}
+      className="message-page"
       style={{ '--site-background': `url("${backgroundUrl}")` } as React.CSSProperties}
     >
       <div className={sendWrap}>

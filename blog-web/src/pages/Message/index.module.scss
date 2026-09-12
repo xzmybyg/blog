@@ -1,6 +1,7 @@
 #messagePage {
   width: 100%;
-  min-height: clamp(520px, 68vh, 720px);
+  min-height: max(520px, calc(100vh - map.get($nav, height) - 64px));
+  min-height: max(520px, calc(100dvh - map.get($nav, height) - 64px));
   height: auto;
   background-image: linear-gradient(rgba(9, 26, 51, 0.82), rgba(9, 26, 51, 0.9)), var(--site-background);
   background-size: cover; // 设置背景图的大小为 cover
