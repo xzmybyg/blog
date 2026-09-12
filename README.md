@@ -77,3 +77,20 @@ pnpm -r run dev
 //启动单一项目
 pnpm -F blog-web run dev
 ```
+
+## 服务端限流配置
+
+限流参数可通过系统环境变量或 `blog-server/.env.production` 配置，格式为 `最大请求数/统计窗口`，例如 `10/5m` 表示 5 分钟内最多请求 10 次。时间支持 `ms`（毫秒）、`s`（秒）、`m`（分钟）、`h`（小时）和 `d`（天）；未配置或格式无效时使用默认值。
+
+| 接口类型 | 配置变量（默认值） |
+| --- | --- |
+| 全部 API | `RATE_LIMIT_GLOBAL=120/1m` |
+| 登录 | `RATE_LIMIT_LOGIN=10/10m` |
+| 注册 | `RATE_LIMIT_REGISTER=3/1h` |
+| 评论、留言和回复 | `RATE_LIMIT_INTERACTION=5/1m` |
+| 点赞 | `RATE_LIMIT_LIKE=30/1m` |
+| 访问量上报 | `RATE_LIMIT_PAGE_VIEW=30/1m` |
+| 文件上传 | `RATE_LIMIT_UPLOAD=10/10m` |
+| 登录后的写操作 | `RATE_LIMIT_AUTH_WRITE=30/1m` |
+
+修改生产环境配置后，需要使用 `pm2 restart blog --update-env` 重启服务使其生效。

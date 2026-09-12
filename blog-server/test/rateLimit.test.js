@@ -51,3 +51,32 @@ test('tracks different IP addresses independently', () => {
   assert.equal(invoke(limiter, '127.0.0.2').nextCalled, true)
   assert.equal(invoke(limiter, '127.0.0.1').statusCode, 429)
 })
+
+test('reads rate limit values from environment variables', () => {
+  const modulePath = require.resolve('../middleware/rateLimit')
+  const originalValue = process.env.RATE_LIMIT_GLOBAL
+
+  try {
+    process.env.RATE_LIMIT_GLOBAL = '1/30s'
+    delete require.cache[modulePath]
+
+    const { globalApiLimiter } = require('../middleware/rateLimit')
+    const first = invoke(globalApiLimiter, '127.0.0.3')
+    const blocked = invoke(globalApiLimiter, '127.0.0.3')
+
+    assert.equal(first.headers['RateLimit-Limit'], '1')
+    assert.equal(blocked.statusCode, 429)
+    assert.ok(Number(blocked.headers['Retry-After']) <= 30)
+
+    process.env.RATE_LIMIT_GLOBAL = '1/30'
+    delete require.cache[modulePath]
+    const { globalApiLimiter: fallbackLimiter } = require('../middleware/rateLimit')
+    const fallback = invoke(fallbackLimiter, '127.0.0.4')
+    assert.equal(fallback.headers['RateLimit-Limit'], '120')
+    assert.ok(Number(fallback.headers['RateLimit-Reset']) > 30)
+  } finally {
+    if (originalValue === undefined) delete process.env.RATE_LIMIT_GLOBAL
+    else process.env.RATE_LIMIT_GLOBAL = originalValue
+    delete require.cache[modulePath]
+  }
+})
