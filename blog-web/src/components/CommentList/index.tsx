@@ -1,4 +1,4 @@
-import { UserOutlined } from '@ant-design/icons'
+import { DEFAULT_USER_AVATAR } from '@/utils/avatar'
 import { Avatar } from 'antd'
 import dayjs from 'dayjs'
 import './index.scss'
@@ -43,7 +43,7 @@ function CommentList({ data, onDataUpdate }: { data: any; onDataUpdate: () => vo
   return (
     <div>
       <div className="CommentWrap">
-        <Avatar className="avatar" size="large" src={avatar} icon={avatar ? null : <UserOutlined />} />
+        <Avatar className="avatar" size="large" src={avatar || DEFAULT_USER_AVATAR} />
         <div className="contentMain">
           <div className="username">
             {nickname || username}
@@ -117,7 +117,7 @@ function Reply({ item, onDataUpdate }: { item: any; onDataUpdate: () => void }) 
   return (
     <div>
       <div className="replyItem" key={reply_id}>
-        <Avatar className="avatar" size="large" src={avatar} icon={avatar ? null : <UserOutlined />} />
+        <Avatar className="avatar" size="large" src={avatar || DEFAULT_USER_AVATAR} />
         <div>
           <div className="username">
             {nickname || username}

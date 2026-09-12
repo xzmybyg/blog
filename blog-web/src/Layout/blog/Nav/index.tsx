@@ -5,6 +5,7 @@ import Login from '@/components/Login'
 import useUserStore, { logoutInfo } from '@/store/user'
 import { Avatar, Popover } from 'antd'
 import routes from '@/router/routes'
+import { DEFAULT_USER_AVATAR } from '@/utils/avatar'
 
 function Nav({ navlist = routes }) {
   const { navDesktop, navMobile, itemWrap, navItem, authorName, MobileMenu } = Style
@@ -44,7 +45,7 @@ function Nav({ navlist = routes }) {
           {id ? (
             <div className={navItem}>
               <Popover placement="bottomRight" content={<button type="button" className={Style.popoverAction} onClick={logoutInfo}>退出登录</button>}>
-                <Avatar src={avatar} icon={avatar ? null : <i className="iconfont icon-denglu1" />} />
+                <Avatar src={avatar || DEFAULT_USER_AVATAR} />
                 <span>{nickname || username}</span>
               </Popover>
             </div>
@@ -72,9 +73,9 @@ function Nav({ navlist = routes }) {
         </button>
         {MobileMenuVisible && (
           <div id="mobile-navigation" className={MobileMenu}>
-            {avatar ? (
+            {id ? (
               <div>
-                <Avatar src={avatar} />
+                <Avatar src={avatar || DEFAULT_USER_AVATAR} />
                 <span>{nickname || username}</span>
               </div>
             ) : (

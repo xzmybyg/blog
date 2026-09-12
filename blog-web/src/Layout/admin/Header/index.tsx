@@ -2,6 +2,7 @@ import useUserStore from '@/store/user'
 import './index.scss'
 import { Breadcrumb, Layout, Popover } from 'antd'
 import routes from '@/router/routes'
+import { DEFAULT_USER_AVATAR } from '@/utils/avatar'
 const { Header } = Layout
 
 export default function AdminHeader() {
@@ -42,7 +43,7 @@ export default function AdminHeader() {
           content={<button className="admin-header__logout" type="button" onClick={logoutInfo}>退出登录</button>}
         >
           <button className="admin-header__user" type="button">
-            <Avatar src={avatar} icon={avatar ? null : <i className="iconfont icon-tuichu" />} />
+            <Avatar src={avatar || DEFAULT_USER_AVATAR} />
             <span>{nickname || username}</span>
           </button>
         </Popover>
