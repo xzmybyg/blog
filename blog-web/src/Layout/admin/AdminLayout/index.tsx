@@ -1,6 +1,8 @@
 import adminroutes from '@/router/adminroutes'
-import { ConfigProvider, FloatButton, Layout, Menu } from 'antd'
+import { Alert, ConfigProvider, FloatButton, Layout, Menu } from 'antd'
 import './index.scss'
+import useUserStore from '@/store/user'
+import { canEditAdmin } from '@/utils/adminPermission'
 
 const { Content, Sider } = Layout
 
@@ -9,6 +11,8 @@ import AdminHeader from '@/Layout/admin/Header'
 export default function AdminLayout({ children }) {
   const navigate = useNavigate()
   const location = useLocation()
+  const role = useUserStore((state) => state.role)
+  const readOnly = !canEditAdmin(role)
   const menuItems = adminroutes.map((item) => {
     if (item.meta?.showOnMenu === false) return null
     return {
@@ -17,6 +21,7 @@ export default function AdminLayout({ children }) {
       label: item.name,
       children: item?.children?.map((child) => {
         if (child.meta?.showOnMenu === false) return null
+        if (readOnly && child.meta?.editOnly) return null
         return {
           key: child.path,
           icon: <i className={`iconfont ${child?.icon}`}></i>,
@@ -109,6 +114,15 @@ export default function AdminLayout({ children }) {
           <Layout className="admin-main">
             <AdminHeader />
             <Content className="admin-content">
+              {readOnly && (
+                <Alert
+                  className="admin-readonly-alert"
+                  type="info"
+                  showIcon
+                  message="只读浏览模式"
+                  description="当前账号可以查看后台数据，但不能新增、编辑、删除或执行运维操作。"
+                />
+              )}
               {children}
             </Content>
           </Layout>

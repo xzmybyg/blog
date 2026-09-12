@@ -7,11 +7,12 @@ import MyLayout from '@/Layout/blog/MyLayout'
 
 import useUserStore, { logoutInfo } from '@/store/user'
 import { getAdminLoginUrl, isTokenExpired } from '@/utils/auth'
+import { canAccessAdmin } from '@/utils/adminPermission'
 
 /* 统一渲染的组件：在这里可以做一些事情，「例如权限/登录态校验，传递路由信息的属性...」 */
 const Element = function Element(props) {
   const { component: Component } = props
-  const { token } = useUserStore()
+  const { token, role } = useUserStore()
 
   //特殊事情： 把路由信息先获取到，最后基于属性传递给组件「这样只要是基于<Route>匹配渲染的组件「不管是类组件还是函数组件」都可以基于属性获取到路由信息」
   const navigate = useNavigate(),
@@ -26,7 +27,10 @@ const Element = function Element(props) {
   }, [props.name])
 
   useEffect(() => {
-    if (!props.meta.checkAuth) {
+    const requiresAdminAuth = props.meta.checkAuth
+      || (location.pathname.startsWith('/admin') && location.pathname !== '/admin/login')
+
+    if (!requiresAdminAuth) {
       setHasCheckedAuth(true)
       return
     }
@@ -36,10 +40,14 @@ const Element = function Element(props) {
     } else if (isTokenExpired(token)) {
       logoutInfo()
       navigate(getAdminLoginUrl(`${location.pathname}${location.search}`), { replace: true })
+    } else if (!canAccessAdmin(role)) {
+      navigate('/', { replace: true })
+    } else if (props.meta.editOnly && role !== 'admin') {
+      navigate('/admin/', { replace: true })
     } else {
       setHasCheckedAuth(true)
     }
-  }, [location.pathname, location.search, navigate, props.meta.checkAuth, token])
+  }, [location.pathname, location.search, navigate, props.meta.checkAuth, props.meta.editOnly, role, token])
 
   if (!hasCheckedAuth && props.name !== '登录') {
     return <Loading />

@@ -48,21 +48,36 @@ router.post('/login', function (req, res) {
 })
 
 router.post('/', function (req, res, next) {
-  const { username, password, email } = req.body.params
+  const { username, password, email } = req.body?.params || req.body || {}
+  if (typeof username !== 'string' || !username.trim() || typeof password !== 'string' || !password || typeof email !== 'string' || !email) {
+    return res.status(400).send({ message: '账号、密码和邮箱不能为空' })
+  }
 
-  const sql = `INSERT INTO user
-  (username, password,email)
-  VALUES (?, ?, ?);`
-  db.query(sql, [username, password, email], (err, result) => {
-    if (err) {
-      console.error(err)
-      res.status(500).send('Server error')
-    } else {
-      res.status(201).send('User created')
+  const normalizedUsername = username.trim()
+  db.query('SELECT id FROM user WHERE username = ? LIMIT 1', [normalizedUsername], (checkError, users) => {
+    if (checkError) {
+      console.error(checkError)
+      return res.status(500).send({ message: '注册失败，请稍后重试' })
     }
-  })
+    if (users.length > 0) {
+      return res.status(409).send({ message: '该账号已存在，请直接登录' })
+    }
 
-  // send("注册成功");
+    const sql = `INSERT INTO user
+    (username, password,email)
+    VALUES (?, ?, ?);`
+    db.query(sql, [normalizedUsername, password, email], (err, result) => {
+      if (err?.code === 'ER_DUP_ENTRY') {
+        return res.status(409).send({ message: '该账号已存在，请直接登录' })
+      }
+      if (err) {
+        console.error(err)
+        return res.status(500).send({ message: '注册失败，请稍后重试' })
+      }
+
+      res.status(201).send({ id: result.insertId, message: '注册成功' })
+    })
+  })
 })
 
 router.delete('/', checkRole, function (req, res, next) {
@@ -72,6 +87,7 @@ router.delete('/', checkRole, function (req, res, next) {
 router.put('/', checkToken, function (req, res, next) {
   const { id: requestedId, ...fields } = req.body
   const { id: currentUserId, role } = req.user
+  if (role === 'viewer') return res.status(403).send('Forbidden')
   const isAdmin = role === 'admin'
   const targetUserId = isAdmin && requestedId !== undefined ? Number(requestedId) : Number(currentUserId)
   const allowedFields = isAdmin
@@ -86,6 +102,9 @@ router.put('/', checkToken, function (req, res, next) {
   const values = []
   for (const [key, value] of Object.entries(fields)) {
     if (!allowedFields.includes(key)) continue
+    if (key === 'role' && !['admin', 'viewer', 'user'].includes(value)) {
+      return res.status(400).send('Invalid user role')
+    }
     setParts.push(`${key} = ?`)
     values.push(key === 'commentLimit' ? (value ? 1 : 0) : value)
   }
@@ -113,7 +132,7 @@ router.put('/', checkToken, function (req, res, next) {
   })
 })
 
-router.get('/usersList', function (req, res, next) {
+router.get('/usersList', checkRole, function (req, res, next) {
   db.query(
     `SELECT 
     id,username,role,avatar,nickname,commentLimit,email,createTime

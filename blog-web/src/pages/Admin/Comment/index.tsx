@@ -1,7 +1,9 @@
 import dayjs from 'dayjs'
 import type { TableColumnsType } from 'antd';
+import useUserStore from '@/store/user'
 
 export default function Comment() {
+  const readOnly = useUserStore((state) => state.role === 'viewer')
   const [commentList, setCommentList] = useState<CommentAdmin[]>([])
   useEffect(() => {
     getCommentList().then((res) => {
@@ -55,7 +57,7 @@ export default function Comment() {
       title: '操作',
       key: 'action',
       render: (record) => (
-        <Space size="middle">
+        readOnly ? <span>只读</span> : <Space size="middle">
           <Button
             onClick={() => {
               handleDeleteComment(record.comment_id)
@@ -103,7 +105,7 @@ export default function Comment() {
         title: '操作',
         key: 'action',
         render: (record) => (
-          <Space size="middle">
+          readOnly ? <span>只读</span> : <Space size="middle">
             <Button
               onClick={() => {
                 handleDeleteReply(record.reply_id)

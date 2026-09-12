@@ -3,10 +3,12 @@ import { FileMarkdownOutlined, InboxOutlined } from '@ant-design/icons'
 import { Alert, Modal, Skeleton, Tabs, Upload } from 'antd'
 import type { UploadProps } from 'antd'
 import './index.scss'
+import useUserStore from '@/store/user'
 
 const MAX_MARKDOWN_SIZE = 2 * 1024 * 1024
 
 export default function AboutAdmin() {
+  const readOnly = useUserStore((state) => state.role === 'viewer')
   const [content, setContent] = useState('')
   const [savedContent, setSavedContent] = useState('')
   const [selectedFile, setSelectedFile] = useState('')
@@ -109,7 +111,7 @@ export default function AboutAdmin() {
           className="about-admin__save-button"
           type="primary"
           loading={saving}
-          disabled={loading || !hasChanges}
+          disabled={readOnly || loading || !hasChanges}
           onClick={saveContent}
         >
           保存关于页
@@ -133,7 +135,7 @@ export default function AboutAdmin() {
                   value={content}
                   subfield={true}
                   preview={true}
-                  onChange={setContent}
+                  onChange={readOnly ? undefined : setContent}
                 />
               ),
             },
@@ -143,6 +145,7 @@ export default function AboutAdmin() {
               children: (
                 <div className="about-admin__upload-panel">
                   <Upload.Dragger
+                    disabled={readOnly}
                     accept=".md,text/markdown"
                     beforeUpload={beforeUpload}
                     maxCount={1}

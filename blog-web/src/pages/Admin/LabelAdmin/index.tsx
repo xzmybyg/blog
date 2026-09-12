@@ -1,7 +1,9 @@
 import { ColorPicker } from 'antd'
 import dayjs from 'dayjs'
+import useUserStore from '@/store/user'
 
 export default function LabelAdmin() {
+  const readOnly = useUserStore((state) => state.role === 'viewer')
   const [labelList, setLabelList] = useState<Label[]>([])
   useEffect(() => {
     getLabelList().then((res) => {
@@ -38,7 +40,7 @@ export default function LabelAdmin() {
       title: '操作',
       key: 'action',
       render: (record) => (
-        <Space>
+        readOnly ? <span>只读</span> : <Space>
           <Button
             onClick={() => {
               setAction(false)
@@ -102,6 +104,7 @@ export default function LabelAdmin() {
   return (
     <div>
       <Button
+        disabled={readOnly}
         onClick={() => {
           setAction(true)
           showModal({ id: null, label: '', color: '#fff' })

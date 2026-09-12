@@ -19,6 +19,7 @@ import {
   type SiteBackgroundInfo,
   type SiteBackgroundType,
 } from '@/apis'
+import useUserStore from '@/store/user'
 
 const MAX_BACKGROUND_SIZE = 8 * 1024 * 1024
 const ACCEPTED_IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp'])
@@ -28,6 +29,7 @@ type HomeContentFormValues = Omit<HomeContent, 'typedTexts'> & {
 }
 
 function HomeContentManager() {
+  const readOnly = useUserStore((state) => state.role === 'viewer')
   const [form] = Form.useForm<HomeContentFormValues>()
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -68,7 +70,7 @@ function HomeContentManager() {
           <p>编辑首页主视觉中的标题、简介与轮播身份。</p>
         </div>
       </header>
-      <Form form={form} layout="vertical" disabled={loading} onFinish={saveContent}>
+      <Form form={form} layout="vertical" disabled={loading || readOnly} onFinish={saveContent}>
         <div className="home-content-management__grid">
           <Form.Item label="眉题" name="eyebrow" rules={[{ required: true, message: '请输入眉题' }, { max: 80 }]}>
             <Input maxLength={80} showCount placeholder="例如：FRONTEND FIELD NOTES · BEIJING" />
@@ -98,6 +100,7 @@ function HomeContentManager() {
 }
 
 function SiteNoticeManager() {
+  const readOnly = useUserStore((state) => state.role === 'viewer')
   const [form] = Form.useForm<SiteNotice>()
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -132,7 +135,7 @@ function SiteNoticeManager() {
           <p>编辑公开页面侧栏中展示的纯文本公告。</p>
         </div>
       </header>
-      <Form form={form} layout="vertical" disabled={loading} onFinish={saveNotice}>
+      <Form form={form} layout="vertical" disabled={loading || readOnly} onFinish={saveNotice}>
         <Form.Item label="公告内容" name="content" rules={[{ required: true, message: '请输入公告内容' }, { max: 500 }]}>
           <Input.TextArea rows={5} maxLength={500} showCount placeholder="输入要在侧栏展示的公告文字" />
         </Form.Item>
@@ -149,6 +152,7 @@ type BackgroundManagerProps = {
 }
 
 function BackgroundManager({ type, title, description }: BackgroundManagerProps) {
+  const readOnly = useUserStore((state) => state.role === 'viewer')
   const [info, setInfo] = useState<SiteBackgroundInfo>({ exists: false })
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState('')
@@ -237,7 +241,7 @@ function BackgroundManager({ type, title, description }: BackgroundManagerProps)
         beforeUpload={beforeUpload}
         maxCount={1}
         showUploadList={false}
-        disabled={uploading}
+        disabled={uploading || readOnly}
       >
         <p className="ant-upload-drag-icon"><InboxOutlined /></p>
         <p className="ant-upload-text">拖放图片到这里，或点击选择</p>
@@ -247,7 +251,7 @@ function BackgroundManager({ type, title, description }: BackgroundManagerProps)
         <span>{selectedFile ? `${selectedFile.name} · ${(selectedFile.size / 1024 / 1024).toFixed(2)} MB` : info.exists ? '当前使用已上传图片' : '当前使用项目默认图片'}</span>
         <div>
           {selectedFile && <Button disabled={uploading} onClick={() => setSelectedFile(null)}>取消选择</Button>}
-          <Button type="primary" disabled={!selectedFile} loading={uploading} onClick={replaceBackground}>
+          <Button type="primary" disabled={readOnly || !selectedFile} loading={uploading} onClick={replaceBackground}>
             上传并替换
           </Button>
         </div>
@@ -257,6 +261,7 @@ function BackgroundManager({ type, title, description }: BackgroundManagerProps)
 }
 
 export default function Home() {
+  const readOnly = useUserStore((state) => state.role === 'viewer')
   const [certificate, setCertificate] = useState<CertificateStatus | null>(null)
   const [certificateError, setCertificateError] = useState(false)
   const [statistics, setStatistics] = useState<{ pageViews: number; uniqueVisitors: number } | null>(null)
@@ -352,7 +357,7 @@ export default function Home() {
           </div>
           <Button
             icon={<ReloadOutlined />}
-            disabled={certificateError}
+            disabled={readOnly || certificateError}
             onClick={() => setConfirmUpdateOpen(true)}
           >
             立即更新

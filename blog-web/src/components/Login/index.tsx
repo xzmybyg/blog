@@ -25,21 +25,18 @@ const Login = forwardRef<LoginHandle>((_props, ref) => {
    * 处理表单提交
    */
   const handleSubmit = () => {
-    const sign = haveAccount ? login : register
-    form.validateFields().then((values) => {
-      sign(values)
-        .then((res) => {
-          setUserInfo(res.data)
-          message.success(haveAccount ? '登录成功' : '注册成功')
-          values = { username: values.username, password: values.password }
-          login(values).then((res) => {
-            setUserInfo(res.data)
-            setIsModalOpen(false)
-          })
-        })
-        .catch((err) => {
-          message.error(err.response.data.message)
-        })
+    form.validateFields().then(async (values) => {
+      try {
+        if (!haveAccount) await register(values)
+
+        const response = await login({ username: values.username, password: values.password })
+        setUserInfo(response.data)
+        message.success(haveAccount ? '登录成功' : '注册成功并已登录')
+        form.resetFields()
+        setIsModalOpen(false)
+      } catch (error: any) {
+        message.error(error.response?.data?.message || '操作失败，请稍后重试')
+      }
     })
   }
 

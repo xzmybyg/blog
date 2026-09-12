@@ -1,7 +1,10 @@
 import { Select } from 'antd'
 import dayjs from 'dayjs'
+import { DEFAULT_USER_AVATAR } from '@/utils/avatar'
+import useUserStore from '@/store/user'
 
 export default function User() {
+  const readOnly = useUserStore((state) => state.role === 'viewer')
   const [userList, setUserList] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
   const loadUsers = useCallback(() => {
@@ -40,6 +43,7 @@ export default function User() {
       key: 'commentLimit',
       render: (commentLimit, record) => (
         <Switch
+          disabled={readOnly}
           checkedChildren="是"
           unCheckedChildren="否"
           checked={commentLimit}
@@ -67,7 +71,7 @@ export default function User() {
       title: '头像',
       dataIndex: 'avatar',
       key: 'avatar',
-      render: (avatar) => <Avatar src={avatar} />,
+      render: (avatar) => <Avatar src={avatar || DEFAULT_USER_AVATAR} />,
     },
     {
       title: '邮箱',
@@ -85,7 +89,7 @@ export default function User() {
       title: '操作',
       key: 'action',
       render: (record) => (
-        <Space size="middle">
+        readOnly ? <span>只读</span> : <Space size="middle">
           <Button onClick={() => handleEditUser(record)}>编辑</Button>
           <Button onClick={() => handleDeleteUser(record.id)} danger>
             删除
@@ -194,6 +198,7 @@ export default function User() {
             >
               <Select.Option value="user">普通用户</Select.Option>
               <Select.Option value="admin">管理员</Select.Option>
+              <Select.Option value="viewer">只读访客</Select.Option>
             </Select>
           </Form.Item>
           <Form.Item label="邮箱">

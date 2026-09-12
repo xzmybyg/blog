@@ -15,7 +15,7 @@ router.get('/', function (req, res, _next) {
   })
 })
 
-router.get('/all', function (req, res, _next) {
+router.get('/all', checkRole, function (req, res, _next) {
   const sql = `SELECT * FROM link`
 
   db.query(sql, (err, data, _field) => {

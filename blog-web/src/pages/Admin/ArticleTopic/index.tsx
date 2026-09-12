@@ -10,10 +10,12 @@ import {
   updateArticleTopic,
 } from '@/apis'
 import './index.scss'
+import useUserStore from '@/store/user'
 
 const emptyTopic = { id: 0, name: '', description: '' }
 
 export default function ArticleTopicAdmin() {
+  const readOnly = useUserStore((state) => state.role === 'viewer')
   const [topics, setTopics] = useState<ArticleTopic[]>([])
   const [articles, setArticles] = useState<Article[]>([])
   const [loading, setLoading] = useState(true)
@@ -154,16 +156,19 @@ export default function ArticleTopicAdmin() {
           <li
             key={article.id}
             className={draggedArticleId === article.id ? 'article-topic-order__item article-topic-order__item--dragging' : 'article-topic-order__item'}
-            draggable={orderingTopicId === null}
+            draggable={!readOnly && orderingTopicId === null}
             onDragStart={(event) => {
+              if (readOnly) return
               setDraggedArticleId(article.id)
               event.dataTransfer.effectAllowed = 'move'
             }}
             onDragOver={(event) => {
+              if (readOnly) return
               event.preventDefault()
               event.dataTransfer.dropEffect = 'move'
             }}
             onDrop={(event) => {
+              if (readOnly) return
               event.preventDefault()
               dropArticle(topic.id, article.id)
             }}
@@ -177,14 +182,14 @@ export default function ArticleTopicAdmin() {
                 type="text"
                 icon={<ArrowUpOutlined />}
                 aria-label={`上移文章：${article.title}`}
-                disabled={index === 0 || orderingTopicId !== null}
+                disabled={readOnly || index === 0 || orderingTopicId !== null}
                 onClick={() => moveArticle(topic.id, article.id, -1)}
               />
               <Button
                 type="text"
                 icon={<ArrowDownOutlined />}
                 aria-label={`下移文章：${article.title}`}
-                disabled={index === topicArticles.length - 1 || orderingTopicId !== null}
+                disabled={readOnly || index === topicArticles.length - 1 || orderingTopicId !== null}
                 onClick={() => moveArticle(topic.id, article.id, 1)}
               />
             </Space>
@@ -204,7 +209,7 @@ export default function ArticleTopicAdmin() {
       key: 'action',
       width: 170,
       render: (_value, record: ArticleTopic) => (
-        <Space>
+        readOnly ? <span>只读</span> : <Space>
           <Button onClick={() => setEditingTopic({ ...record })}>编辑</Button>
           <Button danger disabled={Boolean(record.articleCount)} onClick={() => removeTopic(record)}>删除</Button>
         </Space>
@@ -223,6 +228,7 @@ export default function ArticleTopicAdmin() {
         <Button
           className="article-topic-admin__create-button"
           type="primary"
+          disabled={readOnly}
           onClick={() => setEditingTopic({ ...emptyTopic })}
         >
           新建专题

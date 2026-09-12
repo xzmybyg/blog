@@ -97,6 +97,11 @@
   }
 }
 
+.admin-readonly-alert {
+  max-width: 1440px;
+  margin-bottom: 16px;
+}
+
 @media (max-width: 768px) {
   .admin-content { margin: 12px; overflow-x: auto; }
 }

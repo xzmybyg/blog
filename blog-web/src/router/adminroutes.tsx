@@ -16,6 +16,7 @@ const articleRoutes = [
     component: lazy(() => import(/* webpackChunkName:"Article" */ '@/pages/Admin/Article/AddArticle')), ///* webpackChunkName:"Article" */3个组件打包在一起
     meta: {
       showOnMenu: true,
+      editOnly: true,
     },
   },
   {

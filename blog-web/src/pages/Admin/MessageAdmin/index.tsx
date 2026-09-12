@@ -1,6 +1,8 @@
 import dayjs from 'dayjs'
+import useUserStore from '@/store/user'
 
 export default function MessageAdmin() {
+  const readOnly = useUserStore((state) => state.role === 'viewer')
   const [messageList, setMessageList] = useState<Message[]>([])
   useEffect(() => {
     getMessageList().then((res) => {
@@ -42,7 +44,7 @@ export default function MessageAdmin() {
       title: '操作',
       key: 'action',
       render: (record) => (
-        <Space size="middle">
+        readOnly ? <span>只读</span> : <Space size="middle">
           <Button onClick={() => handleDelete(record.id)}>删除</Button>
         </Space>
       ),

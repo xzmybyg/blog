@@ -2,6 +2,7 @@ import { setUserInfo } from '@/store/user'
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons'
 import { Alert } from 'antd'
 import { getSafeAdminRedirect } from '@/utils/auth'
+import { canAccessAdmin } from '@/utils/adminPermission'
 
 import './index.scss'
 
@@ -15,21 +16,25 @@ export default function Login() {
   const [form] = Form.useForm()
 
   const handleSubmit = () => {
-    const sign = haveAccount ? login : register
-    form.validateFields().then((values) => {
-      sign(values)
-        .then((res) => {
-          setUserInfo(res.data)
-          message.success(haveAccount ? '登录成功' : '注册成功')
-          values = { username: values.username, password: values.password }
-          login(values).then((res) => {
-            setUserInfo(res.data)
-            navigate(getSafeAdminRedirect(searchParams.get('redirect')), { replace: true })
-          })
-        })
-        .catch((err) => {
-          message.error(err.response.data.message)
-        })
+    form.validateFields().then(async (values) => {
+      try {
+        if (!haveAccount) {
+          await register(values)
+          message.success('注册成功')
+        }
+
+        const response = await login({ username: values.username, password: values.password })
+        if (!canAccessAdmin(response.data.role)) {
+          message.error('当前账号没有后台访问权限')
+          return
+        }
+
+        setUserInfo(response.data)
+        if (haveAccount) message.success('登录成功')
+        navigate(getSafeAdminRedirect(searchParams.get('redirect')), { replace: true })
+      } catch (error: any) {
+        message.error(error.response?.data?.message || '登录失败，请检查账号和密码')
+      }
     })
   }
 

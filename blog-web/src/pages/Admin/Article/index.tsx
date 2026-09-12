@@ -4,8 +4,10 @@ import { useEffect } from 'react'
 import { getAdminArticleList, getArticleTopicList } from '@/apis'
 import dayjs from 'dayjs'
 import './index.scss'
+import useUserStore from '@/store/user'
 
 export default function Article() {
+  const readOnly = useUserStore((state) => state.role === 'viewer')
   const columns = [
     {
       title: 'id',
@@ -59,6 +61,7 @@ export default function Article() {
       key: 'topping',
       render: (topping, record) => (
         <Switch
+          disabled={readOnly}
           checkedChildren="是"
           unCheckedChildren="否"
           checked={topping}
@@ -85,6 +88,7 @@ export default function Article() {
       key: 'hidden',
       render: (hidden, record) => (
         <Switch
+          disabled={readOnly}
           checkedChildren="显示"
           unCheckedChildren="隐藏"
           checked={hidden}
@@ -103,7 +107,7 @@ export default function Article() {
       title: '操作',
       key: 'action',
       render: (record) => (
-        <Space>
+        readOnly ? <span>只读</span> : <Space>
           <Button onClick={() => showModal(record)}>编辑</Button>
           <Button onClick={() => delArticle(record.id)}>删除</Button>
         </Space>

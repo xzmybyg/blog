@@ -1,6 +1,8 @@
 import dayjs from 'dayjs'
+import useUserStore from '@/store/user'
 
 export default function TheLink() {
+  const readOnly = useUserStore((state) => state.role === 'viewer')
   const [linkList, setLinkList] = useState<Link[]>([])
   useEffect(() => {
     getAllLinkList().then((res) => {
@@ -68,7 +70,7 @@ export default function TheLink() {
       title: '操作',
       key: 'action',
       render: (record) => (
-        <Space size="middle">
+        readOnly ? <span>只读</span> : <Space size="middle">
           <Button onClick={() => handleAdopt(record.id)}>通过</Button>
           <Button onClick={() => handleRefuse(record.id)}>拒绝</Button>
           <Button onClick={() => handleDeleteLink(record.id)} danger>
