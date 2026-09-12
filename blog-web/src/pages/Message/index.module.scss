@@ -1,6 +1,6 @@
 #messagePage {
   width: 100%;
-  min-height: calc(100vh - 136px);
+  min-height: clamp(520px, 68vh, 720px);
   height: auto;
   background-image: linear-gradient(rgba(9, 26, 51, 0.82), rgba(9, 26, 51, 0.9)), var(--site-background);
   background-size: cover; // 设置背景图的大小为 cover
@@ -8,7 +8,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px 20px;
+  padding: 28px 20px;
   border-radius: $card-radius;
   overflow: hidden;
   .sendWrap {
@@ -43,6 +43,8 @@
 
 @media screen and (max-width: $hiddenSomeSize) {
   #messagePage {
+    min-height: 520px;
+    padding-block: 24px;
     background-position: top right;
     background-size: cover;
     background-repeat: no-repeat;
