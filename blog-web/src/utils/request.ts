@@ -1,6 +1,7 @@
 import { AxiosResponse } from 'axios'
 import useUserStore, { logoutInfo } from '@/store/user'
 import { ADMIN_LOGIN_PATH, getAdminLoginUrl } from './auth'
+import { reportClientError } from './errorReporter'
 
 const devBaseUrl = '/api'
 const proBaseUrl = '/api'
@@ -104,6 +105,17 @@ axiosInstance.interceptors.response.use(
       text = '连接服务器失败,请退出重试!'
     }
     console.error(text)
+
+    const requestUrl = String(error.config?.url || '')
+    if ((!status || status >= 500) && !requestUrl.includes('/error-report')) {
+      reportClientError({
+        message: status ? `API request failed (${status})` : 'API connection failed',
+        route: requestUrl,
+        method: error.config?.method,
+        statusCode: status,
+        context: { browser: navigator.userAgent },
+      })
+    }
 
     return Promise.reject(error)
   },

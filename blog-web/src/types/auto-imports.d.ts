@@ -18,6 +18,7 @@ declare global {
   const DEFAULT_SITE_NOTICE: typeof import('../apis/lib/siteNotice')['DEFAULT_SITE_NOTICE']
   const DEFAULT_USER_AVATAR: typeof import('../utils/avatar')['DEFAULT_USER_AVATAR']
   const Divider: typeof import('antd')['Divider']
+  const ErrorBoundary: typeof import('../components/ErrorBoundary/index')['default']
   const Flex: typeof import('antd')['Flex']
   const Form: typeof import('antd')['Form']
   const Header: typeof import('../Layout/admin/Header/index')['default']
@@ -58,6 +59,7 @@ declare global {
   const deleteArticle: typeof import('../apis/lib/article')['deleteArticle']
   const deleteArticleTopic: typeof import('../apis/lib/articleTopic')['deleteArticleTopic']
   const deleteComment: typeof import('../apis/lib/comment')['deleteComment']
+  const deleteErrorEvent: typeof import('../apis/lib/errorMonitor')['deleteErrorEvent']
   const deleteLabel: typeof import('../apis/lib/label')['deleteLabel']
   const deleteLink: typeof import('../apis/lib/link')['deleteLink']
   const deleteMessage: typeof import('../apis/lib/message')['deleteMessage']
@@ -77,6 +79,7 @@ declare global {
   const getCertificateStatus: typeof import('../apis/lib/info')['getCertificateStatus']
   const getComment: typeof import('../apis/lib/comment')['getComment']
   const getCommentList: typeof import('../apis/lib/comment')['getCommentList']
+  const getErrorEvents: typeof import('../apis/lib/errorMonitor')['getErrorEvents']
   const getHomeContent: typeof import('../apis/lib/homeContent')['getHomeContent']
   const getInfo: typeof import('../apis/lib/info')['getInfo']
   const getLabelList: typeof import('../apis/lib/label')['getLabelList']
@@ -84,6 +87,7 @@ declare global {
   const getMessage: typeof import('../apis/lib/message')['getMessage']
   const getMessageList: typeof import('../apis/lib/message')['getMessageList']
   const getPageArticleList: typeof import('../apis/lib/article')['getPageArticleList']
+  const getRateLimitConfig: typeof import('../apis/lib/rateLimitConfig')['getRateLimitConfig']
   const getSafeAdminRedirect: typeof import('../utils/auth')['getSafeAdminRedirect']
   const getSiteBackgroundInfo: typeof import('../apis/lib/siteBackground')['getSiteBackgroundInfo']
   const getSiteBackgroundUrl: typeof import('../apis/lib/siteBackground')['getSiteBackgroundUrl']
@@ -92,6 +96,7 @@ declare global {
   const getTopic: typeof import('../apis/lib/topic')['getTopic']
   const getUserList: typeof import('../apis/lib/user')['getUserList']
   const getVisitorId: typeof import('../utils/visitorId')['getVisitorId']
+  const installGlobalErrorMonitoring: typeof import('../utils/errorReporter')['installGlobalErrorMonitoring']
   const isRequestThrottled: typeof import('../utils/requestThrottle')['isRequestThrottled']
   const isTokenExpired: typeof import('../utils/auth')['isTokenExpired']
   const lazy: typeof import('react')['lazy']
@@ -104,7 +109,10 @@ declare global {
   const recordPageView: typeof import('../apis/lib/siteStatistics')['recordPageView']
   const register: typeof import('../apis/lib/user')['register']
   const reorderArticleTopic: typeof import('../apis/lib/articleTopic')['reorderArticleTopic']
+  const reportClientError: typeof import('../utils/errorReporter')['reportClientError']
   const request: typeof import('../utils/request')['default']
+  const resetRateLimitConfig: typeof import('../apis/lib/rateLimitConfig')['resetRateLimitConfig']
+  const resolveErrorEvent: typeof import('../apis/lib/errorMonitor')['resolveErrorEvent']
   const setUserInfo: typeof import('../store/user')['setUserInfo']
   const startTransition: typeof import('react')['startTransition']
   const store: typeof import('../store/index')['default']
@@ -117,6 +125,7 @@ declare global {
   const updateLabel: typeof import('../apis/lib/label')['updateLabel']
   const updateLink: typeof import('../apis/lib/link')['updateLink']
   const updateMessage: typeof import('../apis/lib/message')['updateMessage']
+  const updateRateLimitConfig: typeof import('../apis/lib/rateLimitConfig')['updateRateLimitConfig']
   const updateSiteNotice: typeof import('../apis/lib/siteNotice')['updateSiteNotice']
   const updateUser: typeof import('../apis/lib/user')['updateUser']
   const uploadArticleFile: typeof import('../apis/lib/article')['uploadArticleFile']
@@ -149,4 +158,10 @@ declare global {
   const useSyncExternalStore: typeof import('react')['useSyncExternalStore']
   const useTransition: typeof import('react')['useTransition']
   const user: typeof import('../store/user')['default']
+}
+// for type re-export
+declare global {
+  // @ts-ignore
+  export type { ErrorBoundary } from '../components/ErrorBoundary/index'
+  import('../components/ErrorBoundary/index')
 }

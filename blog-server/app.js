@@ -11,6 +11,8 @@ var cookieParser = require('cookie-parser')
 var logger = require('morgan')
 const db = require('@utils/mysqlUtils')
 const { globalApiLimiter } = require('@middleware/rateLimit')
+const requestContext = require('@middleware/requestContext')
+const { reportServerError } = require('@utils/errorMonitor')
 
 var indexRouter = require('@routes/index')
 var usersRouter = require('@routes/users')
@@ -29,6 +31,10 @@ var siteBackgroundRouter = require('@routes/siteBackground')
 var siteStatisticsRouter = require('@routes/siteStatistics')
 var homeContentRouter = require('@routes/homeContent')
 var siteNoticeRouter = require('@routes/siteNotice')
+var rateLimitConfigRouter = require('@routes/rateLimitConfig')
+var errorReportRouter = require('@routes/errorReport')
+var errorMonitorRouter = require('@routes/errorMonitor')
+var healthRouter = require('@routes/health')
 
 var app = express()
 
@@ -44,14 +50,16 @@ function startServer() {
       'Access-Control-Allow-Headers',
       'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild',
     )
-    res.header('Access-Control-Expose-Headers', 'Retry-After, RateLimit-Limit, RateLimit-Remaining, RateLimit-Reset')
+    res.header('Access-Control-Expose-Headers', 'Retry-After, RateLimit-Limit, RateLimit-Remaining, RateLimit-Reset, X-Request-Id')
     res.header('X-Powered-By', ' 3.2.1')
     // res.header("Content-Type", "application/json;charset=utf-8")
     next()
   })
 
   app.use(logger('dev'))
+  app.use(requestContext)
   app.use('/api', globalApiLimiter)
+  app.use('/api/error-report', errorReportRouter)
   app.use(express.json({ limit: '2mb' }))
   app.use(express.urlencoded({ extended: false }))
   app.use(cookieParser())
@@ -74,6 +82,9 @@ function startServer() {
   app.use('/api/site-statistics', siteStatisticsRouter)
   app.use('/api/home-content', homeContentRouter)
   app.use('/api/site-notice', siteNoticeRouter)
+  app.use('/api/rate-limit-config', rateLimitConfigRouter)
+  app.use('/api/error-monitor', errorMonitorRouter)
+  app.use('/api/health', healthRouter)
 
   app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, 'public/blog/index.html'))
@@ -89,13 +100,21 @@ function startServer() {
   })
 
   // error handler
-  app.use(function (err, req, res, next) {
+  app.use(function (err, req, res, _next) {
     // set locals, only providing error in development
     res.locals.message = err.message
     res.locals.error = req.app.get('env') === 'development' ? err : {}
 
     // render the error page
-    res.status(err.status || 500)
+    const statusCode = err.status || 500
+    if (statusCode >= 500) {
+      const errorId = reportServerError(err, req, statusCode)
+      if (req.originalUrl.startsWith('/api/')) {
+        return res.status(statusCode).send({ message: '服务器内部错误', errorId })
+      }
+    }
+
+    res.status(statusCode)
     res.sendFile(`/error.html`, { root: 'public' })
   })
 }

@@ -123,6 +123,28 @@ const adminRoutes = [
     },
   },
   {
+    path: '/admin/rate-limit',
+    component: lazy(() => import('@/pages/Admin/RateLimit')),
+    name: '限流配置',
+    icon: 'icon-riqi',
+    meta: {
+      checkAuth: true,
+      showOnMenu: true,
+      layout: 'admin',
+    },
+  },
+  {
+    path: '/admin/error-monitor',
+    component: lazy(() => import('@/pages/Admin/ErrorMonitor')),
+    name: '错误监控',
+    icon: 'icon-liebiao',
+    meta: {
+      checkAuth: true,
+      showOnMenu: true,
+      layout: 'admin',
+    },
+  },
+  {
     path: '/admin/login',
     component: lazy(() => import('@/pages/Admin/Login')),
     name: '登录',

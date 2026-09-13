@@ -80,7 +80,9 @@ pnpm -F blog-web run dev
 
 ## 服务端限流配置
 
-限流参数可通过系统环境变量或 `blog-server/.env.production` 配置，格式为 `最大请求数/统计窗口`，例如 `10/5m` 表示 5 分钟内最多请求 10 次。时间支持 `ms`（毫秒）、`s`（秒）、`m`（分钟）、`h`（小时）和 `d`（天）；未配置或格式无效时使用默认值。
+先执行 `blog-server/migrations/008_add_rate_limit_config.sql` 创建配置表，即可在管理后台“限流配置”页面修改规则并立即生效。后台配置优先于环境变量；恢复默认会回到环境变量或系统默认值。
+
+限流基线也可通过系统环境变量或 `blog-server/.env.production` 配置，格式为 `最大请求数/统计窗口`，例如 `10/5m` 表示 5 分钟内最多请求 10 次。时间支持 `ms`（毫秒）、`s`（秒）、`m`（分钟）、`h`（小时）和 `d`（天）；未配置或格式无效时使用默认值。
 
 | 接口类型 | 配置变量（默认值） |
 | --- | --- |
@@ -94,3 +96,15 @@ pnpm -F blog-web run dev
 | 登录后的写操作 | `RATE_LIMIT_AUTH_WRITE=30/1m` |
 
 修改生产环境配置后，需要使用 `pm2 restart blog --update-env` 重启服务使其生效。
+
+## 错误监控
+
+执行 `blog-server/migrations/009_add_error_monitor.sql` 创建错误事件表后，服务端 5xx、前端未捕获异常和进程异常会自动聚合记录，并可在管理后台“错误监控”页面查看和处理。`viewer` 角色仅可查看。
+
+健康检查地址为 `/api/health`，数据库不可用时返回 HTTP 503。生产环境可由服务器外部的可用性监控服务定时访问该地址。
+
+前端错误默认只在生产构建中上报；如需在开发环境测试，可设置：
+
+```env
+VITE_ERROR_REPORTING_ENABLED=true
+```

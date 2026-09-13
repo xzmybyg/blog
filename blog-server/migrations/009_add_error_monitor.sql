@@ -1,0 +1,23 @@
+CREATE TABLE IF NOT EXISTS `error_event` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `fingerprint` char(64) NOT NULL COMMENT '同类错误聚合指纹',
+  `source` varchar(16) NOT NULL COMMENT 'client/server/process',
+  `level` varchar(16) NOT NULL DEFAULT 'error',
+  `message` varchar(1000) NOT NULL,
+  `stack` text,
+  `route` varchar(255) DEFAULT NULL,
+  `method` varchar(10) DEFAULT NULL,
+  `status_code` smallint unsigned DEFAULT NULL,
+  `request_id` varchar(64) DEFAULT NULL,
+  `user_agent` varchar(500) DEFAULT NULL,
+  `context_json` text,
+  `occurrences` int unsigned NOT NULL DEFAULT 1,
+  `first_seen_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_seen_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `resolved` tinyint(1) NOT NULL DEFAULT 0,
+  `resolved_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_error_fingerprint` (`fingerprint`),
+  KEY `idx_error_last_seen` (`last_seen_at`),
+  KEY `idx_error_resolved` (`resolved`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

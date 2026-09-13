@@ -1,0 +1,27 @@
+@use '@/styleConfig/scssConfig.scss' as config;
+
+.error-fallback {
+  display: grid;
+  place-content: center;
+  min-height: 100vh;
+  padding: 32px;
+  color: config.$ink;
+  text-align: center;
+  background: config.$paper;
+
+  span { color: config.$danger; font-family: config.$font-mono; font-size: 12px; letter-spacing: .12em; }
+  h1 { margin: 10px 0; font-family: config.$font-display; }
+  p { margin: 0 0 24px; color: config.$muted; }
+
+  button {
+    justify-self: center;
+    padding: 10px 20px;
+    border: 0;
+    border-radius: 8px;
+    background: config.$accent;
+    color: #fff;
+    cursor: pointer;
+
+    &:focus-visible { outline: 3px solid config.$focus-ring; outline-offset: 2px; }
+  }
+}

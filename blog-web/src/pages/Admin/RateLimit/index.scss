@@ -1,0 +1,142 @@
+@use '@/styleConfig/scssConfig.scss' as config;
+
+.rate-limit-admin {
+  color: config.$ink;
+}
+
+.rate-limit-admin__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 8px 4px 24px;
+
+  span {
+    color: config.$accent;
+    font-family: config.$font-mono;
+    font-size: 12px;
+    letter-spacing: .1em;
+  }
+
+  h1 { margin: 6px 0; font-family: config.$font-display; }
+  p { margin: 0; color: config.$muted; }
+}
+
+.rate-limit-admin__notice {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+  padding: 14px 18px;
+  border: 1px solid #bfd1ed;
+  border-radius: 12px;
+  background: #edf4ff;
+  color: #174b91;
+
+  > svg { flex: 0 0 auto; font-size: 22px; }
+  p { display: flex; gap: 10px; margin: 0; }
+  span { color: #526b8e; }
+}
+
+.rate-limit-admin__loading {
+  padding: 28px;
+  border: 1px solid #dbe3ef;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.rate-limit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.rate-limit-card {
+  padding: 20px;
+  border: 1px solid #dbe3ef;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgb(22 48 82 / 6%);
+
+  > header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+
+    span {
+      color: config.$accent;
+      font-family: config.$font-mono;
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    h2 { margin: 3px 0 0; font-size: 20px; }
+  }
+
+  > footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 18px;
+
+    > span { color: config.$muted; font-size: 12px; }
+    > div { display: flex; gap: 8px; }
+  }
+}
+
+.rate-limit-card__description {
+  min-height: 22px;
+  margin: 10px 0 18px;
+  color: config.$muted;
+}
+
+.rate-limit-card__editor {
+  display: grid;
+  grid-template-columns: minmax(100px, 1fr) auto minmax(100px, 1fr) 92px;
+  align-items: end;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 12px;
+  background: #f4f7fb;
+
+  label {
+    display: grid;
+    gap: 7px;
+
+    > span { color: config.$muted; font-size: 12px; }
+    .ant-input-number { width: 100%; }
+  }
+
+  > strong {
+    padding-bottom: 5px;
+    color: #1857d9;
+    font-family: config.$font-mono;
+    font-size: 28px;
+    font-weight: 500;
+  }
+}
+
+@media (max-width: 1080px) {
+  .rate-limit-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 680px) {
+  .rate-limit-admin__header,
+  .rate-limit-card > footer,
+  .rate-limit-admin__notice p {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .rate-limit-card__editor {
+    grid-template-columns: 1fr 20px 1fr;
+
+    > .ant-select { grid-column: 3; }
+  }
+
+  .rate-limit-card > footer > div { width: 100%; }
+  .rate-limit-card > footer button { flex: 1; }
+}

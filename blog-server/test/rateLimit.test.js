@@ -54,11 +54,13 @@ test('tracks different IP addresses independently', () => {
 
 test('reads rate limit values from environment variables', () => {
   const modulePath = require.resolve('../middleware/rateLimit')
+  const configModulePath = require.resolve('../middleware/rateLimitConfig')
   const originalValue = process.env.RATE_LIMIT_GLOBAL
 
   try {
     process.env.RATE_LIMIT_GLOBAL = '1/30s'
     delete require.cache[modulePath]
+    delete require.cache[configModulePath]
 
     const { globalApiLimiter } = require('../middleware/rateLimit')
     const first = invoke(globalApiLimiter, '127.0.0.3')
@@ -70,6 +72,7 @@ test('reads rate limit values from environment variables', () => {
 
     process.env.RATE_LIMIT_GLOBAL = '1/30'
     delete require.cache[modulePath]
+    delete require.cache[configModulePath]
     const { globalApiLimiter: fallbackLimiter } = require('../middleware/rateLimit')
     const fallback = invoke(fallbackLimiter, '127.0.0.4')
     assert.equal(fallback.headers['RateLimit-Limit'], '120')
@@ -78,5 +81,30 @@ test('reads rate limit values from environment variables', () => {
     if (originalValue === undefined) delete process.env.RATE_LIMIT_GLOBAL
     else process.env.RATE_LIMIT_GLOBAL = originalValue
     delete require.cache[modulePath]
+    delete require.cache[configModulePath]
+  }
+})
+
+test('applies an updated in-memory rule immediately', () => {
+  const modulePath = require.resolve('../middleware/rateLimit')
+  const configModulePath = require.resolve('../middleware/rateLimitConfig')
+  delete require.cache[modulePath]
+  delete require.cache[configModulePath]
+  const { resetRateLimitRule, setRateLimitRule } = require('../middleware/rateLimitConfig')
+  const { createRateLimiter: createDynamicRateLimiter } = require('../middleware/rateLimit')
+  const limiter = createDynamicRateLimiter({ ruleKey: 'login' })
+
+  try {
+    setRateLimitRule('login', { max: 1, windowMs: 60 * 1000 })
+    assert.equal(invoke(limiter, '127.0.0.5').nextCalled, true)
+    assert.equal(invoke(limiter, '127.0.0.5').statusCode, 429)
+
+    setRateLimitRule('login', { max: 2, windowMs: 60 * 1000 })
+    assert.equal(invoke(limiter, '127.0.0.5').nextCalled, true)
+    assert.equal(invoke(limiter, '127.0.0.5').nextCalled, true)
+  } finally {
+    resetRateLimitRule('login')
+    delete require.cache[modulePath]
+    delete require.cache[configModulePath]
   }
 })
