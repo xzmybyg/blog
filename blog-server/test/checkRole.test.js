@@ -1,8 +1,15 @@
 const test = require('node:test')
 const assert = require('node:assert/strict')
+const Module = require('node:module')
 const jwt = require('jsonwebtoken')
-const key = require('../config/key')
+const key = 'test-only-jwt-secret'
+const originalLoad = Module._load
+Module._load = function (request, parent, isMain) {
+  if (request === '../config/key') return key
+  return originalLoad.call(this, request, parent, isMain)
+}
 const checkRole = require('../middleware/checkRole')
+Module._load = originalLoad
 
 function createToken(role) {
   return jwt.sign({ id: 1, username: `${role}-tester`, role }, key, { expiresIn: '5m' })
