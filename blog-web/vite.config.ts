@@ -68,6 +68,7 @@ export default defineConfig(({mode}: ConfigEnv) => {
         bundler: 'vite',
       }),
     ],
+    esbuild: mode === 'production' ? { drop: ['console', 'debugger'] } : undefined,
     css: {
       preprocessorOptions: {
         scss: {
@@ -96,13 +97,7 @@ export default defineConfig(({mode}: ConfigEnv) => {
     },
     build: {
       outDir: 'blog',
-      minify: 'terser', // 启用后 terserOptions 配置才有效
-      terserOptions: {
-        compress: {
-          drop_console: true, // 生产环境时移除console
-          drop_debugger: true,
-        },
-      },
+      minify: 'esbuild',
       rollupOptions: {
         output: {
           entryFileNames: 'assets/[name].[hash].js',
