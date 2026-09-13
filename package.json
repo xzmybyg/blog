@@ -10,7 +10,8 @@
     "server": "pnpm --filter blog-server run dev",
     "admin": "pnpm --filter blog-admin run dev",
     "test": "pnpm --dir blog-server test",
-    "verify": "pnpm lint && pnpm test && pnpm --dir blog-web run build",
+    "test:coverage": "pnpm --dir blog-server test:coverage",
+    "verify": "pnpm lint && pnpm test:coverage && pnpm --dir blog-web run build",
     "lint": "eslint --ext .ts,.tsx,js,.json .",
     "format": "prettier --config .prettierrc --write ."
   },
