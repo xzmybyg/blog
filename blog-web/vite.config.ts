@@ -1,4 +1,5 @@
-import { defineConfig, ConfigEnv, loadEnv } from 'vite'
+import { ConfigEnv, loadEnv } from 'vite'
+import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react-swc'
 import path from 'path'
 import AutoImport from 'unplugin-auto-import/vite'
@@ -64,9 +65,13 @@ export default defineConfig(({mode}: ConfigEnv) => {
           globalsPropValue: true, // Default `true`, (true | false | 'readonly' | 'readable' | 'writable' | 'writeable')
         },
       }),
-      codeInspectorPlugin({
-        bundler: 'vite',
-      }),
+      ...(mode === 'test'
+        ? []
+        : [
+            codeInspectorPlugin({
+              bundler: 'vite',
+            }),
+          ]),
     ],
     esbuild: mode === 'production' ? { drop: ['console', 'debugger'] } : undefined,
     css: {
@@ -94,6 +99,11 @@ export default defineConfig(({mode}: ConfigEnv) => {
           rewrite: (path) => path.replace(/^\/api/, '/api'),
         },
       },
+    },
+    test: {
+      environment: 'jsdom',
+      setupFiles: './src/test/setup.ts',
+      globals: true,
     },
     build: {
       outDir: 'blog',

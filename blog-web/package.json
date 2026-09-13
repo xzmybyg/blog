@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "cc": "node ./scripts/create-component.js",
@@ -39,6 +41,8 @@
     "zustand": "^4.4.7"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "6.4.5",
+    "@testing-library/react": "14.3.1",
     "@types/markdown-navbar": "^1.4.4",
     "@types/react": "^18.2.47",
     "@types/react-dom": "^18.2.7",
@@ -50,11 +54,13 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
     "husky": "^8.0.3",
+    "jsdom": "22.1.0",
     "sass": "^1.69.5",
     "typescript": "^5.0.2",
     "unplugin-auto-import": "^0.16.7",
     "vite": "^4.4.5",
     "vite-plugin-pages": "^0.32.0",
-    "vite-plugin-sass": "^0.1.0"
+    "vite-plugin-sass": "^0.1.0",
+    "vitest": "0.34.6"
   }
 }
