@@ -97,6 +97,18 @@ pnpm -F blog-web run dev
 
 修改生产环境配置后，需要使用 `pm2 restart blog --update-env` 重启服务使其生效。
 
+## MySQL 集成测试
+
+集成测试只读取 `TEST_DB_*` 环境变量，不会回退到服务端使用的 `DB_*`。为避免误操作生产库，`TEST_DB_NAME` 必须包含独立的 `test` 标识（例如 `blog_test`），并且不能与当前 `DB_NAME` 相同。未完整配置时测试会明确标记为跳过。
+
+复制 `blog-server/.env.test.example` 中的变量到测试机或 Jenkins 凭据环境，创建权限受限的专用测试账号和数据库后运行：
+
+```cmd
+pnpm test:integration
+```
+
+当前集成测试会在单个数据库连接中创建临时表，验证 `008_add_rate_limit_config.sql` 的表结构、基础读写和规则主键唯一约束；连接关闭后临时表自动删除。
+
 ## 错误监控
 
 执行 `blog-server/migrations/009_add_error_monitor.sql` 创建错误事件表后，服务端 5xx、前端未捕获异常和进程异常会自动聚合记录，并可在管理后台“错误监控”页面查看和处理。`viewer` 角色仅可查看。

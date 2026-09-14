@@ -1,7 +1,20 @@
 const { spawnSync } = require('node:child_process')
+const fs = require('node:fs')
+const path = require('node:path')
 
 const lineThreshold = 70
-const result = spawnSync(process.execPath, ['--test', '--experimental-test-coverage'], {
+const reportDirectory = path.resolve(process.cwd(), '..', 'reports')
+const reportPath = path.join(reportDirectory, 'server-tests.xml')
+fs.mkdirSync(reportDirectory, { recursive: true })
+
+const result = spawnSync(process.execPath, [
+  '--test',
+  '--experimental-test-coverage',
+  '--test-reporter=spec',
+  '--test-reporter-destination=stdout',
+  '--test-reporter=junit',
+  `--test-reporter-destination=${reportPath}`,
+], {
   cwd: process.cwd(),
   encoding: 'utf8',
 })

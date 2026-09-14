@@ -9,6 +9,7 @@ router.get('/', function (req, res, _next) {
   db.query(sql, (err, data, _field) => {
     if (err) {
       console.error(err)
+      res.status(500).send('Server error')
     } else {
       res.send(data)
     }
@@ -21,6 +22,7 @@ router.get('/all', checkRole, function (req, res, _next) {
   db.query(sql, (err, data, _field) => {
     if (err) {
       console.error(err)
+      res.status(500).send('Server error')
     } else {
       res.send(data)
     }

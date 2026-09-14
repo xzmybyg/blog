@@ -158,6 +158,7 @@ if errorlevel 1 (
             echo "PM2 应用：${params.PM2_APP_NAME}"
         }
         always {
+            junit allowEmptyResults: true, testResults: 'source/reports/*.xml'
             echo '流水线执行结束。'
         }
     }

@@ -6,6 +6,7 @@
     "dev": "cross-env NODE_ENV=development nodemon ./bin/www",
     "start": "cross-env NODE_ENV=production node ./bin/www",
     "test": "node --test",
+    "test:integration": "node --test test/mysqlIntegration.test.js",
     "test:coverage": "node ./scripts/testCoverage.js"
   },
   "_moduleAliases": {
