@@ -56,7 +56,7 @@ $targetFrontend = Join-Path $targetServer 'public\blog'
 $targetWeb = Join-Path $deploy 'blog-web'
 New-Item -ItemType Directory -Force -Path $targetServer, $targetFrontend, $targetWeb | Out-Null
 
-foreach ($protectedPath in @('.env.production', 'config\sqlconfig.js')) {
+foreach ($protectedPath in @('config\sqlconfig.js')) {
   $fullProtectedPath = Join-Path $targetServer $protectedPath
   if (-not (Test-Path -LiteralPath $fullProtectedPath)) {
     throw "Required production configuration is missing: $fullProtectedPath"
