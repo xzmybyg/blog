@@ -56,10 +56,17 @@ $targetFrontend = Join-Path $targetServer 'public\blog'
 $targetWeb = Join-Path $deploy 'blog-web'
 New-Item -ItemType Directory -Force -Path $targetServer, $targetFrontend, $targetWeb | Out-Null
 
-foreach ($protectedPath in @('config\sqlconfig.js')) {
+foreach ($protectedPath in @('.env.production', 'config\sqlconfig.js')) {
   $fullProtectedPath = Join-Path $targetServer $protectedPath
   if (-not (Test-Path -LiteralPath $fullProtectedPath)) {
     throw "Required production configuration is missing: $fullProtectedPath"
+  }
+}
+
+$productionEnv = Get-Content -LiteralPath (Join-Path $targetServer '.env.production') -Raw
+foreach ($envName in @('DB_HOST', 'DB_USER', 'DB_PASSWORD', 'DB_PORT', 'DB_NAME')) {
+  if ($productionEnv -notmatch "(?m)^$envName=.+$") {
+    throw "Required production environment variable is missing or empty: $envName"
   }
 }
 
@@ -100,8 +107,6 @@ try {
   $env:PM2_APP_NAME = $AppName
   & $Pm2Command startOrReload (Join-Path $targetServer 'ecosystem.config.js') --env production --update-env
   if ($LASTEXITCODE -ne 0) { throw "PM2 restart failed with exit code $LASTEXITCODE" }
-  & $Pm2Command save
-  if ($LASTEXITCODE -ne 0) { throw "PM2 save failed with exit code $LASTEXITCODE" }
 } finally {
   Pop-Location
 }
@@ -128,5 +133,8 @@ if ($pm2PidAfter -eq 0 -or $portPidsAfter -notcontains $pm2PidAfter) {
 if ($health.release -ne $ReleaseSha) {
   throw "Deployment release mismatch: expected $ReleaseSha, received $($health.release)"
 }
+
+& $Pm2Command save
+if ($LASTEXITCODE -ne 0) { throw "PM2 save failed with exit code $LASTEXITCODE" }
 
 Write-Host "Deployment verified: release=$($health.release), pid=$pm2PidAfter, port=$Port"
