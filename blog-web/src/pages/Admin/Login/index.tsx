@@ -16,31 +16,29 @@ export default function Login() {
 
   const [form] = Form.useForm()
 
-  const handleSubmit = () => {
-    form.validateFields().then(async (values) => {
-      if (submitting) return
-      setSubmitting(true)
-      try {
-        if (!haveAccount) {
-          await register(values)
-          message.success('注册成功')
-        }
-
-        const response = await login({ username: values.username, password: values.password })
-        if (!canAccessAdmin(response.data.role)) {
-          message.error('当前账号没有后台访问权限')
-          return
-        }
-
-        setUserInfo(response.data)
-        if (haveAccount) message.success('登录成功')
-        navigate(getSafeAdminRedirect(searchParams.get('redirect')), { replace: true })
-      } catch (error: any) {
-        message.error(error.response?.data?.message || '登录失败，请检查账号和密码')
-      } finally {
-        setSubmitting(false)
+  const handleSubmit = async (values: { username: string; password: string; email?: string }) => {
+    if (submitting) return
+    setSubmitting(true)
+    try {
+      if (!haveAccount) {
+        await register({ ...values, email: values.email! })
+        message.success('注册成功')
       }
-    })
+
+      const response = await login({ username: values.username, password: values.password })
+      if (!canAccessAdmin(response.data.role)) {
+        message.error('当前账号没有后台访问权限')
+        return
+      }
+
+      setUserInfo(response.data)
+      if (haveAccount) message.success('登录成功')
+      navigate(getSafeAdminRedirect(searchParams.get('redirect')), { replace: true })
+    } catch (error: any) {
+      message.error(error.response?.data?.message || '登录失败，请检查账号和密码')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -62,7 +60,7 @@ export default function Login() {
               description="请重新登录，完成后将返回之前的管理页面。"
             />
           )}
-          <Form form={form} name={haveAccount ? 'login' : 'register'}>
+          <Form form={form} name={haveAccount ? 'login' : 'register'} onFinish={handleSubmit}>
             <Form.Item
               label="账号"
               name="username"
@@ -109,7 +107,7 @@ export default function Login() {
               </Form.Item>
             )}
             <Form.Item>
-              <Button type="primary" htmlType="submit" loading={submitting} onClick={() => handleSubmit()}>
+              <Button type="primary" htmlType="submit" loading={submitting}>
                 {haveAccount ? '登录' : '注册'}
               </Button>
             </Form.Item>
