@@ -86,7 +86,7 @@ Copy-Item -LiteralPath (Join-Path $workspace 'blog-web\package.json') -Destinati
 
 Push-Location $deploy
 try {
-  & $PnpmCommand --filter blog-server install --prod --frozen-lockfile
+  & $PnpmCommand --filter blog-server install --prod --frozen-lockfile --ignore-scripts
   if ($LASTEXITCODE -ne 0) { throw "Dependency installation failed with exit code $LASTEXITCODE" }
 
   $env:RELEASE_SHA = $ReleaseSha
