@@ -26,7 +26,7 @@ pipeline {
     environment {
         HUSKY = '0'
         CI = 'true'
-        NODE_OPTIONS = '--max-old-space-size=1024'
+        NODE_OPTIONS = '--max-old-space-size=1280'
         SOURCE_ROOT = "${WORKSPACE}\\source"
         DEPLOY_ROOT = 'C:\\dev\\blog'
         PM2_HOME = 'C:\\Users\\Administrator\\.pm2'
