@@ -7,6 +7,7 @@ module.exports = {
       autorestart: true,
       env_production: {
         NODE_ENV: 'production',
+        RELEASE_SHA: process.env.RELEASE_SHA,
       },
     },
   ],

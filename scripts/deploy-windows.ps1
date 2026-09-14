@@ -56,6 +56,13 @@ $targetFrontend = Join-Path $targetServer 'public\blog'
 $targetWeb = Join-Path $deploy 'blog-web'
 New-Item -ItemType Directory -Force -Path $targetServer, $targetFrontend, $targetWeb | Out-Null
 
+foreach ($protectedPath in @('.env.production', 'config\sqlconfig.js')) {
+  $fullProtectedPath = Join-Path $targetServer $protectedPath
+  if (-not (Test-Path -LiteralPath $fullProtectedPath)) {
+    throw "Required production configuration is missing: $fullProtectedPath"
+  }
+}
+
 $pm2PidBefore = Get-Pm2Pid
 $portPidsBefore = @(Get-PortPids)
 if ($portPidsBefore.Count -gt 0 -and ($pm2PidBefore -eq 0 -or $portPidsBefore -notcontains $pm2PidBefore)) {
@@ -105,7 +112,10 @@ for ($attempt = 1; $attempt -le 20; $attempt += 1) {
     $health = Invoke-RestMethod -Uri "http://127.0.0.1:$Port/api/health" -TimeoutSec 3
     if ($health.status -eq 'ok') { break }
   } catch {
-    if ($attempt -eq 20) { throw }
+    if ($attempt -eq 20) {
+      & $Pm2Command logs $AppName --lines 50 --nostream
+      throw
+    }
   }
   Start-Sleep -Seconds 1
 }

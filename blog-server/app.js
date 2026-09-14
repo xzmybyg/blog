@@ -1,12 +1,12 @@
 require('module-alias/register')
+const path = require('path')
 const dotenv = require('dotenv')
-dotenv.config()
+dotenv.config({ path: path.join(__dirname, '.env') })
 const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development'
-dotenv.config({ path: envFile })
+dotenv.config({ path: path.join(__dirname, envFile) })
 
 var createError = require('http-errors')
 var express = require('express')
-var path = require('path')
 var cookieParser = require('cookie-parser')
 var logger = require('morgan')
 const db = require('@utils/mysqlUtils')
