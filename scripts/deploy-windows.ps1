@@ -88,6 +88,7 @@ try {
   if ($LASTEXITCODE -ne 0) { throw "Dependency installation failed with exit code $LASTEXITCODE" }
 
   $env:RELEASE_SHA = $ReleaseSha
+  $env:PM2_APP_NAME = $AppName
   & $Pm2Command startOrReload (Join-Path $targetServer 'ecosystem.config.js') --env production --update-env
   if ($LASTEXITCODE -ne 0) { throw "PM2 restart failed with exit code $LASTEXITCODE" }
   & $Pm2Command save

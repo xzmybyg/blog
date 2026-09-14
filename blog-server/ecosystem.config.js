@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'blog',
+      name: process.env.PM2_APP_NAME || 'blog',
       script: './bin/www',
       cwd: __dirname,
       autorestart: true,
