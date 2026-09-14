@@ -8,6 +8,8 @@ const dbModulePath = require.resolve('../utils/mysqlUtils')
 const healthRoutePath = require.resolve('../routes/health')
 
 async function requestHealth(query) {
+  const previousReleaseSha = process.env.RELEASE_SHA
+  process.env.RELEASE_SHA = 'test-commit'
   const previousDbModule = require.cache[dbModulePath]
   require.cache[dbModulePath] = {
     id: dbModulePath,
@@ -32,6 +34,8 @@ async function requestHealth(query) {
     delete require.cache[healthRoutePath]
     if (previousDbModule) require.cache[dbModulePath] = previousDbModule
     else delete require.cache[dbModulePath]
+    if (previousReleaseSha === undefined) delete process.env.RELEASE_SHA
+    else process.env.RELEASE_SHA = previousReleaseSha
   }
 }
 
@@ -42,6 +46,7 @@ test('health endpoint reports an available database', async () => {
   assert.equal(response.headers.get('cache-control'), 'no-store')
   assert.equal(body.status, 'ok')
   assert.equal(body.database, 'ok')
+  assert.equal(body.release, 'test-commit')
   assert.equal(typeof body.uptime, 'number')
   assert.ok(!Number.isNaN(Date.parse(body.timestamp)))
 })
@@ -54,4 +59,5 @@ test('health endpoint returns 503 when the database is unavailable', async () =>
   assert.equal(response.status, 503)
   assert.equal(body.status, 'error')
   assert.equal(body.database, 'unavailable')
+  assert.equal(body.release, 'test-commit')
 })
