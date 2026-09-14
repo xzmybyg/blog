@@ -56,7 +56,7 @@ $targetFrontend = Join-Path $targetServer 'public\blog'
 New-Item -ItemType Directory -Force -Path $targetServer, $targetFrontend | Out-Null
 
 $pm2PidBefore = Get-Pm2Pid
-$portPidsBefore = Get-PortPids
+$portPidsBefore = @(Get-PortPids)
 if ($portPidsBefore.Count -gt 0 -and ($pm2PidBefore -eq 0 -or $portPidsBefore -notcontains $pm2PidBefore)) {
   throw "Port $Port is owned by PID(s) $($portPidsBefore -join ', '), but PM2 '$AppName' PID is $pm2PidBefore"
 }
@@ -109,7 +109,7 @@ for ($attempt = 1; $attempt -le 20; $attempt += 1) {
 }
 
 $pm2PidAfter = Get-Pm2Pid
-$portPidsAfter = Get-PortPids
+$portPidsAfter = @(Get-PortPids)
 if ($pm2PidAfter -eq 0 -or $portPidsAfter -notcontains $pm2PidAfter) {
   throw "Deployment PID mismatch: PM2 '$AppName' PID is $pm2PidAfter, port $Port PID(s) are $($portPidsAfter -join ', ')"
 }
