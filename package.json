@@ -14,6 +14,7 @@
     "test:web": "pnpm --dir blog-web test",
     "test:coverage": "pnpm --dir blog-server test:coverage",
     "test:ci": "pnpm test:coverage && pnpm test:web",
+    "test:smoke": "node scripts/smoke-test.js",
     "verify": "pnpm lint && pnpm test:ci && pnpm --dir blog-web run build",
     "lint": "eslint --ext .ts,.tsx,js,.json .",
     "format": "prettier --config .prettierrc --write ."

@@ -7,6 +7,7 @@ param(
   [string]$ReleaseSha,
   [string]$Pm2Command = 'pm2.cmd',
   [string]$PnpmCommand = 'pnpm.cmd',
+  [string]$NodeCommand = 'node.exe',
   [string]$AppName = 'blog',
   [int]$Port = 8080
 )
@@ -133,6 +134,11 @@ if ($pm2PidAfter -eq 0 -or $portPidsAfter -notcontains $pm2PidAfter) {
 if ($health.release -ne $ReleaseSha) {
   throw "Deployment release mismatch: expected $ReleaseSha, received $($health.release)"
 }
+
+$env:SMOKE_BASE_URL = "http://127.0.0.1:$Port"
+$env:SMOKE_EXPECTED_RELEASE = $ReleaseSha
+& $NodeCommand (Join-Path $workspace 'scripts\smoke-test.js')
+if ($LASTEXITCODE -ne 0) { throw "Deployment smoke test failed with exit code $LASTEXITCODE" }
 
 & $Pm2Command save
 if ($LASTEXITCODE -ne 0) { throw "PM2 save failed with exit code $LASTEXITCODE" }
