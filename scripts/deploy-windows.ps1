@@ -53,7 +53,8 @@ if ($workspace.TrimEnd('\') -eq $deploy.TrimEnd('\')) {
 
 $targetServer = Join-Path $deploy 'blog-server'
 $targetFrontend = Join-Path $targetServer 'public\blog'
-New-Item -ItemType Directory -Force -Path $targetServer, $targetFrontend | Out-Null
+$targetWeb = Join-Path $deploy 'blog-web'
+New-Item -ItemType Directory -Force -Path $targetServer, $targetFrontend, $targetWeb | Out-Null
 
 $pm2PidBefore = Get-Pm2Pid
 $portPidsBefore = @(Get-PortPids)
@@ -81,6 +82,7 @@ Invoke-Robocopy @(
 Copy-Item -LiteralPath (Join-Path $workspace 'package.json') -Destination $deploy -Force
 Copy-Item -LiteralPath (Join-Path $workspace 'pnpm-lock.yaml') -Destination $deploy -Force
 Copy-Item -LiteralPath (Join-Path $workspace 'pnpm-workspace.yaml') -Destination $deploy -Force
+Copy-Item -LiteralPath (Join-Path $workspace 'blog-web\package.json') -Destination $targetWeb -Force
 
 Push-Location $deploy
 try {
