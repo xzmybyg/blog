@@ -31,7 +31,6 @@ pipeline {
         DEPLOY_ROOT = 'C:\\dev\\blog'
         PM2_HOME = 'C:\\Users\\Administrator\\.pm2'
         PM2_CMD = 'C:\\Users\\Administrator\\AppData\\Local\\pnpm\\pm2.CMD'
-        CHECKOUT_REPOSITORY = '尚未拉取'
     }
 
     stages {
@@ -39,6 +38,7 @@ pipeline {
             steps {
                 dir('source') {
                     script {
+                        env.CHECKOUT_REPOSITORY = '尚未拉取'
                         deleteDir()
                         try {
                             echo "尝试从 Gitee 拉取分支：${params.BRANCH}"
@@ -159,6 +159,7 @@ if errorlevel 1 (
         }
         always {
             junit allowEmptyResults: true, testResults: 'source/reports/*.xml'
+            archiveArtifacts allowEmptyArchive: true, artifacts: 'source/reports/**/*'
             echo '流水线执行结束。'
         }
     }

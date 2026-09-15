@@ -104,6 +104,25 @@ export default defineConfig(({mode}: ConfigEnv) => {
       environment: 'jsdom',
       setupFiles: './src/test/setup.ts',
       globals: true,
+      coverage: {
+        provider: 'v8',
+        all: true,
+        include: ['src/**/*.{ts,tsx}'],
+        exclude: [
+          'src/**/*.d.ts',
+          'src/**/*.test.{ts,tsx}',
+          'src/test/**',
+          'src/types/**',
+        ],
+        reporter: ['text', 'html', 'json-summary'],
+        reportsDirectory: '../reports/web-coverage',
+        thresholds: {
+          statements: 27,
+          branches: 58,
+          functions: 32,
+          lines: 27,
+        },
+      },
     },
     build: {
       outDir: 'blog',
