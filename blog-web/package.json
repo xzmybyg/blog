@@ -9,6 +9,7 @@
     "test": "vitest run",
     "test:ci": "vitest run --coverage --reporter=default --reporter=junit --outputFile.junit=../reports/web-tests.xml",
     "test:watch": "vitest",
+    "test:e2e": "playwright test",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "cc": "node ./scripts/create-component.js",
@@ -44,6 +45,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "6.4.5",
     "@testing-library/react": "14.3.1",
+    "@playwright/test": "1.63.0",
     "@types/markdown-navbar": "^1.4.4",
     "@types/react": "^18.2.47",
     "@types/react-dom": "^18.2.7",

@@ -31,6 +31,7 @@ pipeline {
         DEPLOY_ROOT = 'C:\\dev\\blog'
         PM2_HOME = 'C:\\Users\\Administrator\\.pm2'
         PM2_CMD = 'C:\\Users\\Administrator\\AppData\\Local\\pnpm\\pm2.CMD'
+        PLAYWRIGHT_BROWSERS_PATH = "${WORKSPACE}\\.playwright-browsers"
     }
 
     stages {
@@ -86,6 +87,8 @@ if errorlevel 1 exit /b 1
 @echo off
 call pnpm install --no-frozen-lockfile
 if errorlevel 1 exit /b 1
+call pnpm --dir blog-web exec playwright install chromium
+if errorlevel 1 exit /b 1
 '''
                 }
             }
@@ -113,6 +116,19 @@ if errorlevel 1 exit /b 1
 call pnpm --filter blog-web run build
 if errorlevel 1 exit /b 1
 if not exist "blog-web\\blog\\index.html" exit /b 2
+'''
+                }
+            }
+        }
+
+        stage('Browser E2E') {
+            steps {
+                dir('source') {
+                    bat '''
+@echo off
+set "NODE_OPTIONS=--max-old-space-size=384"
+call pnpm test:e2e
+if errorlevel 1 exit /b 1
 '''
                 }
             }

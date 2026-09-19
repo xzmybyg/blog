@@ -1,5 +1,5 @@
 import { ConfigEnv, loadEnv } from 'vite'
-import { defineConfig } from 'vitest/config'
+import { configDefaults, defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react-swc'
 import path from 'path'
 import AutoImport from 'unplugin-auto-import/vite'
@@ -104,6 +104,7 @@ export default defineConfig(({mode}: ConfigEnv) => {
       environment: 'jsdom',
       setupFiles: './src/test/setup.ts',
       globals: true,
+      exclude: [...configDefaults.exclude, 'e2e/**'],
       coverage: {
         provider: 'v8',
         all: true,

@@ -1,0 +1,34 @@
+import { defineConfig, devices } from '@playwright/test'
+
+export default defineConfig({
+  testDir: './e2e',
+  fullyParallel: false,
+  workers: 1,
+  timeout: 60_000,
+  expect: { timeout: 15_000 },
+  retries: process.env.CI ? 1 : 0,
+  reporter: [
+    ['list'],
+    ['junit', { outputFile: '../reports/e2e-tests.xml' }],
+    ['html', { outputFolder: '../reports/playwright-report', open: 'never' }],
+  ],
+  outputDir: '../reports/playwright-results',
+  use: {
+    baseURL: 'http://127.0.0.1:5177',
+    screenshot: 'only-on-failure',
+    trace: 'retain-on-failure',
+    video: 'off',
+  },
+  projects: [
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+    },
+  ],
+  webServer: {
+    command: 'node node_modules/vite/bin/vite.js --host 127.0.0.1 --port 5177',
+    url: 'http://127.0.0.1:5177',
+    reuseExistingServer: !process.env.CI,
+    timeout: 120_000,
+  },
+})
