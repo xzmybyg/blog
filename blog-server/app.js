@@ -37,6 +37,16 @@ var errorMonitorRouter = require('@routes/errorMonitor')
 var healthRouter = require('@routes/health')
 
 var app = express()
+const siteUrl = String(process.env.SITE_URL || 'https://www.xzmybyg.cn').replace(/\/$/, '')
+
+function escapeXml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
+}
 
 if (process.env.NODE_ENV === 'production') {
   app.set('trust proxy', 1)
@@ -85,6 +95,49 @@ function startServer() {
   app.use('/api/rate-limit-config', rateLimitConfigRouter)
   app.use('/api/error-monitor', errorMonitorRouter)
   app.use('/api/health', healthRouter)
+
+  app.get('/robots.txt', function (_req, res) {
+    res.type('text/plain').send([
+      'User-agent: *',
+      'Allow: /',
+      'Disallow: /admin',
+      `Sitemap: ${siteUrl}/sitemap.xml`,
+    ].join('\n'))
+  })
+
+  app.get('/sitemap.xml', function (_req, res) {
+    db.query(
+      'SELECT id, createTime FROM article WHERE hidden = 0 ORDER BY createTime DESC',
+      (error, articles) => {
+        if (error) {
+          console.error(error)
+          return res.status(500).type('text/plain').send('Unable to generate sitemap')
+        }
+
+        const staticPaths = ['/', '/article', '/about', '/link', '/message']
+        const urls = staticPaths.map((pathname) => ({ location: `${siteUrl}${pathname}` }))
+        articles.forEach((article) => {
+          const date = article.createTime ? new Date(article.createTime) : null
+          urls.push({
+            location: `${siteUrl}/topic/${encodeURIComponent(article.id)}`,
+            lastModified: date && !Number.isNaN(date.getTime()) ? date.toISOString() : undefined,
+          })
+        })
+
+        const body = urls.map(({ location, lastModified }) => [
+          '  <url>',
+          `    <loc>${escapeXml(location)}</loc>`,
+          lastModified ? `    <lastmod>${lastModified}</lastmod>` : '',
+          '  </url>',
+        ].filter(Boolean).join('\n')).join('\n')
+
+        res
+          .set('Cache-Control', 'public, max-age=3600')
+          .type('application/xml')
+          .send(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>`)
+      },
+    )
+  })
 
   app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, 'public/blog/index.html'))

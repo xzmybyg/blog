@@ -1,13 +1,15 @@
 import routes from './routes'
 import { Routes, Route, useNavigate, useLocation, useParams, useSearchParams } from 'react-router-dom'
 //路由懒加载 需要Suspense组件配合才能实现
-import { Suspense } from 'react'
-import AdminLayout from '@/Layout/admin/AdminLayout'
+import { lazy, Suspense } from 'react'
 import MyLayout from '@/Layout/blog/MyLayout'
+import { updateSeoMetadata } from '@/utils/seo'
 
 import useUserStore, { logoutInfo } from '@/store/user'
 import { getAdminLoginUrl, isTokenExpired } from '@/utils/auth'
 import { canAccessAdmin } from '@/utils/adminPermission'
+
+const AdminLayout = lazy(() => import('@/Layout/admin/AdminLayout'))
 
 /* 统一渲染的组件：在这里可以做一些事情，「例如权限/登录态校验，传递路由信息的属性...」 */
 const Element = function Element(props) {
@@ -23,8 +25,8 @@ const Element = function Element(props) {
   const [hasCheckedAuth, setHasCheckedAuth] = useState(false)
 
   useEffect(() => {
-    document.title = `${props.name} · 心中没有白月光`
-  }, [props.name])
+    updateSeoMetadata(props.name, location.pathname)
+  }, [location.pathname, props.name])
 
   useEffect(() => {
     const requiresAdminAuth = props.meta.checkAuth

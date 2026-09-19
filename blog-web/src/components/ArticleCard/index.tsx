@@ -22,6 +22,8 @@ function ArticleCard(props: CardProps) {
         <img
           src={bannerSrc}
           alt={title || '文章封面'}
+          width="960"
+          height="540"
           loading="lazy"
           decoding="async"
           onError={() => {

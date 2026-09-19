@@ -127,6 +127,7 @@ declare global {
   const updateLink: typeof import('../apis/lib/link')['updateLink']
   const updateMessage: typeof import('../apis/lib/message')['updateMessage']
   const updateRateLimitConfig: typeof import('../apis/lib/rateLimitConfig')['updateRateLimitConfig']
+  const updateSeoMetadata: typeof import('../utils/seo')['updateSeoMetadata']
   const updateSiteNotice: typeof import('../apis/lib/siteNotice')['updateSiteNotice']
   const updateUser: typeof import('../apis/lib/user')['updateUser']
   const uploadArticleFile: typeof import('../apis/lib/article')['uploadArticleFile']

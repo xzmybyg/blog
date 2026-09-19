@@ -1,21 +1,53 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image" href="/blog-icon.jpg" />
+    <link rel="icon" type="image/jpeg" href="/blog-icon.jpg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>心中没有白月光's blog</title>
+    <meta name="description" content="记录 React、TypeScript、前端工程化、产品体验与个人项目实践的技术博客。" />
+    <meta name="keywords" content="前端开发,React,TypeScript,Vite,Node.js,个人博客" />
+    <meta name="author" content="心中没有白月光" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#091a33" />
+    <link rel="canonical" href="https://www.xzmybyg.cn/" />
+    <link rel="preload" href="/banner.jpg" as="image" fetchpriority="high" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="心中没有白月光" />
+    <meta property="og:title" content="心中没有白月光的技术博客" />
+    <meta property="og:description" content="记录 React、TypeScript、前端工程化、产品体验与个人项目实践。" />
+    <meta property="og:url" content="https://www.xzmybyg.cn/" />
+    <meta property="og:image" content="https://www.xzmybyg.cn/blog/banner.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://www.xzmybyg.cn/blog/banner.jpg" />
+    <title>心中没有白月光的技术博客</title>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        "name": "心中没有白月光的技术博客",
+        "url": "https://www.xzmybyg.cn/",
+        "description": "记录 React、TypeScript、前端工程化、产品体验与个人项目实践的技术博客。",
+        "inLanguage": "zh-CN",
+        "author": {
+          "@type": "Person",
+          "name": "心中没有白月光",
+          "url": "https://www.xzmybyg.cn/about"
+        }
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script>
-      const normal_title = document.title
+      let visibleTitle = document.title
       document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState == 'hidden') {
+        if (document.visibilityState === 'hidden') {
+          visibleTitle = document.title
           document.title = '客官请留步'
         } else {
-          document.title = normal_title
+          document.title = visibleTitle
         }
       })
     </script>

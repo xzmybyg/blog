@@ -133,14 +133,6 @@ export default defineConfig(({mode}: ConfigEnv) => {
           entryFileNames: 'assets/[name].[hash].js',
           chunkFileNames: 'assets/[name].[hash].js',
           assetFileNames: 'assets/[name].[hash].[ext]',
-          manualChunks: {
-            // 将 React 相关库分离到一个单独的 chunk
-            react: ['react', 'react-dom', 'react-router-dom'],
-            // 将 Ant Design 相关库分离到一个单独的 chunk
-            antd: ['antd', '@ant-design/icons'],
-            // 将其他第三方库分离到一个单独的 chunk
-            vendor: ['axios', 'classnames', 'dayjs', 'for-editor', 'framer-motion', 'markdown-navbar', 'react-markdown', 'zustand'],
-          },
         },
       },
     },

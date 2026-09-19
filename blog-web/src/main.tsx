@@ -9,7 +9,6 @@ import ErrorBoundary from '@/components/ErrorBoundary'
 import { installGlobalErrorMonitoring } from '@/utils/errorReporter'
 
 import '@/assets/iconfont/font_4530597_shxu8uijqn/iconfont.css'
-import '@/assets/iconfont/font_4530597_shxu8uijqn/iconfont.js'
 
 installGlobalErrorMonitoring()
 
