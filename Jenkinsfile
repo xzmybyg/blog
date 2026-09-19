@@ -68,8 +68,9 @@ pipeline {
                         }
                     }
 
-                    bat '''
+                    bat encoding: 'UTF-8', script: '''
 @echo off
+chcp 65001 >nul
 echo Checkout repository: %CHECKOUT_REPOSITORY%
 git branch --show-current
 if errorlevel 1 exit /b 1
@@ -83,8 +84,9 @@ if errorlevel 1 exit /b 1
         stage('Install dependencies') {
             steps {
                 dir('source') {
-                    bat '''
+                    bat encoding: 'UTF-8', script: '''
 @echo off
+chcp 65001 >nul
 call pnpm install --no-frozen-lockfile
 if errorlevel 1 exit /b 1
 call pnpm --dir blog-web exec playwright install chromium
@@ -97,8 +99,9 @@ if errorlevel 1 exit /b 1
         stage('Code quality and tests') {
             steps {
                 dir('source') {
-                    bat '''
+                    bat encoding: 'UTF-8', script: '''
 @echo off
+chcp 65001 >nul
 call pnpm lint
 if errorlevel 1 exit /b 1
 call pnpm test:ci
@@ -111,8 +114,9 @@ if errorlevel 1 exit /b 1
         stage('Build frontend') {
             steps {
                 dir('source') {
-                    bat '''
+                    bat encoding: 'UTF-8', script: '''
 @echo off
+chcp 65001 >nul
 call pnpm --filter blog-web run build
 if errorlevel 1 exit /b 1
 if not exist "blog-web\\blog\\index.html" exit /b 2
@@ -124,8 +128,9 @@ if not exist "blog-web\\blog\\index.html" exit /b 2
         stage('Browser E2E') {
             steps {
                 dir('source') {
-                    bat '''
+                    bat encoding: 'UTF-8', script: '''
 @echo off
+chcp 65001 >nul
 set "NODE_OPTIONS=--max-old-space-size=384"
 call pnpm test:e2e
 if errorlevel 1 exit /b 1
@@ -136,8 +141,9 @@ if errorlevel 1 exit /b 1
 
         stage('Deploy and verify') {
             steps {
-                bat '''
+                bat encoding: 'UTF-8', script: '''
 @echo off
+chcp 65001 >nul
 if not exist "%PM2_CMD%" (
     echo ERROR: PM2 executable was not found: %PM2_CMD%
     exit /b 2
