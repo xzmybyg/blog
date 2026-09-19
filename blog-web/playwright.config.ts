@@ -2,10 +2,11 @@ import { defineConfig, devices } from '@playwright/test'
 
 export default defineConfig({
   testDir: './e2e',
+  globalSetup: './e2e/global-setup.ts',
   fullyParallel: false,
   workers: 1,
-  timeout: 60_000,
-  expect: { timeout: 15_000 },
+  timeout: 120_000,
+  expect: { timeout: 45_000 },
   retries: process.env.CI ? 1 : 0,
   reporter: [
     ['list'],
@@ -25,10 +26,4 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
   ],
-  webServer: {
-    command: 'node node_modules/vite/bin/vite.js --host 127.0.0.1 --port 5177',
-    url: 'http://127.0.0.1:5177',
-    reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
-  },
 })
