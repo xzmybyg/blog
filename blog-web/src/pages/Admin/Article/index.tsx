@@ -1,10 +1,14 @@
-import { Button, Empty, Input, Select, Space, Table, Tag } from 'antd'
-import { SearchOutlined } from '@ant-design/icons'
+import MdEditor from 'for-editor'
+import { Alert, Button, Empty, Input, Modal, Select, Space, Table, Tabs, Tag, Upload } from 'antd'
+import type { UploadProps } from 'antd'
+import { FileMarkdownOutlined, InboxOutlined, SearchOutlined } from '@ant-design/icons'
 import { useEffect } from 'react'
-import { getAdminArticleList, getArticleTopicList } from '@/apis'
+import { getAdminArticleList, getArticleContent, getArticleTopicList, uploadArticleFile } from '@/apis'
 import dayjs from 'dayjs'
 import './index.scss'
 import useUserStore from '@/store/user'
+
+const MAX_MARKDOWN_SIZE = 2 * 1024 * 1024
 
 export default function Article() {
   const readOnly = useUserStore((state) => state.role === 'viewer')
@@ -138,17 +142,48 @@ export default function Article() {
   const [labelList, setLabelList] = useState<Label[]>([])
   const [topicList, setTopicList] = useState<ArticleTopic[]>([])
   const [saving, setSaving] = useState(false)
+  const [markdown, setMarkdown] = useState('')
+  const [contentLoading, setContentLoading] = useState(false)
+  const [selectedMarkdownFile, setSelectedMarkdownFile] = useState('')
+
+  const loadArticleContent = async (articleFile: string) => {
+    setContentLoading(true)
+    try {
+      const response = await getArticleContent(articleFile)
+      setMarkdown(response.data)
+    } catch {
+      setMarkdown('')
+      message.error('文章正文加载失败，请稍后重试')
+    } finally {
+      setContentLoading(false)
+    }
+  }
 
   const showModal = (article: Article) => {
     setCurrentArticle(article)
-
+    setMarkdown('')
+    setSelectedMarkdownFile('')
     setIsModalOpen(true)
+    if (article.article) void loadArticleContent(article.article)
   }
 
   const handleOk = async () => {
     if (!currentArticle) return
+    if (!currentArticle.title.trim()) {
+      message.error('请输入文章标题')
+      return
+    }
+    if (!currentArticle.article?.trim()) {
+      message.error('请选择文章文件')
+      return
+    }
+    if (!markdown.trim()) {
+      message.error('文章正文不能为空')
+      return
+    }
     setSaving(true)
     try {
+      await uploadArticleFile({ title: currentArticle.article, content: markdown })
       await updateArticle(currentArticle)
       await loadArticles()
       setIsModalOpen(false)
@@ -161,7 +196,46 @@ export default function Article() {
   }
 
   const handleCancel = () => {
+    if (saving) return
     setIsModalOpen(false)
+  }
+
+  const readMarkdownFile = async (file: File) => {
+    try {
+      setMarkdown(await file.text())
+      setSelectedMarkdownFile(file.name)
+      message.success(`已读取 ${file.name}，保存后将替换当前正文`)
+    } catch {
+      message.error('文件读取失败，请确认文件编码为 UTF-8')
+    }
+  }
+
+  const beforeMarkdownUpload: UploadProps['beforeUpload'] = (file) => {
+    if (!file.name.toLowerCase().endsWith('.md')) {
+      message.error('仅支持 .md 格式的 Markdown 文件')
+      return Upload.LIST_IGNORE
+    }
+    if (file.size === 0) {
+      message.error('不能上传空文件')
+      return Upload.LIST_IGNORE
+    }
+    if (file.size > MAX_MARKDOWN_SIZE) {
+      message.error('Markdown 文件不能超过 2 MB')
+      return Upload.LIST_IGNORE
+    }
+
+    if (markdown.trim()) {
+      Modal.confirm({
+        title: '替换当前正文？',
+        content: `读取“${file.name}”会替换编辑器中的现有内容。`,
+        okText: '确认替换',
+        cancelText: '取消',
+        onOk: () => readMarkdownFile(file),
+      })
+    } else {
+      void readMarkdownFile(file)
+    }
+    return Upload.LIST_IGNORE
   }
 
   const delArticle = (id: number) => {
@@ -290,9 +364,17 @@ export default function Article() {
         closable={!saving}
         maskClosable={!saving}
         keyboard={!saving}
-        okText="确定"
+        width={960}
+        okText="保存修改"
         cancelText="取消"
       >
+        <Tabs
+          className="admin-article-editor"
+          items={[
+            {
+              key: 'meta',
+              label: '基本信息',
+              children: (
         <Form labelCol={{ span: 4 }}>
           <Form.Item label="文章标题">
             <Input
@@ -313,12 +395,14 @@ export default function Article() {
                 label: item,
                 value: item,
               }))}
-              onChange={(e) =>
+              onChange={(e) => {
                 setCurrentArticle({
                   ...(currentArticle as Article),
                   article: e,
                 })
-              }
+                setSelectedMarkdownFile('')
+                void loadArticleContent(e)
+              }}
             />
           </Form.Item>
           <Form.Item label="标签">
@@ -399,6 +483,46 @@ export default function Article() {
             />
           </Form.Item>
         </Form>
+              ),
+            },
+            {
+              key: 'content',
+              label: '正文编辑',
+              children: (
+                <div className="admin-article-editor__content">
+                  <Upload.Dragger
+                    accept=".md,text/markdown"
+                    beforeUpload={beforeMarkdownUpload}
+                    disabled={contentLoading || saving}
+                    maxCount={1}
+                    showUploadList={false}
+                  >
+                    <p className="ant-upload-drag-icon"><InboxOutlined /></p>
+                    <p className="ant-upload-text">上传 Markdown 替换正文</p>
+                    <p className="ant-upload-hint">文件会先读取到编辑器，点击“保存修改”后才会写入。</p>
+                  </Upload.Dragger>
+                  {selectedMarkdownFile && (
+                    <Alert
+                      type="success"
+                      showIcon
+                      icon={<FileMarkdownOutlined />}
+                      message={`已读取：${selectedMarkdownFile}`}
+                    />
+                  )}
+                  <MdEditor
+                    placeholder={contentLoading ? '正在加载文章正文…' : '请输入 Markdown 正文'}
+                    height="520px"
+                    lineNum={1}
+                    value={markdown}
+                    subfield={true}
+                    preview={true}
+                    onChange={setMarkdown}
+                  />
+                </div>
+              ),
+            },
+          ]}
+        />
       </Modal>
     </div>
   )

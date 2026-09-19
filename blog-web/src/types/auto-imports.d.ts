@@ -72,6 +72,7 @@ declare global {
   const getAdminLoginUrl: typeof import('../utils/auth')['getAdminLoginUrl']
   const getAllArticleList: typeof import('../apis/lib/article')['getAllArticleList']
   const getAllLinkList: typeof import('../apis/lib/link')['getAllLinkList']
+  const getArticleContent: typeof import('../apis/lib/article')['getArticleContent']
   const getArticleFiles: typeof import('../apis/lib/article')['getArticleFiles']
   const getArticleLikes: typeof import('../apis/lib/article')['getArticleLikes']
   const getArticleNavigation: typeof import('../apis/lib/article')['getArticleNavigation']

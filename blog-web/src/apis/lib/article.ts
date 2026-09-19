@@ -72,6 +72,13 @@ export function getAdminArticleList() {
   return axiosInstance.get('/article/admin')
 }
 
+export function getArticleContent(article: string) {
+  return axiosInstance.get<string>('/article/content', {
+    params: { article },
+    responseType: 'text',
+  })
+}
+
 export function getArticleNavigation(id: number) {
   return axiosInstance.get<ArticleNavigation>('/article/navigation', { params: { id } })
 }

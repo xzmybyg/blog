@@ -130,6 +130,26 @@ router.get('/admin', checkRole, function (_req, res) {
   })
 })
 
+// 管理系统读取文章 Markdown 正文
+router.get('/content', checkRole, function (req, res) {
+  const fileName = String(req.query.article || '')
+    .trim()
+    .replace(/\.md$/i, '')
+
+  if (!fileName || /[\\/:*?"<>|]/.test(fileName)) {
+    return res.status(400).send({ message: '文章文件名无效' })
+  }
+
+  fs.readFile(path.join(process.cwd(), 'public', 'article', `${fileName}.md`), 'utf8', (err, content) => {
+    if (err) {
+      if (err.code === 'ENOENT') return res.status(404).send({ message: '文章文件不存在' })
+      console.error(err)
+      return res.status(500).send({ message: '文章正文读取失败' })
+    }
+    res.type('text/markdown').send(content)
+  })
+})
+
 // 获取同一专题内的上一篇和下一篇文章
 router.get('/navigation', function (req, res) {
   const articleId = Number(req.query.id)
