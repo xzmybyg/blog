@@ -92,21 +92,42 @@
 }
 
 .changeLogin {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 7px;
-  margin-top: 2px;
-  padding: 0;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
   color: config.$accent;
+  text-align: left;
   font-size: 13px;
-  background: transparent;
+  background: rgba(24, 87, 217, .05);
   border: 0;
+  border-radius: 9px;
   cursor: pointer;
+  transition: background-color .18s ease, color .18s ease;
 
-  span { transition: transform .18s ease; }
+  span:last-child { transition: transform .18s ease; }
 
-  &:hover span { transform: translateX(3px); }
+  &:hover { color: config.$accent-deep; background: rgba(24, 87, 217, .09); }
+  &:hover span:last-child { transform: translateX(3px); }
   &:focus-visible { outline: 2px solid rgba(24, 87, 217, .25); outline-offset: 4px; }
+
+  &--recovery {
+    color: config.$muted;
+    background: transparent;
+
+    &:hover { color: config.$accent; background: config.$paper; }
+    &:hover span:last-child { transform: none; }
+  }
+}
+
+.loginPanel__actions {
+  display: grid;
+  gap: 6px;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid config.$line;
 }
 
 @media (max-width: 520px) {

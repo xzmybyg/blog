@@ -141,21 +141,31 @@ const Login = forwardRef<LoginHandle>((_props, ref) => {
             </Form.Item>
           )}
         </Form>}
-        {!resettingPassword && <button
-          type="button"
-          className="changeLogin"
-          disabled={submitting}
-          onClick={() => {
-            setHaveAccount(!haveAccount)
-          }}
-        >
-          {haveAccount ? '还没有账号？创建一个' : '已有账号？返回登录'}
-          <span aria-hidden="true">→</span>
-        </button>}
-        {haveAccount && !resettingPassword && (
-          <button type="button" className="changeLogin" disabled={submitting} onClick={() => setResettingPassword(true)}>
-            忘记密码？通过邮箱找回
-          </button>
+        {!resettingPassword && (
+          <div className="loginPanel__actions">
+            <button
+              type="button"
+              className="changeLogin"
+              disabled={submitting}
+              onClick={() => {
+                setHaveAccount(!haveAccount)
+              }}
+            >
+              <span>{haveAccount ? '还没有账号？创建一个' : '已有账号？返回登录'}</span>
+              <span aria-hidden="true">→</span>
+            </button>
+            {haveAccount && (
+              <button
+                type="button"
+                className="changeLogin changeLogin--recovery"
+                disabled={submitting}
+                onClick={() => setResettingPassword(true)}
+              >
+                <span>忘记密码？</span>
+                <span>通过邮箱找回</span>
+              </button>
+            )}
+          </div>
         )}
       </div>
       {/* <div id="wx_login_container"></div> */}
