@@ -10,11 +10,16 @@ $ErrorActionPreference = 'Stop'
 
 $dependencyFiles = @(
     Join-Path $WorkspaceRoot 'package.json'
-    Join-Path $WorkspaceRoot 'pnpm-lock.yaml'
     Join-Path $WorkspaceRoot 'pnpm-workspace.yaml'
     Join-Path $WorkspaceRoot 'blog-web\package.json'
     Join-Path $WorkspaceRoot 'blog-server\package.json'
 )
+
+$lockFile = Join-Path $WorkspaceRoot 'pnpm-lock.yaml'
+$hasLockFile = Test-Path -LiteralPath $lockFile -PathType Leaf
+if ($hasLockFile) {
+    $dependencyFiles += $lockFile
+}
 
 $fingerprintSource = foreach ($file in $dependencyFiles) {
     if (-not (Test-Path -LiteralPath $file -PathType Leaf)) {
@@ -43,7 +48,8 @@ New-Item -ItemType Directory -Path $StateRoot -Force | Out-Null
 
 if ($cachedFingerprint -eq $fingerprint) {
     Write-Host 'Dependency manifests are unchanged; installing from the pnpm store without network access.'
-    & pnpm.cmd install --frozen-lockfile --offline
+    $installMode = if ($hasLockFile) { '--frozen-lockfile' } else { '--no-frozen-lockfile' }
+    & pnpm.cmd install $installMode --offline
     if ($LASTEXITCODE -eq 0) {
         exit 0
     }
@@ -53,7 +59,8 @@ else {
     Write-Host 'Dependency manifests changed; checking the pnpm store before downloading missing packages.'
 }
 
-& pnpm.cmd install --frozen-lockfile --prefer-offline
+$installMode = if ($hasLockFile) { '--frozen-lockfile' } else { '--no-frozen-lockfile' }
+& pnpm.cmd install $installMode --prefer-offline
 if ($LASTEXITCODE -ne 0) {
     exit $LASTEXITCODE
 }
