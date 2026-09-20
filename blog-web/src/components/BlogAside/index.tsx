@@ -4,6 +4,7 @@ import { EnvironmentOutlined, GithubOutlined, MailOutlined, WechatOutlined } fro
 import PublicNotice from './PublicNotice'
 import Website from './Website'
 import LabelCard from './LabelCard'
+import { DEFAULT_USER_AVATAR } from '@/utils/avatar'
 
 import Style from './index.module.scss'
 const {
@@ -18,8 +19,6 @@ const {
   wechat,
   jello,
 } = Style
-const baseURL = import.meta.env.VITE_BASE_URL
-
 function Wechat() {
   const WechatContent = <img className={wechat} src="/MyWechat.jpg" alt="加载失败" />
   return (
@@ -45,7 +44,7 @@ function BlogAside() {
           <Avatar
             className={jello}
             size={60}
-            src={`${baseURL}/blog-icon.jpg`}
+            src={DEFAULT_USER_AVATAR}
             alt="加载失败"
           />
           <div className={profileIdentity}>

@@ -2,6 +2,7 @@ import ReactMarkdown from 'react-markdown'
 import { Alert, Skeleton } from 'antd'
 import 'github-markdown-css'
 import './index.scss'
+import { DEFAULT_USER_AVATAR } from '@/utils/avatar'
 
 const baseURL = import.meta.env.VITE_BASE_URL
 
@@ -28,7 +29,7 @@ function About() {
       <Card className="card">
         <img className="animal_avatars" src={`${baseURL}/animal_avatars.png`} alt="" aria-hidden="true" />
         <header className="about-header">
-          <Avatar className="avatar jello" src={`${baseURL}/blog-icon.jpg`} alt="作者头像" size={80} />
+          <Avatar className="avatar jello" src={DEFAULT_USER_AVATAR} alt="作者头像" size={80} />
           <div>
             <span className="aboutEyebrow">ABOUT THE AUTHOR</span>
             <p>关于作者、技术栈与这个博客。</p>

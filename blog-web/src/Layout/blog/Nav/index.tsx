@@ -11,6 +11,15 @@ function Nav({ navlist = routes }) {
   const { navDesktop, navMobile, itemWrap, navItem, authorName, MobileMenu } = Style
   const { id, username, nickname, avatar } = useUserStore()
   const [MobileMenuVisible, setMobileMenuVisible] = useState(false)
+  const preferredAvatar = avatar && avatar !== '404' ? avatar : DEFAULT_USER_AVATAR
+  const [avatarSrc, setAvatarSrc] = useState(preferredAvatar)
+
+  useEffect(() => setAvatarSrc(preferredAvatar), [preferredAvatar])
+
+  const fallbackToDefaultAvatar = () => {
+    if (avatarSrc !== DEFAULT_USER_AVATAR) setAvatarSrc(DEFAULT_USER_AVATAR)
+    return false
+  }
 
   const loginRef = useRef<{ openModal: () => void } | null>(null)
   const callChildMethod = () => {
@@ -45,7 +54,7 @@ function Nav({ navlist = routes }) {
           {id ? (
             <div className={navItem}>
               <Popover placement="bottomRight" content={<button type="button" className={Style.popoverAction} onClick={logoutInfo}>退出登录</button>}>
-                <Avatar src={avatar || DEFAULT_USER_AVATAR} />
+                <Avatar src={avatarSrc} onError={fallbackToDefaultAvatar} />
                 <span>{nickname || username}</span>
               </Popover>
             </div>
@@ -75,7 +84,7 @@ function Nav({ navlist = routes }) {
           <div id="mobile-navigation" className={MobileMenu}>
             {id ? (
               <div>
-                <Avatar src={avatar || DEFAULT_USER_AVATAR} />
+                <Avatar src={avatarSrc} onError={fallbackToDefaultAvatar} />
                 <span>{nickname || username}</span>
               </div>
             ) : (
