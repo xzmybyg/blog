@@ -1,4 +1,4 @@
-export type SiteBackgroundType = 'home' | 'message'
+export type SiteBackgroundType = 'home' | 'message' | 'article'
 
 export type SiteBackgroundInfo = {
   exists: boolean

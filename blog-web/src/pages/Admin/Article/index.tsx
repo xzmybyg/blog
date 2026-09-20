@@ -7,6 +7,8 @@ import { getAdminArticleList, getArticleContent, getArticleTopicList, uploadArti
 import dayjs from 'dayjs'
 import './index.scss'
 import useUserStore from '@/store/user'
+import DefaultCoverManager from './DefaultCoverManager'
+import { bundledArticleCover, resolveArticleCover } from '@/utils/articleCover'
 
 const MAX_MARKDOWN_SIZE = 2 * 1024 * 1024
 
@@ -57,7 +59,7 @@ export default function Article() {
       title: '封面',
       dataIndex: 'banner',
       key: 'banner',
-      render: (banner) => <>{banner}</>,
+      render: (banner) => <Tag color={banner ? 'blue' : 'default'}>{banner ? '单独封面' : '默认封面'}</Tag>,
     },
     {
       title: '置顶',
@@ -145,6 +147,7 @@ export default function Article() {
   const [markdown, setMarkdown] = useState('')
   const [contentLoading, setContentLoading] = useState(false)
   const [selectedMarkdownFile, setSelectedMarkdownFile] = useState('')
+  const [useCustomCover, setUseCustomCover] = useState(false)
 
   const loadArticleContent = async (articleFile: string) => {
     setContentLoading(true)
@@ -161,6 +164,7 @@ export default function Article() {
 
   const showModal = (article: Article) => {
     setCurrentArticle(article)
+    setUseCustomCover(Boolean(article.banner?.trim() && article.banner !== '404'))
     setMarkdown('')
     setSelectedMarkdownFile('')
     setIsModalOpen(true)
@@ -184,7 +188,7 @@ export default function Article() {
     setSaving(true)
     try {
       await uploadArticleFile({ title: currentArticle.article, content: markdown })
-      await updateArticle(currentArticle)
+      await updateArticle({ ...currentArticle, banner: currentArticle.banner?.trim() || '' })
       await loadArticles()
       setIsModalOpen(false)
       message.success('文章已更新')
@@ -279,6 +283,7 @@ export default function Article() {
 
   return (
     <div>
+      <DefaultCoverManager />
       <div style={{ width: '100%', height: '100%' }}>
         <Table
           rowKey={(record) => record.id}
@@ -445,16 +450,43 @@ export default function Article() {
               }
             />
           </Form.Item>
-          <Form.Item label="封面">
-            <Input
-              value={currentArticle?.banner}
-              onChange={(e) =>
-                setCurrentArticle({
-                  ...(currentArticle as Article),
-                  banner: e.target.value,
-                })
-              }
-            />
+          <Form.Item label="文章封面">
+            <div className="admin-article-cover-field">
+              <Select
+                value={useCustomCover ? 'custom' : 'default'}
+                options={[
+                  { label: '使用默认封面', value: 'default' },
+                  { label: '使用单独封面', value: 'custom' },
+                ]}
+                onChange={(value) => {
+                  if (value === 'default') {
+                    setUseCustomCover(false)
+                    setCurrentArticle({ ...(currentArticle as Article), banner: '' })
+                  } else {
+                    setUseCustomCover(true)
+                    if (currentArticle?.banner === '404') {
+                      setCurrentArticle({ ...(currentArticle as Article), banner: '' })
+                    }
+                  }
+                }}
+              />
+              {useCustomCover && (
+                <Input
+                  value={currentArticle?.banner}
+                  placeholder="输入七牛文件名、完整图片 URL 或站内路径"
+                  onChange={(e) => setCurrentArticle({ ...(currentArticle as Article), banner: e.target.value })}
+                />
+              )}
+              <img
+                src={resolveArticleCover(currentArticle?.banner)}
+                alt="文章封面预览"
+                onError={(event) => {
+                  event.currentTarget.onerror = null
+                  event.currentTarget.src = bundledArticleCover
+                }}
+              />
+              {useCustomCover && !currentArticle?.banner?.trim() && <span>请输入单独封面地址；留空保存时仍会回退默认封面。</span>}
+            </div>
           </Form.Item>
           <Form.Item label="置顶">
             <Switch

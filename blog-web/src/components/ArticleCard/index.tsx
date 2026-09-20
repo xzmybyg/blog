@@ -2,6 +2,7 @@
 import dayjs from 'dayjs'
 import { Link } from 'react-router-dom'
 import { BookOutlined, TagOutlined, PushpinOutlined } from '@ant-design/icons'
+import { bundledArticleCover, resolveArticleCover } from '@/utils/articleCover'
 //样式引入
 import Style from './index.module.scss'
 
@@ -9,13 +10,10 @@ const { articleCard, articleInfo, articleContent, articleTitle, articleTime, art
 
 function ArticleCard(props: CardProps) {
   const { id, title, topping, createTime, label, topicName, description, addClassName,banner } = props
-  const defaultBanner = `${import.meta.env.BASE_URL.replace(/\/?$/, '/')}banner.jpg`
-  const optimizedBanner = banner && banner !== '404'
-    ? `https://filespace.xzmybyg.cn/images/${banner}?imageMogr2/thumbnail/960x/format/webp/quality/78`
-    : defaultBanner
-  const [bannerSrc, setBannerSrc] = useState(
-    optimizedBanner,
-  )
+  const cover = resolveArticleCover(banner)
+  const [bannerSrc, setBannerSrc] = useState(cover)
+
+  useEffect(() => setBannerSrc(cover), [cover])
   return (
     <article className={`${articleCard} ${addClassName && Style[addClassName as string]}`}>
       <Link className={Style.articleImageWrap} to={`/topic/${id}`} aria-label={`阅读文章：${title}`}>
@@ -27,8 +25,8 @@ function ArticleCard(props: CardProps) {
           loading="lazy"
           decoding="async"
           onError={() => {
-            if (bannerSrc !== defaultBanner) {
-              setBannerSrc(defaultBanner)
+            if (bannerSrc !== bundledArticleCover) {
+              setBannerSrc(bundledArticleCover)
             }
           }}
         />

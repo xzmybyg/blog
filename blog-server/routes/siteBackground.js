@@ -6,7 +6,7 @@ const { uploadLimiter } = require('@middleware/rateLimit')
 
 const router = express.Router()
 const backgroundDirectory = path.join(__dirname, '../public/site-backgrounds')
-const backgroundTypes = new Set(['home', 'message'])
+const backgroundTypes = new Set(['home', 'message', 'article'])
 const maxFileSize = 8 * 1024 * 1024
 const acceptedContentTypes = new Set(['image/jpeg', 'image/png', 'image/webp'])
 
