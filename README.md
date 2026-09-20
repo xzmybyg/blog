@@ -115,6 +115,8 @@ pnpm test:integration
 
 验证码有效期为 10 分钟，验证成功后立即失效。接口不会向请求方透露邮箱是否已注册；旧账号密码会在成功登录后自动升级为 scrypt 哈希。
 
+为禁止重复邮箱，再执行 `blog-server/migrations/011_add_unique_user_email.sql`。脚本会先列出历史重复邮箱；如果查询有结果，需要先人工确认并合并重复账号，再创建唯一索引。
+
 ## 错误监控
 
 执行 `blog-server/migrations/009_add_error_monitor.sql` 创建错误事件表后，服务端 5xx、前端未捕获异常和进程异常会自动聚合记录，并可在管理后台“错误监控”页面查看和处理。`viewer` 角色仅可查看。

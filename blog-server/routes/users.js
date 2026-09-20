@@ -31,6 +31,13 @@ function hashResetCode(userId, code) {
   return crypto.createHash('sha256').update(`${userId}:${code}:${pepper}`).digest('hex')
 }
 
+function getDuplicateUserMessage(error) {
+  const detail = `${error?.message || ''} ${error?.sqlMessage || ''}`
+  return /uq_user_email|email/i.test(detail)
+    ? '该邮箱已注册，请直接登录或找回密码'
+    : '该账号已存在，请直接登录'
+}
+
 router.post('/login', loginLimiter, function (req, res) {
   const { username, password } = req.body || {}
   if (typeof username !== 'string' || !username.trim() || typeof password !== 'string' || !password) {
@@ -93,13 +100,21 @@ router.post('/', registerLimiter, function (req, res) {
   if (!isValidEmail(normalizedEmail) || password.length < 8 || password.length > 72) {
     return res.status(400).send({ message: '邮箱格式无效或密码长度不符合要求' })
   }
-  db.query('SELECT id FROM user WHERE username = ? LIMIT 1', [normalizedUsername], (checkError, users) => {
+  db.query(
+    'SELECT username, email FROM user WHERE username = ? OR LOWER(email) = ? LIMIT 1',
+    [normalizedUsername, normalizedEmail],
+    (checkError, users) => {
     if (checkError) {
       console.error(checkError)
       return res.status(500).send({ message: '注册失败，请稍后重试' })
     }
     if (users.length > 0) {
-      return res.status(409).send({ message: '该账号已存在，请直接登录' })
+      const emailExists = normalizeEmail(users[0].email) === normalizedEmail
+      return res.status(409).send({
+        message: emailExists
+          ? '该邮箱已注册，请直接登录或找回密码'
+          : '该账号已存在，请直接登录',
+      })
     }
 
     hashPassword(password).then((passwordHash) => {
@@ -108,7 +123,7 @@ router.post('/', registerLimiter, function (req, res) {
       VALUES (?, ?, ?);`
       db.query(sql, [normalizedUsername, passwordHash, normalizedEmail], (err, result) => {
       if (err?.code === 'ER_DUP_ENTRY') {
-        return res.status(409).send({ message: '该账号已存在，请直接登录' })
+        return res.status(409).send({ message: getDuplicateUserMessage(err) })
       }
       if (err) {
         console.error(err)
@@ -121,7 +136,8 @@ router.post('/', registerLimiter, function (req, res) {
       console.error(error)
       res.status(500).send({ message: '注册失败，请稍后重试' })
     })
-  })
+    },
+  )
 })
 
 router.post('/password-reset/request', passwordResetRequestLimiter, async function (req, res) {

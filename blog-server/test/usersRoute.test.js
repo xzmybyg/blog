@@ -73,7 +73,7 @@ async function requestUsers({ path = '/login', method = 'POST', body, query, use
 
 test('login validates required credentials before querying the database', async () => {
   let queryCalled = false
-  const { response } = await requestUsers({
+  const { response, body } = await requestUsers({
     body: { username: '', password: '' },
     query() { queryCalled = true },
   })
@@ -116,29 +116,44 @@ test('registration rejects an existing username without inserting a row', async 
     body: { username: ' existing ', password: 'secret123', email: 'user@example.com' },
     query(sql, params, callback) {
       calls.push({ sql, params })
-      callback(null, [{ id: 1 }])
+      callback(null, [{ username: 'existing', email: 'another@example.com' }])
     },
   })
 
   assert.equal(response.status, 409)
   assert.equal(body.message, '该账号已存在，请直接登录')
   assert.equal(calls.length, 1)
-  assert.deepEqual(calls[0].params, ['existing'])
+  assert.deepEqual(calls[0].params, ['existing', 'user@example.com'])
+})
+
+test('registration rejects an email that is already registered', async () => {
+  const { response, body } = await requestUsers({
+    path: '/',
+    body: { username: 'new-user', password: 'secret123', email: ' Existing@Example.com ' },
+    query(_sql, params, callback) {
+      assert.deepEqual(params, ['new-user', 'existing@example.com'])
+      callback(null, [{ username: 'another-user', email: 'existing@example.com' }])
+    },
+  })
+
+  assert.equal(response.status, 409)
+  assert.equal(body.message, '该邮箱已注册，请直接登录或找回密码')
 })
 
 test('registration converts a duplicate insert race into a conflict', async () => {
   let callCount = 0
-  const { response } = await requestUsers({
+  const { response, body } = await requestUsers({
     path: '/',
     body: { username: 'new-user', password: 'secret123', email: 'user@example.com' },
     query(_sql, _params, callback) {
       callCount += 1
       if (callCount === 1) callback(null, [])
-      else callback({ code: 'ER_DUP_ENTRY' })
+      else callback({ code: 'ER_DUP_ENTRY', sqlMessage: "Duplicate entry for key 'uq_user_email'" })
     },
   })
 
   assert.equal(response.status, 409)
+  assert.equal(body.message, '该邮箱已注册，请直接登录或找回密码')
   assert.equal(callCount, 2)
 })
 
