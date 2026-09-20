@@ -81,21 +81,6 @@ if errorlevel 1 exit /b 1
             }
         }
 
-        stage('Test pipeline') {
-            steps {
-                script {
-                    build(
-                        job: 'blog-test',
-                        parameters: [
-                            string(name: 'BRANCH', value: params.BRANCH)
-                        ],
-                        wait: true,
-                        propagate: true
-                    )
-                }
-            }
-        }
-
         stage('Install dependencies') {
             steps {
                 dir('source') {
