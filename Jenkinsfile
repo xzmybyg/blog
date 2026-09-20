@@ -31,7 +31,7 @@ pipeline {
         DEPLOY_ROOT = 'C:\\dev\\blog'
         PM2_HOME = 'C:\\Users\\Administrator\\.pm2'
         PM2_CMD = 'C:\\Users\\Administrator\\AppData\\Local\\pnpm\\pm2.CMD'
-        PLAYWRIGHT_BROWSERS_PATH = "${WORKSPACE}\\.playwright-browsers"
+        DEPENDENCY_STATE_ROOT = 'C:\\Users\\Administrator\\.jenkins\\dependency-state\\blog-deploy'
     }
 
     stages {
@@ -81,31 +81,27 @@ if errorlevel 1 exit /b 1
             }
         }
 
-        stage('Install dependencies') {
+        stage('Test pipeline') {
             steps {
-                dir('source') {
-                    bat encoding: 'UTF-8', script: '''
-@echo off
-chcp 65001 >nul
-call pnpm install --no-frozen-lockfile
-if errorlevel 1 exit /b 1
-call pnpm --dir blog-web exec playwright install chromium
-if errorlevel 1 exit /b 1
-'''
+                script {
+                    build(
+                        job: 'blog-test',
+                        parameters: [
+                            string(name: 'BRANCH', value: params.BRANCH)
+                        ],
+                        wait: true,
+                        propagate: true
+                    )
                 }
             }
         }
 
-        stage('Code quality and tests') {
+        stage('Install dependencies') {
             steps {
                 dir('source') {
-                    bat encoding: 'UTF-8', script: '''
-@echo off
-chcp 65001 >nul
-call pnpm lint
-if errorlevel 1 exit /b 1
-call pnpm test:ci
-if errorlevel 1 exit /b 1
+                    powershell encoding: 'UTF-8', script: '''
+& .\\scripts\\install-dependencies.ps1 -WorkspaceRoot $PWD.Path -StateRoot $env:DEPENDENCY_STATE_ROOT
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 '''
                 }
             }
@@ -120,20 +116,6 @@ chcp 65001 >nul
 call pnpm --filter blog-web run build
 if errorlevel 1 exit /b 1
 if not exist "blog-web\\blog\\index.html" exit /b 2
-'''
-                }
-            }
-        }
-
-        stage('Browser E2E') {
-            steps {
-                dir('source') {
-                    bat encoding: 'UTF-8', script: '''
-@echo off
-chcp 65001 >nul
-set "NODE_OPTIONS=--max-old-space-size=384"
-call pnpm test:e2e
-if errorlevel 1 exit /b 1
 '''
                 }
             }

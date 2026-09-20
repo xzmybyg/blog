@@ -1,0 +1,139 @@
+pipeline {
+    agent any
+
+    options {
+        skipDefaultCheckout(true)
+        disableConcurrentBuilds()
+        timestamps()
+    }
+
+    parameters {
+        gitParameter(
+            name: 'BRANCH',
+            type: 'PT_BRANCH',
+            branchFilter: 'origin/(.*)',
+            defaultValue: 'dev',
+            selectedValue: 'DEFAULT',
+            sortMode: 'ASCENDING_SMART',
+            quickFilterEnabled: true,
+            listSize: '10',
+            useRepository: 'https://(gitee\\.com/lv-chengye|github\\.com/xzmybyg)/blog\\.git',
+            description: '选择要测试的远程分支'
+        )
+    }
+
+    environment {
+        HUSKY = '0'
+        CI = 'true'
+        NODE_OPTIONS = '--max-old-space-size=1280'
+        DEPENDENCY_STATE_ROOT = 'C:\\Users\\Administrator\\.jenkins\\dependency-state\\blog-test'
+        PLAYWRIGHT_BROWSERS_PATH = 'C:\\Users\\Administrator\\.jenkins\\playwright-browsers'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                dir('source') {
+                    script {
+                        env.CHECKOUT_REPOSITORY = '尚未拉取'
+                        deleteDir()
+                        try {
+                            git(branch: params.BRANCH, changelog: false, poll: false, url: 'https://gitee.com/lv-chengye/blog.git')
+                            env.CHECKOUT_REPOSITORY = 'Gitee'
+                        } catch (giteeError) {
+                            echo "Gitee 拉取失败：${giteeError.message}"
+                            deleteDir()
+                            try {
+                                git(branch: params.BRANCH, changelog: false, poll: false, url: 'https://github.com/xzmybyg/blog.git')
+                                env.CHECKOUT_REPOSITORY = 'GitHub'
+                            } catch (githubError) {
+                                echo "GitHub 拉取失败：${githubError.message}"
+                                error('Gitee 和 GitHub 均拉取失败，测试流水线终止。')
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Install dependencies') {
+            steps {
+                dir('source') {
+                    powershell encoding: 'UTF-8', script: '''
+& .\\scripts\\install-dependencies.ps1 -WorkspaceRoot $PWD.Path -StateRoot $env:DEPENDENCY_STATE_ROOT
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+'''
+                }
+            }
+        }
+
+        stage('Code quality') {
+            steps {
+                dir('source') {
+                    bat encoding: 'UTF-8', script: '''
+@echo off
+chcp 65001 >nul
+call pnpm lint
+if errorlevel 1 exit /b 1
+'''
+                }
+            }
+        }
+
+        stage('Unit tests') {
+            steps {
+                dir('source') {
+                    bat encoding: 'UTF-8', script: '''
+@echo off
+chcp 65001 >nul
+call pnpm test:ci
+if errorlevel 1 exit /b 1
+'''
+                }
+            }
+        }
+
+        stage('Build frontend') {
+            steps {
+                dir('source') {
+                    bat encoding: 'UTF-8', script: '''
+@echo off
+chcp 65001 >nul
+call pnpm --filter blog-web run build
+if errorlevel 1 exit /b 1
+if not exist "blog-web\\blog\\index.html" exit /b 2
+'''
+                }
+            }
+        }
+
+        stage('Browser E2E') {
+            steps {
+                dir('source') {
+                    bat encoding: 'UTF-8', script: '''
+@echo off
+chcp 65001 >nul
+set "NODE_OPTIONS=--max-old-space-size=384"
+call pnpm --dir blog-web exec playwright install chromium
+if errorlevel 1 exit /b 1
+call pnpm test:e2e
+if errorlevel 1 exit /b 1
+'''
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "测试通过：${params.BRANCH}（${env.CHECKOUT_REPOSITORY}）"
+        }
+        failure {
+            echo "测试失败：${params.BRANCH}（${env.CHECKOUT_REPOSITORY}）"
+        }
+        always {
+            junit allowEmptyResults: true, testResults: 'source/reports/*.xml'
+            archiveArtifacts allowEmptyArchive: true, artifacts: 'source/reports/**/*'
+        }
+    }
+}
