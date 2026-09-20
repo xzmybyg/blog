@@ -25,6 +25,8 @@ function loadUsersRouter(query, user = { id: 1, role: 'user' }) {
       return {
         loginLimiter: passThrough,
         registerLimiter: passThrough,
+        passwordResetRequestLimiter: passThrough,
+        passwordResetConfirmLimiter: passThrough,
         authenticatedWriteLimiter: passThrough,
       }
     }
@@ -90,6 +92,7 @@ test('login returns a signed token without exposing a password', async () => {
     nickname: 'Reader',
     commentLimit: 1,
     email: 'reader@example.com',
+    password: 'secret',
   }
   const { response, body } = await requestUsers({
     body: { username: ' reader ', password: 'secret' },
@@ -101,7 +104,7 @@ test('login returns a signed token without exposing a password', async () => {
 
   assert.equal(response.status, 200)
   assert.equal(response.headers.get('cache-control'), 'no-store')
-  assert.deepEqual(calls[0].params, ['reader', 'secret'])
+  assert.deepEqual(calls[0].params, ['reader'])
   assert.equal(body.password, undefined)
   assert.equal(jwt.verify(body.token, testKey).role, 'viewer')
 })
@@ -110,7 +113,7 @@ test('registration rejects an existing username without inserting a row', async 
   const calls = []
   const { response, body } = await requestUsers({
     path: '/',
-    body: { username: ' existing ', password: 'secret', email: 'user@example.com' },
+    body: { username: ' existing ', password: 'secret123', email: 'user@example.com' },
     query(sql, params, callback) {
       calls.push({ sql, params })
       callback(null, [{ id: 1 }])
@@ -127,7 +130,7 @@ test('registration converts a duplicate insert race into a conflict', async () =
   let callCount = 0
   const { response } = await requestUsers({
     path: '/',
-    body: { username: 'new-user', password: 'secret', email: 'user@example.com' },
+    body: { username: 'new-user', password: 'secret123', email: 'user@example.com' },
     query(_sql, _params, callback) {
       callCount += 1
       if (callCount === 1) callback(null, [])

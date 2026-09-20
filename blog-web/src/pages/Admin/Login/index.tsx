@@ -3,6 +3,7 @@ import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons'
 import { Alert } from 'antd'
 import { getSafeAdminRedirect } from '@/utils/auth'
 import { canAccessAdmin } from '@/utils/adminPermission'
+import PasswordResetForm from '@/components/PasswordResetForm'
 
 import './index.scss'
 
@@ -13,6 +14,7 @@ export default function Login() {
   //是否已有账号
   const [haveAccount, setHaveAccount] = useState(true)
   const [submitting, setSubmitting] = useState(false)
+  const [resettingPassword, setResettingPassword] = useState(false)
 
   const [form] = Form.useForm()
 
@@ -50,7 +52,7 @@ export default function Login() {
         <span>管理文章、评论与站点内容。</span>
       </div>
       <div className="CardWrap">
-        <Card title={haveAccount ? '登录后台' : '注册账号'}>
+        <Card title={resettingPassword ? '找回密码' : haveAccount ? '登录后台' : '注册账号'}>
           {sessionExpired && (
             <Alert
               className="loginPage__session-alert"
@@ -60,7 +62,9 @@ export default function Login() {
               description="请重新登录，完成后将返回之前的管理页面。"
             />
           )}
-          <Form form={form} name={haveAccount ? 'login' : 'register'} onFinish={handleSubmit}>
+          {resettingPassword ? (
+            <PasswordResetForm onBack={() => setResettingPassword(false)} />
+          ) : <Form form={form} name={haveAccount ? 'login' : 'register'} onFinish={handleSubmit}>
             <Form.Item
               label="账号"
               name="username"
@@ -84,7 +88,7 @@ export default function Login() {
                 !haveAccount
                   ? [
                       { required: true, message: '请输入密码!' },
-                      { min: 8, max: 16, message: '密码长度在8-16之间' },
+                      { min: 8, max: 72, message: '密码长度在8-72之间' },
                     ]
                   : []
               }
@@ -111,8 +115,8 @@ export default function Login() {
                 {haveAccount ? '登录' : '注册'}
               </Button>
             </Form.Item>
-          </Form>
-          <button
+          </Form>}
+          {!resettingPassword && <button
             type="button"
             className="changeLogin"
             disabled={submitting}
@@ -121,7 +125,12 @@ export default function Login() {
             }}
           >
             {haveAccount ? '还没有账号？去注册' : '已有账号？去登录'}
-          </button>
+          </button>}
+          {haveAccount && !resettingPassword && (
+            <button type="button" className="changeLogin" disabled={submitting} onClick={() => setResettingPassword(true)}>
+              忘记密码？通过邮箱找回
+            </button>
+          )}
         </Card>
       </div>
     </div>

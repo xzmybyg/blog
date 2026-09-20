@@ -109,6 +109,12 @@ pnpm test:integration
 
 当前集成测试会在单个数据库连接中创建临时表，验证 `008_add_rate_limit_config.sql` 的表结构、基础读写和规则主键唯一约束；连接关闭后临时表自动删除。
 
+## 邮箱找回密码
+
+部署前执行 `blog-server/migrations/010_add_password_reset.sql`，用于扩展密码哈希字段并创建一次性验证码表。随后在 `blog-server/.env.production` 中配置 `SMTP_HOST`、`SMTP_PORT`、`SMTP_SECURE`、`SMTP_USER`、`SMTP_PASSWORD`、`SMTP_FROM` 和随机生成的 `PASSWORD_RESET_PEPPER`。
+
+验证码有效期为 10 分钟，验证成功后立即失效。接口不会向请求方透露邮箱是否已注册；旧账号密码会在成功登录后自动升级为 scrypt 哈希。
+
 ## 错误监控
 
 执行 `blog-server/migrations/009_add_error_monitor.sql` 创建错误事件表后，服务端 5xx、前端未捕获异常和进程异常会自动聚合记录，并可在管理后台“错误监控”页面查看和处理。`viewer` 角色仅可查看。

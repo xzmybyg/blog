@@ -12,6 +12,14 @@ export function register({ username, password, email }: registerParams) {
   })
 }
 
+export function requestPasswordReset(email: string) {
+  return axiosInstance.post('/users/password-reset/request', { email })
+}
+
+export function confirmPasswordReset(data: { email: string; code: string; password: string }) {
+  return axiosInstance.post('/users/password-reset/confirm', data)
+}
+
 /*-----管理系统接口-----*/
 
 //获取用户列表

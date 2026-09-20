@@ -79,6 +79,16 @@ const registerLimiter = createRateLimiter({
   ruleKey: 'register',
   message: '注册尝试过于频繁，请稍后重试',
 })
+const passwordResetRequestLimiter = createRateLimiter({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: '验证码发送过于频繁，请稍后重试',
+})
+const passwordResetConfirmLimiter = createRateLimiter({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: '验证码尝试过于频繁，请稍后重试',
+})
 const interactionLimiter = createRateLimiter({
   ruleKey: 'interaction',
   keyGenerator: getUserOrIpKey,
@@ -104,6 +114,8 @@ module.exports = {
   globalApiLimiter,
   loginLimiter,
   registerLimiter,
+  passwordResetRequestLimiter,
+  passwordResetConfirmLimiter,
   interactionLimiter,
   likeLimiter,
   pageViewLimiter,

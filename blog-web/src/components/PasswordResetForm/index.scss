@@ -1,0 +1,32 @@
+@use '@/styleConfig/scssConfig.scss' as config;
+
+.passwordReset {
+  &__help {
+    margin: 0 0 20px;
+    color: config.$muted;
+    line-height: 1.6;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 10px;
+
+    .ant-btn {
+      min-height: 44px;
+      flex: 1;
+    }
+  }
+
+  &__back {
+    min-height: 44px;
+    margin-top: 10px;
+    padding: 0;
+    color: config.$accent;
+    background: transparent;
+    border: 0;
+    font: inherit;
+    cursor: pointer;
+
+    &:focus-visible { outline: 3px solid config.$focus-ring; outline-offset: 2px; }
+  }
+}
