@@ -1,4 +1,5 @@
 export * from './lib/article'
+export * from './lib/articleCover'
 export * from './lib/topic'
 export * from './lib/user'
 export * from './lib/info'

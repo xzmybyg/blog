@@ -8,6 +8,7 @@ import dayjs from 'dayjs'
 import './index.scss'
 import useUserStore from '@/store/user'
 import DefaultCoverManager from './DefaultCoverManager'
+import CoverLibrary from './CoverLibrary'
 import { bundledArticleCover, resolveArticleCover } from '@/utils/articleCover'
 
 const MAX_MARKDOWN_SIZE = 2 * 1024 * 1024
@@ -471,11 +472,17 @@ export default function Article() {
                 }}
               />
               {useCustomCover && (
-                <Input
-                  value={currentArticle?.banner}
-                  placeholder="输入七牛文件名、完整图片 URL 或站内路径"
-                  onChange={(e) => setCurrentArticle({ ...(currentArticle as Article), banner: e.target.value })}
-                />
+                <div className="admin-article-cover-field__source">
+                  <Input
+                    value={currentArticle?.banner}
+                    placeholder="输入七牛文件名、完整图片 URL 或站内路径"
+                    onChange={(e) => setCurrentArticle({ ...(currentArticle as Article), banner: e.target.value })}
+                  />
+                  <CoverLibrary
+                    value={currentArticle?.banner}
+                    onChange={(banner) => setCurrentArticle({ ...(currentArticle as Article), banner })}
+                  />
+                </div>
               )}
               <img
                 src={resolveArticleCover(currentArticle?.banner)}

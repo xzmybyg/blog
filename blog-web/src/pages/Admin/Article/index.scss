@@ -92,6 +92,58 @@
   > span { grid-column: 1 / -1; color: config.$muted; font-size: 12px; }
 }
 
+.admin-article-cover-field__source {
+  display: flex;
+  gap: 8px;
+
+  .ant-input { min-width: 0; }
+  .ant-btn { flex: 0 0 auto; }
+}
+
+.article-cover-library {
+  display: grid;
+  gap: 16px;
+}
+
+.article-cover-library__upload-actions,
+.article-cover-library__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.article-cover-library__upload-actions > span {
+  overflow: hidden;
+  color: config.$muted;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.article-cover-library__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-height: 390px;
+  gap: 12px;
+  overflow-y: auto;
+
+  button {
+    display: grid;
+    gap: 6px;
+    padding: 6px;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    background: config.$paper;
+    color: config.$ink;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  button.is-selected { border-color: config.$accent; }
+  img { width: 100%; aspect-ratio: 16 / 9; border-radius: 6px; object-fit: cover; }
+  span { overflow: hidden; font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+}
+
 @media (max-width: 900px) {
   .admin-article-filters {
     grid-template-columns: 1fr;
@@ -101,4 +153,7 @@
 
   .article-cover-manager { grid-template-columns: 1fr; }
   .article-cover-manager__actions { grid-column: 1; }
+  .admin-article-cover-field { grid-template-columns: 1fr; }
+  .admin-article-cover-field__source { flex-direction: column; }
+  .article-cover-library__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
