@@ -1,5 +1,5 @@
 import './index.scss'
-import { DEFAULT_USER_AVATAR } from '@/utils/avatar'
+const baseURL = import.meta.env.VITE_BASE_URL
 
 function BarrageComponent({ comments }: { comments: TheComment[] }) {
   const [barrages, setBarrages] = useState<Barrage[]>([])
@@ -41,7 +41,7 @@ function BarrageComponent({ comments }: { comments: TheComment[] }) {
             }}
             onAnimationEnd={() => handleAnimationEnd(index)}
           >
-            <img src={DEFAULT_USER_AVATAR} alt="" />
+            <img src={`${baseURL}/blog-icon.jpg`} alt="" />
             {barrage.comment?.content}
           </div>
         )
