@@ -1,6 +1,6 @@
 import { getSiteBackgroundInfo, getSiteBackgroundUrl, type SiteBackgroundType } from '@/apis'
 
-const defaultBackground = `${import.meta.env.BASE_URL.replace(/\/?$/, '/')}banner.jpg`
+const defaultBackground = `${import.meta.env.BASE_URL.replace(/\/?$/, '/')}banner.webp`
 
 export default function useSiteBackground(type: SiteBackgroundType) {
   const [backgroundUrl, setBackgroundUrl] = useState(defaultBackground)

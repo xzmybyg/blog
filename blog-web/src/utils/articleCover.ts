@@ -1,4 +1,4 @@
-export const bundledArticleCover = `${import.meta.env.BASE_URL.replace(/\/?$/, '/')}banner.jpg`
+export const bundledArticleCover = `${import.meta.env.BASE_URL.replace(/\/?$/, '/')}banner.webp`
 
 export function getDefaultArticleCover(version?: string | number) {
   const suffix = version === undefined ? '' : `?v=${encodeURIComponent(version)}`

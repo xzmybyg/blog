@@ -219,7 +219,7 @@ function BackgroundManager({ type, title, description }: BackgroundManagerProps)
 
   const currentUrl = info.exists
     ? getSiteBackgroundUrl(type, info.updatedAt)
-    : `${import.meta.env.BASE_URL.replace(/\/?$/, '/')}banner.jpg`
+    : `${import.meta.env.BASE_URL.replace(/\/?$/, '/')}banner.webp`
 
   return (
     <section className="background-manager" aria-busy={loading || uploading}>

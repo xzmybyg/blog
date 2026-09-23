@@ -86,7 +86,7 @@ function TheLink() {
                 <div><dt>名称</dt><dd>心中没有白月光</dd></div>
                 <div><dt>描述</dt><dd>孩儿立志出乡关，学不成名誓不还</dd></div>
                 <div><dt>网址</dt><dd>https://www.xzmybyg.cn</dd></div>
-                <div><dt>头像</dt><dd>https://www.xzmybyg.cn/blog/blog-icon.jpg</dd></div>
+                <div><dt>头像</dt><dd>https://www.xzmybyg.cn/blog/blog-icon.webp</dd></div>
               </dl>
             </aside>
             <div className={linkForm}>

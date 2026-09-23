@@ -44,6 +44,6 @@ describe('ArticleCard', () => {
 
     fireEvent.error(image)
 
-    expect(image).toHaveAttribute('src', '/banner.jpg')
+    expect(image).toHaveAttribute('src', '/banner.webp')
   })
 })

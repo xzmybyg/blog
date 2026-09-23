@@ -21,7 +21,7 @@ const {
 const baseURL = import.meta.env.VITE_BASE_URL
 
 function Wechat() {
-  const WechatContent = <img className={wechat} src="/MyWechat.jpg" alt="加载失败" />
+  const WechatContent = <img className={wechat} src={`${baseURL}/MyWechat.webp`} alt="加载失败" />
   return (
     <Popover content={WechatContent} title="微信二维码">
       <button className={wechatAction} type="button" aria-label="查看微信二维码">
@@ -45,7 +45,7 @@ function BlogAside() {
           <Avatar
             className={jello}
             size={60}
-            src={`${baseURL}/blog-icon.jpg`}
+            src={`${baseURL}/blog-icon.webp`}
             alt="加载失败"
           />
           <div className={profileIdentity}>

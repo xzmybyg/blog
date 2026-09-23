@@ -41,7 +41,7 @@ function BarrageComponent({ comments }: { comments: TheComment[] }) {
             }}
             onAnimationEnd={() => handleAnimationEnd(index)}
           >
-            <img src={`${baseURL}/blog-icon.jpg`} alt="" />
+            <img src={`${baseURL}/blog-icon.webp`} alt="" />
             {barrage.comment?.content}
           </div>
         )

@@ -26,9 +26,9 @@ function About() {
   return (
     <div id="aboutpage" className="pages">
       <Card className="card">
-        <img className="animal_avatars" src={`${baseURL}/animal_avatars.png`} alt="" aria-hidden="true" />
+        <img className="animal_avatars" src={`${baseURL}/animal_avatars.webp`} alt="" aria-hidden="true" />
         <header className="about-header">
-          <Avatar className="avatar jello" src={`${baseURL}/blog-icon.jpg`} alt="作者头像" size={80} />
+          <Avatar className="avatar jello" src={`${baseURL}/blog-icon.webp`} alt="作者头像" size={80} />
           <div>
             <span className="aboutEyebrow">ABOUT THE AUTHOR</span>
             <p>关于作者、技术栈与这个博客。</p>
