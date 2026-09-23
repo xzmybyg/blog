@@ -2,6 +2,8 @@ var express = require('express')
 var router = express.Router()
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
+const fs = require('fs/promises')
+const path = require('path')
 const db = require('@utils/mysqlUtils')
 const key = require('@config/key')
 const checkRole = require('@middleware/checkRole')
@@ -14,9 +16,50 @@ const {
   passwordResetRequestLimiter,
   passwordResetConfirmLimiter,
   authenticatedWriteLimiter,
+  uploadLimiter,
 } = require('@middleware/rateLimit')
 
 const PASSWORD_RESET_MESSAGE = '如果该邮箱已注册，验证码将发送至邮箱，请注意查收'
+const avatarDirectory = path.join(__dirname, '../public/user-avatars')
+const maxAvatarSize = 2 * 1024 * 1024
+const avatarTypes = new Map([
+  ['image/jpeg', { extension: 'jpg', signature: (content) => content.length >= 3 && content[0] === 0xff && content[1] === 0xd8 && content[2] === 0xff }],
+  ['image/png', { extension: 'png', signature: (content) => content.length >= 8 && content.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])) }],
+  ['image/webp', { extension: 'webp', signature: (content) => content.length >= 12 && content.toString('ascii', 0, 4) === 'RIFF' && content.toString('ascii', 8, 12) === 'WEBP' }],
+])
+
+function detectAvatarType(content) {
+  for (const [mimeType, definition] of avatarTypes) {
+    if (definition.signature(content)) return { mimeType, extension: definition.extension }
+  }
+  return null
+}
+
+function readAvatarBody(req, res, next) {
+  if (!avatarTypes.has(req.get('Content-Type')?.split(';')[0])) return res.status(415).send('Unsupported image type')
+  if (Number(req.get('Content-Length')) > maxAvatarSize) return res.status(413).send('Avatar file is too large')
+
+  const chunks = []
+  let size = 0
+  req.on('data', (chunk) => {
+    size += chunk.length
+    if (size <= maxAvatarSize) chunks.push(chunk)
+  })
+  req.on('end', () => {
+    if (size > maxAvatarSize) return res.status(413).send('Avatar file is too large')
+    req.body = Buffer.concat(chunks)
+    next()
+  })
+  req.on('error', next)
+}
+
+async function removeAvatarFiles(userId, exceptExtension) {
+  for (const extension of ['jpg', 'png', 'webp']) {
+    if (extension !== exceptExtension) {
+      await fs.rm(path.join(avatarDirectory, `${userId}.${extension}`), { force: true })
+    }
+  }
+}
 
 function normalizeEmail(value) {
   return typeof value === 'string' ? value.trim().toLowerCase() : ''
@@ -228,6 +271,29 @@ router.get('/me', checkToken, function (req, res) {
   )
 })
 
+router.put('/avatar', checkToken, uploadLimiter, readAvatarBody, async function (req, res) {
+  if (req.user.role === 'viewer') return res.status(403).send('Forbidden')
+  const avatarType = Buffer.isBuffer(req.body) && detectAvatarType(req.body)
+  if (!avatarType) return res.status(415).send('Unsupported image type')
+
+  const fileName = `${req.user.id}.${avatarType.extension}`
+  const avatarFile = path.join(avatarDirectory, fileName)
+  const temporaryFile = `${avatarFile}.${process.pid}.${Date.now()}.tmp`
+  const avatarUrl = `/user-avatars/${fileName}?v=${Date.now()}`
+  try {
+    await fs.mkdir(avatarDirectory, { recursive: true })
+    await fs.writeFile(temporaryFile, req.body)
+    await fs.rename(temporaryFile, avatarFile)
+    await db.promise().query('UPDATE user SET avatar = ? WHERE id = ?', [avatarUrl, req.user.id])
+    await removeAvatarFiles(req.user.id, avatarType.extension)
+    res.send({ avatar: avatarUrl })
+  } catch (error) {
+    console.error(error)
+    await fs.rm(temporaryFile, { force: true }).catch(() => {})
+    res.status(500).send('Server error')
+  }
+})
+
 router.delete('/', checkRole, function (req, res, next) {
   //TODO: 删除用户
 })
@@ -289,13 +355,16 @@ router.put('/', checkToken, authenticatedWriteLimiter, async function (req, res)
   WHERE id = ?`
 
   // 执行 SQL 查询
-  db.query(sql, [...values, targetUserId], (err, result) => {
+  db.query(sql, [...values, targetUserId], async (err, result) => {
     if (err) {
       console.error(err)
       res.status(500).send('Server error')
     } else if (result.affectedRows === 0) {
       res.status(404).send('User not found')
     } else {
+      if (fields.avatar === '') {
+        await removeAvatarFiles(targetUserId).catch((cleanupError) => console.error(cleanupError))
+      }
       res.status(200).send('User updated')
     }
   })

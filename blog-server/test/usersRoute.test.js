@@ -28,6 +28,7 @@ function loadUsersRouter(query, user = { id: 1, role: 'user' }) {
         passwordResetRequestLimiter: passThrough,
         passwordResetConfirmLimiter: passThrough,
         authenticatedWriteLimiter: passThrough,
+        uploadLimiter: passThrough,
       }
     }
     return originalLoad.call(this, request, parent, isMain)

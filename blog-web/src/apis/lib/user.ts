@@ -28,6 +28,13 @@ export function updateCurrentUser(data: Pick<User, 'nickname' | 'avatar'>) {
   return axiosInstance.put('/users', data)
 }
 
+export function uploadUserAvatar(file: File) {
+  return axiosInstance.put<{ avatar: string }>('/users/avatar', file, {
+    headers: { 'Content-Type': file.type },
+    timeout: 30000,
+  })
+}
+
 /*-----管理系统接口-----*/
 
 //获取用户列表

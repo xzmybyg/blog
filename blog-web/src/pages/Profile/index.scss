@@ -41,9 +41,24 @@
 }
 
 .profile-card__avatar {
-  flex: 0 0 auto;
   border: 5px solid $surface;
   box-shadow: 0 12px 30px rgb(18 32 51 / 16%);
+}
+
+.profile-card__avatar-editor {
+  display: grid;
+  justify-items: center;
+  flex: 0 0 auto;
+  gap: 10px;
+
+  small { color: $muted; font-size: 0.72rem; }
+}
+
+.profile-card__avatar-actions {
+  display: flex;
+  gap: 8px;
+
+  .ant-btn { min-height: 40px; }
 }
 
 .profile-card__content {
@@ -99,6 +114,7 @@
 
 @media screen and (max-width: 520px) {
   .profile-card__header { flex-direction: column-reverse; }
+  .profile-card__avatar-editor { justify-items: start; }
   .profile-card__actions { flex-direction: column-reverse; }
   .profile-card__actions .ant-btn { width: 100%; }
 }

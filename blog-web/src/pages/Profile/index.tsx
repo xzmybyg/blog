@@ -1,14 +1,38 @@
 import { useEffect, useState } from 'react'
-import { Alert, Avatar, Button, Card, Form, Input, Skeleton, message } from 'antd'
-import { LinkOutlined, SaveOutlined, UserOutlined } from '@ant-design/icons'
-import { getCurrentUser, updateCurrentUser } from '@/apis'
+import { Alert, Avatar, Button, Card, Form, Input, Skeleton, Upload, message } from 'antd'
+import type { UploadProps } from 'antd'
+import { DeleteOutlined, SaveOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons'
+import { getCurrentUser, updateCurrentUser, uploadUserAvatar } from '@/apis'
 import useUserStore from '@/store/user'
 import { DEFAULT_USER_AVATAR } from '@/utils/avatar'
 import './index.scss'
 
 type ProfileValues = {
   nickname: string
-  avatar: string
+}
+
+const MAX_SOURCE_AVATAR_SIZE = 8 * 1024 * 1024
+const ACCEPTED_AVATAR_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp'])
+
+async function compressAvatar(file: File) {
+  const image = await createImageBitmap(file)
+  const scale = Math.min(1, 512 / Math.max(image.width, image.height))
+  const canvas = document.createElement('canvas')
+  canvas.width = Math.max(1, Math.round(image.width * scale))
+  canvas.height = Math.max(1, Math.round(image.height * scale))
+  const context = canvas.getContext('2d')
+  if (!context) {
+    image.close()
+    throw new Error('Canvas is unavailable')
+  }
+  context.drawImage(image, 0, 0, canvas.width, canvas.height)
+  image.close()
+
+  const blob = await new Promise<Blob>((resolve, reject) => {
+    canvas.toBlob((result) => result ? resolve(result) : reject(new Error('Image compression failed')), 'image/webp', 0.82)
+  })
+  const baseName = file.name.replace(/\.[^.]+$/, '') || 'avatar'
+  return new File([blob], `${baseName}.webp`, { type: 'image/webp' })
 }
 
 export default function Profile() {
@@ -17,9 +41,14 @@ export default function Profile() {
   const [profile, setProfile] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
-  const avatarValue = Form.useWatch('avatar', form)
   const [previewSrc, setPreviewSrc] = useState(DEFAULT_USER_AVATAR)
+  const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null)
+  const [resetAvatar, setResetAvatar] = useState(false)
   const readOnly = role === 'viewer'
+
+  useEffect(() => () => {
+    if (previewSrc.startsWith('blob:')) URL.revokeObjectURL(previewSrc)
+  }, [previewSrc])
 
   useEffect(() => {
     getCurrentUser()
@@ -27,29 +56,31 @@ export default function Profile() {
         setProfile(response.data)
         form.setFieldsValue({
           nickname: response.data.nickname || '',
-          avatar: response.data.avatar || '',
         })
+        setPreviewSrc(response.data.avatar || DEFAULT_USER_AVATAR)
       })
       .catch(() => message.error('个人资料加载失败，请稍后刷新重试'))
       .finally(() => setLoading(false))
   }, [form])
 
-  useEffect(() => {
-    setPreviewSrc(avatarValue?.trim() || DEFAULT_USER_AVATAR)
-  }, [avatarValue])
-
   const saveProfile = async (values: ProfileValues) => {
     if (readOnly) return
-    const nextProfile = {
-      nickname: values.nickname.trim(),
-      avatar: values.avatar.trim(),
-    }
+    const nickname = values.nickname.trim()
     setSaving(true)
     try {
-      await updateCurrentUser(nextProfile)
+      await updateCurrentUser({ nickname, ...(resetAvatar ? { avatar: '' } : {}) })
+      let avatar = resetAvatar ? '' : profile?.avatar || ''
+      if (selectedAvatar) {
+        const response = await uploadUserAvatar(selectedAvatar)
+        avatar = response.data.avatar
+      }
+      const nextProfile = { nickname, avatar }
       setProfile((current) => current ? { ...current, ...nextProfile } : current)
       useUserStore.setState(nextProfile)
-      form.setFieldsValue(nextProfile)
+      form.setFieldsValue({ nickname })
+      setSelectedAvatar(null)
+      setResetAvatar(false)
+      setPreviewSrc(avatar || DEFAULT_USER_AVATAR)
       message.success('个人资料已保存')
     } catch (error: any) {
       message.error(error.response?.data?.message || '个人资料保存失败，请稍后重试')
@@ -60,7 +91,31 @@ export default function Profile() {
 
   const resetProfile = () => {
     if (!profile) return
-    form.setFieldsValue({ nickname: profile.nickname || '', avatar: profile.avatar || '' })
+    form.setFieldsValue({ nickname: profile.nickname || '' })
+    setSelectedAvatar(null)
+    setResetAvatar(false)
+    setPreviewSrc(profile.avatar || DEFAULT_USER_AVATAR)
+  }
+
+  const beforeAvatarUpload: UploadProps['beforeUpload'] = async (file) => {
+    if (!ACCEPTED_AVATAR_TYPES.has(file.type)) {
+      message.error('仅支持 JPG、PNG 或 WebP 图片')
+      return Upload.LIST_IGNORE
+    }
+    if (file.size === 0 || file.size > MAX_SOURCE_AVATAR_SIZE) {
+      message.error('头像图片不能为空且不能超过 8 MB')
+      return Upload.LIST_IGNORE
+    }
+    try {
+      const compressed = await compressAvatar(file)
+      setSelectedAvatar(compressed)
+      setResetAvatar(false)
+      setPreviewSrc(URL.createObjectURL(compressed))
+      message.success(`头像已压缩至 ${(compressed.size / 1024).toFixed(1)} KB，保存后生效`)
+    } catch {
+      message.error('头像压缩失败，请换一张图片重试')
+    }
+    return Upload.LIST_IGNORE
   }
 
   return (
@@ -72,16 +127,41 @@ export default function Profile() {
             <h1>管理你的公开信息</h1>
             <p>昵称和头像会展示在导航、评论与留言中。</p>
           </div>
-          <Avatar
-            className="profile-card__avatar"
-            size={112}
-            src={previewSrc}
-            alt="头像预览"
-            onError={() => {
-              if (previewSrc !== DEFAULT_USER_AVATAR) setPreviewSrc(DEFAULT_USER_AVATAR)
-              return false
-            }}
-          />
+          <div className="profile-card__avatar-editor">
+            <Avatar
+              className="profile-card__avatar"
+              size={112}
+              src={previewSrc}
+              alt="头像预览"
+              onError={() => {
+                if (previewSrc !== DEFAULT_USER_AVATAR) setPreviewSrc(DEFAULT_USER_AVATAR)
+                return false
+              }}
+            />
+            <div className="profile-card__avatar-actions">
+              <Upload
+                accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                beforeUpload={beforeAvatarUpload}
+                maxCount={1}
+                showUploadList={false}
+                disabled={readOnly || saving}
+              >
+                <Button icon={<UploadOutlined aria-hidden="true" />}>选择头像</Button>
+              </Upload>
+              <Button
+                icon={<DeleteOutlined aria-hidden="true" />}
+                disabled={readOnly || saving}
+                onClick={() => {
+                  setSelectedAvatar(null)
+                  setResetAvatar(true)
+                  setPreviewSrc(DEFAULT_USER_AVATAR)
+                }}
+              >
+                恢复默认
+              </Button>
+            </div>
+            <small>{selectedAvatar ? `${selectedAvatar.name} · ${(selectedAvatar.size / 1024).toFixed(1)} KB` : '自动压缩为 512px WebP'}</small>
+          </div>
         </header>
 
         {readOnly && <Alert type="info" showIcon message="当前为只读账号，不能修改个人资料。" />}
@@ -106,18 +186,6 @@ export default function Profile() {
                 extra="留空时会显示登录账号。"
               >
                 <Input size="large" prefix={<UserOutlined aria-hidden="true" />} maxLength={30} showCount placeholder="输入公开昵称" />
-              </Form.Item>
-              <Form.Item
-                label="头像地址"
-                name="avatar"
-                rules={[{
-                  validator: (_, value) => !value || /^(https?:\/\/|\/)/i.test(value.trim())
-                    ? Promise.resolve()
-                    : Promise.reject(new Error('请输入 HTTP(S) 图片地址或站内绝对路径')),
-                }]}
-                extra="支持 HTTPS 图片地址；留空使用默认头像。后续可迁移到七牛云统一管理。"
-              >
-                <Input size="large" prefix={<LinkOutlined aria-hidden="true" />} maxLength={2048} placeholder="https://example.com/avatar.webp" />
               </Form.Item>
               <div className="profile-card__actions">
                 <Button disabled={saving} onClick={resetProfile}>撤销修改</Button>
