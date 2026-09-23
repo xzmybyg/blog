@@ -176,6 +176,46 @@ test('ordinary users can update only their own allowed profile fields', async ()
   assert.deepEqual(update.params, ['New name', 5])
 })
 
+test('authenticated users can load their own profile', async () => {
+  const profile = {
+    id: 5,
+    username: 'reader',
+    role: 'user',
+    avatar: '',
+    nickname: 'Reader',
+    commentLimit: 1,
+    email: 'reader@example.com',
+  }
+  const { response, body } = await requestUsers({
+    path: '/me',
+    method: 'GET',
+    user: { id: 5, role: 'user' },
+    query(sql, params, callback) {
+      assert.match(sql, /FROM user WHERE id = \?/)
+      assert.deepEqual(params, [5])
+      callback(null, [profile])
+    },
+  })
+
+  assert.equal(response.status, 200)
+  assert.equal(response.headers.get('cache-control'), 'no-store')
+  assert.deepEqual(body, profile)
+})
+
+test('profile updates reject invalid avatar URLs before querying the database', async () => {
+  let queryCalled = false
+  const { response } = await requestUsers({
+    path: '/',
+    method: 'PUT',
+    user: { id: 5, role: 'user' },
+    body: { avatar: 'javascript:alert(1)' },
+    query() { queryCalled = true },
+  })
+
+  assert.equal(response.status, 400)
+  assert.equal(queryCalled, false)
+})
+
 test('viewers cannot update users', async () => {
   let queryCalled = false
   const { response } = await requestUsers({

@@ -29,6 +29,16 @@ const Element = function Element(props) {
   }, [location.pathname, props.name])
 
   useEffect(() => {
+    if (props.meta.userAuth) {
+      if (!token || isTokenExpired(token)) {
+        if (token) logoutInfo()
+        navigate('/', { replace: true })
+      } else {
+        setHasCheckedAuth(true)
+      }
+      return
+    }
+
     const requiresAdminAuth = props.meta.checkAuth
       || (location.pathname.startsWith('/admin') && location.pathname !== '/admin/login')
 
@@ -49,7 +59,7 @@ const Element = function Element(props) {
     } else {
       setHasCheckedAuth(true)
     }
-  }, [location.pathname, location.search, navigate, props.meta.checkAuth, props.meta.editOnly, role, token])
+  }, [location.pathname, location.search, navigate, props.meta.checkAuth, props.meta.editOnly, props.meta.userAuth, role, token])
 
   if (!hasCheckedAuth && props.name !== '登录') {
     return <Loading />

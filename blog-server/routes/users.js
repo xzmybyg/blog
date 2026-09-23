@@ -213,6 +213,21 @@ router.post('/password-reset/confirm', passwordResetConfirmLimiter, async functi
   }
 })
 
+router.get('/me', checkToken, function (req, res) {
+  db.query(
+    'SELECT id, username, role, avatar, nickname, commentLimit, email FROM user WHERE id = ? LIMIT 1',
+    [req.user.id],
+    (error, users) => {
+      if (error) {
+        console.error(error)
+        return res.status(500).send('Server error')
+      }
+      if (users.length === 0) return res.status(404).send('User not found')
+      res.set('Cache-Control', 'no-store').send(users[0])
+    },
+  )
+})
+
 router.delete('/', checkRole, function (req, res, next) {
   //TODO: 删除用户
 })
@@ -235,6 +250,16 @@ router.put('/', checkToken, authenticatedWriteLimiter, async function (req, res)
   const values = []
   for (const [key, value] of Object.entries(fields)) {
     if (!allowedFields.includes(key)) continue
+    if (key === 'nickname' && (typeof value !== 'string' || value.trim().length > 30)) {
+      return res.status(400).send('Invalid nickname')
+    }
+    if (key === 'avatar') {
+      if (typeof value !== 'string') return res.status(400).send('Invalid avatar URL')
+      const normalizedAvatar = value.trim()
+      if (normalizedAvatar.length > 2048 || (normalizedAvatar && !/^(https?:\/\/|\/)/i.test(normalizedAvatar))) {
+        return res.status(400).send('Invalid avatar URL')
+      }
+    }
     if (key === 'role' && !['admin', 'viewer', 'user'].includes(value)) {
       return res.status(400).send('Invalid user role')
     }
@@ -247,7 +272,9 @@ router.put('/', checkToken, authenticatedWriteLimiter, async function (req, res)
         ? (value ? 1 : 0)
         : key === 'password'
           ? await hashPassword(value)
-          : value,
+          : typeof value === 'string'
+            ? value.trim()
+            : value,
     )
   }
 

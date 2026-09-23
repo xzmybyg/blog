@@ -136,6 +136,8 @@
 }
 
 .popoverAction {
+  display: flex;
+  align-items: center;
   min-height: 36px;
   padding: 0 12px;
   border: 0;
@@ -144,6 +146,12 @@
   background: transparent;
   cursor: pointer;
   &:hover { color: $accent; background: rgba(24, 87, 217, .08); }
+}
+
+.accountActions {
+  display: grid;
+  min-width: 112px;
+  gap: 4px;
 }
 
 @media screen and (max-width: $hiddenSomeSize) {

@@ -58,6 +58,16 @@ const routes: RouterType[] = [
     },
   },
   {
+    path: '/profile',
+    component: lazy(() => import('@/pages/Profile')),
+    name: '个人资料',
+    showOnNav: false,
+    meta: {
+      fontend: true,
+      userAuth: true,
+    },
+  },
+  {
     path: '/admin',
     component: SecondRoute,
     name: '后台管理',

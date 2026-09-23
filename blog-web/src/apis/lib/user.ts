@@ -20,6 +20,14 @@ export function confirmPasswordReset(data: { email: string; code: string; passwo
   return axiosInstance.post('/users/password-reset/confirm', data)
 }
 
+export function getCurrentUser() {
+  return axiosInstance.get<User>('/users/me')
+}
+
+export function updateCurrentUser(data: Pick<User, 'nickname' | 'avatar'>) {
+  return axiosInstance.put('/users', data)
+}
+
 /*-----管理系统接口-----*/
 
 //获取用户列表

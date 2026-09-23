@@ -1,5 +1,5 @@
 import { MenuOutlined, CloseOutlined } from '@ant-design/icons'
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import Style from './index.module.scss'
 import Login from '@/components/Login'
 import useUserStore, { logoutInfo } from '@/store/user'
@@ -44,7 +44,12 @@ function Nav({ navlist = routes }) {
           })}
           {id ? (
             <div className={navItem}>
-              <Popover placement="bottomRight" content={<button type="button" className={Style.popoverAction} onClick={logoutInfo}>退出登录</button>}>
+              <Popover placement="bottomRight" content={(
+                <div className={Style.accountActions}>
+                  <Link className={Style.popoverAction} to="/profile">个人资料</Link>
+                  <button type="button" className={Style.popoverAction} onClick={logoutInfo}>退出登录</button>
+                </div>
+              )}>
                 <Avatar src={avatar || DEFAULT_USER_AVATAR} />
                 <span>{nickname || username}</span>
               </Popover>
@@ -100,9 +105,10 @@ function Nav({ navlist = routes }) {
               )
             })}
             {id && (
-              <button type="button" className={navItem} onClick={logoutInfo}>
-                退出
-              </button>
+              <>
+                <NavLink className={navItem} to="/profile" onClick={() => setMobileMenuVisible(false)}>个人资料</NavLink>
+                <button type="button" className={navItem} onClick={logoutInfo}>退出</button>
+              </>
             )}
           </div>
         )}
