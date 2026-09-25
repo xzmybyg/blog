@@ -98,6 +98,10 @@ export default defineConfig(({mode}: ConfigEnv) => {
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, '/api'),
         },
+        '/user-avatars': {
+          target: env.VITE_API_URL,
+          changeOrigin: true,
+        },
       },
     },
     test: {
