@@ -1,29 +1,35 @@
-@use '@/styleConfig/scssConfig.scss' as config;
-
 .admin-header {
   display: flex;
   height: auto;
-  min-height: 80px;
+  min-height: 88px;
   justify-content: space-between;
   align-items: center;
   margin: 0;
-  padding: 14px 24px;
+  padding: 16px 32px;
   line-height: 1.4;
-  background: rgba(255, 255, 255, 0.96);
-  border-bottom: 1px solid config.$line;
+  background: var(--admin-surface, #fff);
+  border-bottom: 1px solid var(--admin-border);
+
+  .ant-breadcrumb {
+    color: var(--admin-ink);
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .ant-breadcrumb-separator {
+    color: #a9a299;
+  }
 }
 
 .admin-header__context { display: grid; gap: 6px; }
 .admin-header__eyebrow {
-  color: config.$accent;
-  font-family: config.$font-mono;
+  color: var(--admin-accent);
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
 }
 .admin-header__user, .admin-header__logout {
   appearance: none;
-  border: 0;
   font: inherit;
   cursor: pointer;
 }
@@ -32,24 +38,26 @@
   min-height: 44px;
   align-items: center;
   gap: 10px;
-  padding: 5px 10px;
-  color: config.$ink;
-  background: transparent;
-  border-radius: 10px;
+  padding: 5px 12px 5px 6px;
+  color: var(--admin-ink);
+  background: var(--admin-surface, #fff);
+  border: 1px solid var(--admin-border);
+  border-radius: 24px;
 
-  &:hover { background: #eef3fb; }
+  &:hover { background: #f6f4f0; }
 }
 .admin-header__logout {
-  min-height: 36px;
-  padding: 6px 10px;
-  color: config.$danger;
-  background: transparent;
-  border-radius: 6px;
+  min-height: 40px;
+  padding: 8px 12px;
+  color: #b44039;
+  background: var(--admin-surface, #fff);
+  border: 0;
+  border-radius: 8px;
 
-  &:hover { background: #fff1f0; }
+  &:hover { background: #fbf0ed; }
 }
 
 @media (max-width: 768px) {
-  .admin-header { min-height: 68px; padding: 10px 12px; }
+  .admin-header { min-height: 68px; padding: 10px 16px; }
   .admin-header__eyebrow, .admin-header__user span { display: none; }
 }

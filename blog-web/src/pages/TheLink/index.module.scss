@@ -102,8 +102,8 @@
 
     &:hover {
       color: $ink;
-      background: #f8faff;
-      border-color: rgba(24, 87, 217, .45);
+      background: $surface;
+      border-color: $accent;
       transform: translateY(-3px);
 
       &::after { transform: scaleX(1); }
@@ -177,7 +177,7 @@
 
     > header {
       span {
-        color: $signal;
+        color: $accent;
         font-family: $font-mono;
         font-size: .7rem;
         font-weight: 700;
@@ -207,7 +207,7 @@
   .notice {
     padding: 22px;
     background: $paper;
-    border-left: 3px solid $signal;
+    border-left: 3px solid $accent;
     border-radius: 0 10px 10px 0;
 
     > strong { color: $ink; }
@@ -230,7 +230,8 @@
     :global(.ant-input) { min-height: 42px; border-color: $line; }
     :global(.ant-input:hover),
     :global(.ant-input:focus) { border-color: $accent; }
-    :global(.ant-btn-primary) { min-width: 128px; color: #fff; font-weight: 700; }
+    :global(.ant-btn-primary) { min-width: 128px; color: #fff; background: $ink; border-color: $ink; font-weight: 700; }
+    :global(.ant-btn-primary:hover) { background: $accent-deep; border-color: $accent-deep; }
   }
 }
 

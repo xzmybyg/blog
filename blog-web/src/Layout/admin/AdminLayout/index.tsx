@@ -48,36 +48,37 @@ export default function AdminLayout({ children }) {
       <ConfigProvider
         theme={{
           token: {
-            colorPrimary: '#1857d9',
-            colorInfo: '#1857d9',
-            colorSuccess: '#18794e',
-            colorError: '#c83b31',
-            colorText: '#122033',
-            colorTextSecondary: '#58677c',
-            colorBorder: '#d9e1ec',
-            colorBgLayout: '#f4f7fb',
-            borderRadius: 10,
+            colorPrimary: '#1d1c1b',
+            colorInfo: '#9b7854',
+            colorSuccess: '#387451',
+            colorError: '#b44039',
+            colorText: '#1f1e1c',
+            colorTextSecondary: '#756f68',
+            colorBorder: '#e5dfd7',
+            colorBgLayout: '#faf9f7',
+            borderRadius: 12,
             fontFamily: "'Microsoft YaHei', 'PingFang SC', system-ui, sans-serif",
           },
           components: {
             Layout: {
-              siderBg: '#0d2b55',
-              triggerBg: '#092344',
+              siderBg: '#f6f4f0',
+              triggerBg: '#f6f4f0',
             },
             Menu: {
-              darkItemBg: '#0d2b55',
-              darkSubMenuItemBg: '#092344',
-              darkItemColor: '#c9d6e8',
-              darkItemHoverBg: '#163b6b',
-              darkItemSelectedBg: '#1857d9',
-              darkItemSelectedColor: '#fff',
-              itemBorderRadius: 8,
+              itemBg: 'transparent',
+              subMenuItemBg: 'transparent',
+              itemColor: '#625d56',
+              itemHoverBg: '#eeebe6',
+              itemHoverColor: '#1f1e1c',
+              itemSelectedBg: '#fff',
+              itemSelectedColor: '#1f1e1c',
+              itemBorderRadius: 12,
             },
             Pagination: {
               itemBg: '#fff',
               itemLinkBg: '#fff',
               itemActiveBg: '#fff',
-              itemActiveColor: '#1857d9',
+              itemActiveColor: '#1d1c1b',
             },
           },
         }}
@@ -85,7 +86,8 @@ export default function AdminLayout({ children }) {
         <Layout className="admin-shell">
           <Sider
             className="admin-sider"
-            width={232}
+            width={252}
+            breakpoint="md"
             collapsible
             collapsed={collapsed}
             onCollapse={(value) => setCollapsed(value)}
@@ -94,14 +96,20 @@ export default function AdminLayout({ children }) {
               <span className="admin-brand__mark">&lt;/&gt;</span>
               {!collapsed && (
                 <span className="admin-brand__copy">
-                  <strong>BLOG CONSOLE</strong>
-                  <small>内容管理工作台</small>
+                  <strong>博客管理</strong>
+                  <small>BLOG CONTENT STUDIO</small>
                 </span>
               )}
             </div>
+            {!collapsed && (
+              <div className="admin-menu-heading" aria-hidden="true">
+                <span>工作区</span>
+                <small>管理导航</small>
+              </div>
+            )}
             <Menu
               className="admin-menu"
-              theme="dark"
+              theme="light"
               selectedKeys={[location.pathname]}
               mode="inline"
               items={menuItems}

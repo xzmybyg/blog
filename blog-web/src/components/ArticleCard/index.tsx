@@ -43,13 +43,13 @@ function ArticleCard(props: CardProps) {
         <div className={articleInfo}>
           <div className={articleLabel}>
             {topping && (
-              <Tag color="#87d068" icon={<PushpinOutlined />}>
+              <Tag icon={<PushpinOutlined />}>
                 置顶
               </Tag>
             )}
 
             {topicName && (
-              <Tag color="blue" icon={<BookOutlined />}>
+              <Tag icon={<BookOutlined />}>
                 专题 · {topicName}
               </Tag>
             )}
@@ -57,7 +57,7 @@ function ArticleCard(props: CardProps) {
             {Array.isArray(label) &&
               label?.map((item) => {
                 return (
-                  <Tag key={item} color="#2db7f5" icon={<TagOutlined />}>
+                  <Tag key={item} icon={<TagOutlined />}>
                     {item}
                   </Tag>
                 )

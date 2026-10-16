@@ -34,7 +34,7 @@ export default function AdminHeader() {
   return (
     <Header className="header admin-header">
       <div className="admin-header__context">
-        <span className="admin-header__eyebrow">WORKSPACE / 管理后台</span>
+        <span className="admin-header__eyebrow">内容工作台 / BLOG STUDIO</span>
         <Breadcrumb items={getBreadcrumbItems(router.pathname)} />
       </div>
       {id ? (

@@ -5,7 +5,7 @@
   left: 0;
   z-index: 50;
   background-color: map.get($nav, bcColor);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px);
   border-bottom: 1px solid $line;
   height: map.get($nav, height);
   color: map.get($nav, color);
@@ -14,86 +14,103 @@
 }
 .navDesktop {
   @extend .nav;
-  padding: 0 max(36px, calc((100vw - $content-max-width) / 2));
+  padding: 0 max(24px, calc((100vw - $content-max-width) / 2));
   .authorName {
-    color: $accent-deep;
-    font-family: $font-mono;
-    font-size: 0.88rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: $ink;
+    font-family: $font-display;
+    font-size: 1rem;
     font-weight: 700;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
+    letter-spacing: 0.025em;
     white-space: nowrap;
+
+    span {
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      border: 1px solid $line;
+      border-radius: 11px;
+      color: $accent-deep;
+      background: $surface;
+      font-family: $font-mono;
+      font-size: 0.72rem;
+      letter-spacing: -0.12em;
+      box-shadow: 0 2px 8px rgba(31, 30, 28, 0.04);
+    }
   }
   .itemWrap {
     height: 100%;
     display: flex;
-    justify-content: space-evenly;
     align-items: center;
+    gap: 4px;
     .navItem {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      height: 100%;
-      line-height: map.get($nav, height);
+      gap: 7px;
+      min-height: 42px;
       text-align: center;
       color: $muted;
-      min-width: 50px;
-      margin: 0 10px;
-      padding: 0 6px;
-      font-weight: 600;
+      padding: 0 13px;
+      border-radius: 12px;
+      font-weight: 500;
       position: relative;
       cursor: pointer;
       border: 0;
       background: transparent;
       font: inherit;
-      transition: color 0.2s ease;
+      white-space: nowrap;
+      transition: color 0.2s ease, background-color 0.2s ease;
       &:hover {
         color: $ink;
-        background-color: transparent;
-        &::after {
-          transform: scaleX(1);
-        }
-      }
-      &::after {
-        content: '';
-        position: absolute;
-        right: 4px;
-        bottom: 18px;
-        left: 4px;
-        height: 2px;
-        background: $signal;
-        transform: scaleX(0);
-        transform-origin: center;
-        transition: transform 0.2s ease;
+        background-color: $paper-deep;
       }
       &.active {
-        color: $accent-deep;
-        &::after {
-          transform: scaleX(1);
-        }
+        color: $ink;
+        background: $surface;
+        box-shadow: inset 0 0 0 1px $line, 0 1px 3px rgba(31, 30, 28, 0.04);
       }
     }
   }
 }
 .navMobile {
   @extend .nav;
-  padding: 0 20px;
+  padding: 0 16px;
   display: none;
 
   .authorName {
-    color: $accent-deep;
-    font-family: $font-mono;
-    font-size: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: $ink;
+    font-family: $font-display;
+    font-size: 0.9rem;
     font-weight: 700;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
+    letter-spacing: 0.01em;
+
+    span {
+      display: grid;
+      place-items: center;
+      width: 32px;
+      height: 32px;
+      border: 1px solid $line;
+      border-radius: 10px;
+      color: $accent-deep;
+      background: $surface;
+      font-family: $font-mono;
+      font-size: 0.66rem;
+      letter-spacing: -0.12em;
+    }
   }
 
   .menuButton {
     width: 44px;
     height: 44px;
     border: 1px solid $line;
-    border-radius: 10px;
+    border-radius: 12px;
     color: $ink;
     background: $surface;
     cursor: pointer;
@@ -101,18 +118,19 @@
 
   .MobileMenu {
     position: fixed;
-    right: 0;
+    right: 12px;
     top: map.get($nav, height);
     height: auto;
-    width: min(280px, 78vw);
-    padding: 20px;
-    background: rgba(244, 247, 251, 0.98);
+    width: min(300px, calc(100vw - 24px));
+    padding: 12px;
+    background: $surface;
     border: 1px solid $line;
+    border-radius: 0 0 16px 16px;
     box-shadow: $card-shadow;
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: 10px;
+    gap: 4px;
     .navItem {
       width: 100%;
       min-height: 44px;
@@ -121,7 +139,7 @@
       gap: 10px;
       padding: 0 12px;
       border: 0;
-      border-radius: 8px;
+      border-radius: 10px;
       color: $ink;
       background: transparent;
       font: inherit;
@@ -129,7 +147,7 @@
       &.active,
       &:hover {
         color: $accent-deep;
-        background: rgba(24, 87, 217, 0.08);
+        background: $paper-deep;
       }
     }
   }
@@ -145,7 +163,7 @@
   color: $ink;
   background: transparent;
   cursor: pointer;
-  &:hover { color: $accent; background: rgba(24, 87, 217, .08); }
+  &:hover { color: $accent-deep; background: $paper-deep; }
 }
 
 .accountActions {

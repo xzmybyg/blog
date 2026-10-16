@@ -1,6 +1,6 @@
 @use '@/styleConfig/scssConfig.scss' as config;
 
-.error-monitor-admin { color: config.$ink; }
+.error-monitor-admin { color: var(--admin-ink); }
 
 .error-monitor-admin__header {
   display: flex;
@@ -11,9 +11,9 @@
 
   > div:last-child { display: flex; gap: 10px; }
   > div:last-child .ant-select { min-width: 116px; }
-  span { color: config.$accent; font-family: config.$font-mono; font-size: 12px; letter-spacing: .1em; }
+  span { color: var(--admin-accent); font-family: config.$font-mono; font-size: 12px; letter-spacing: .1em; }
   h1 { margin: 6px 0; font-family: config.$font-display; }
-  p { margin: 0; color: config.$muted; }
+  p { margin: 0; color: var(--admin-muted); }
 }
 
 .error-monitor-summary {
@@ -21,9 +21,9 @@
   gap: 0;
   margin: 0 0 20px;
   overflow: hidden;
-  border: 1px solid config.$line;
+  border: 1px solid var(--admin-border);
   border-radius: 12px;
-  background: config.$surface;
+  background: var(--admin-surface);
 
   > div {
     display: flex;
@@ -31,19 +31,19 @@
     gap: 10px;
     min-width: 150px;
     padding: 14px 20px;
-    border-right: 1px solid config.$line;
+    border-right: 1px solid var(--admin-border);
   }
 
   > div:last-child { border-right: 0; }
-  dt { color: config.$muted; font-size: 12px; }
-  dd { margin: 0; color: config.$ink; font-family: config.$font-mono; font-size: 22px; font-weight: 700; }
+  dt { color: var(--admin-muted); font-size: 12px; }
+  dd { margin: 0; color: var(--admin-ink); font-family: config.$font-mono; font-size: 22px; font-weight: 700; }
 }
 
 .error-monitor-loading {
   padding: 28px;
-  border: 1px solid config.$line;
+  border: 1px solid var(--admin-border);
   border-radius: 14px;
-  background: config.$surface;
+  background: var(--admin-surface);
 }
 
 .error-ledger { display: grid; gap: 14px; }
@@ -52,10 +52,10 @@
   position: relative;
   overflow: hidden;
   padding: 20px 20px 18px 25px;
-  border: 1px solid config.$line;
+  border: 1px solid var(--admin-border);
   border-radius: 14px;
-  background: config.$surface;
-  box-shadow: 0 8px 22px rgb(18 32 51 / 6%);
+  background: var(--admin-surface);
+  box-shadow: 0 4px 16px rgb(31 30 28 / 4%);
 
   > header {
     display: flex;
@@ -88,7 +88,7 @@
   min-width: 0;
 
   > svg { flex: 0 0 auto; margin-top: 3px; color: config.$danger; font-size: 20px; }
-  span { color: config.$muted; font-family: config.$font-mono; font-size: 11px; letter-spacing: .08em; }
+  span { color: var(--admin-muted); font-family: config.$font-mono; font-size: 11px; letter-spacing: .08em; }
   h2 { margin: 4px 0 0; overflow-wrap: anywhere; font-size: 17px; }
 }
 
@@ -101,17 +101,17 @@
   margin: 18px 0 0;
   padding: 14px 16px;
   border-radius: 10px;
-  background: config.$paper;
+  background: var(--admin-page);
 
-  dt { color: config.$muted; font-size: 11px; }
+  dt { color: var(--admin-muted); font-size: 11px; }
   dd { margin: 5px 0 0; overflow-wrap: anywhere; font-family: config.$font-mono; font-size: 12px; }
 }
 
 .error-event__details {
   margin-top: 14px;
-  color: config.$muted;
+  color: var(--admin-muted);
 
-  summary { width: fit-content; color: config.$accent; cursor: pointer; font-size: 13px; }
+  summary { width: fit-content; color: var(--admin-accent); cursor: pointer; font-size: 13px; }
   > div { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 10px; margin-top: 10px; }
   > div > span { font-size: 12px; }
   p { margin: 0; }
@@ -121,8 +121,8 @@
     padding: 14px;
     overflow: auto;
     border-radius: 10px;
-    background: #0d1b2d;
-    color: #d8e3f3;
+    background: #242321;
+    color: #f4f0ea;
     font-family: config.$font-mono;
     font-size: 12px;
     white-space: pre-wrap;
@@ -136,7 +136,7 @@
 @media (max-width: 620px) {
   .error-monitor-admin__header { align-items: stretch; flex-direction: column; }
   .error-monitor-summary { display: grid; grid-template-columns: repeat(3, 1fr); }
-  .error-monitor-summary > div { display: grid; min-width: 0; padding: 12px; border-right: 1px solid config.$line; }
+  .error-monitor-summary > div { display: grid; min-width: 0; padding: 12px; border-right: 1px solid var(--admin-border); }
   .error-event { padding: 17px 15px 15px 20px; }
   .error-event__facts { grid-template-columns: 1fr; }
   .error-event > footer { flex-direction: column; }

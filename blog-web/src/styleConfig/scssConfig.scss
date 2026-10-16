@@ -8,21 +8,21 @@ $mediaSize: (
 );
 $hiddenSomeSize: 896px;
 
-// Developer Field Notes：运行时语义令牌（DESIGN.md 的唯一实现映射）
-$paper: #f4f7fb;
-$paper-deep: #e9eef6;
+// 博客与后台共用的暖灰色语义令牌
+$paper: #faf9f7;
+$paper-deep: #f1eee9;
 $surface: #ffffff;
-$ink: #122033;
-$muted: #58677c;
-$accent: #1857d9;
-$accent-deep: #0b3ca8;
-$signal: #f05a3c;
-$line: #d9e1ec;
+$ink: #1f1e1c;
+$muted: #756f68;
+$accent: #9b7854;
+$accent-deep: #765735;
+$signal: #9b7854;
+$line: #e5dfd7;
 $success: #18794e;
 $danger: #c83b31;
-$focus-ring: rgba(24, 87, 217, 0.28);
-$card-shadow: 0 14px 36px rgba(18, 32, 51, 0.1);
-$card-radius: 18px;
+$focus-ring: rgba(155, 120, 84, 0.42);
+$card-shadow: 0 8px 28px rgba(31, 30, 28, 0.045);
+$card-radius: 16px;
 $content-max-width: 1220px;
 $font-display: Arial, 'Microsoft YaHei', 'PingFang SC', sans-serif;
 $font-body: 'Microsoft YaHei', 'PingFang SC', system-ui, sans-serif;
@@ -33,14 +33,14 @@ $rootFontSize: 16px;
 
 //主题变量
 $nav: (
-  bcColor: rgba(244, 247, 251, 0.94),
+  bcColor: rgba(250, 249, 247, 0.94),
   color: $ink,
-  height: 72px,
+  height: 76px,
   fontSize: 1rem
 );
 $footer: (
-  bcColor: #0d1b2d,
-  color: #f4f7fb,
+  bcColor: $paper-deep,
+  color: $muted,
 );
 $articleCard: (
   bcColor: $surface,
@@ -50,7 +50,7 @@ $articleCard: (
 
 //滚动条变量
 $thumb: (
-  color: $accent,
+  color: #c8bcaf,
   width: 8px,
 );
 

@@ -5,7 +5,7 @@ import { Affix, Button, Card } from 'antd'
 import { ArrowLeftOutlined, ArrowRightOutlined, DownloadOutlined, HeartFilled, HeartOutlined } from '@ant-design/icons'
 const { TextArea } = Input
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { okaidia } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
 //api引入
 import { getArticleLikes, getArticleNavigation, getTopic, likeArticle } from '@/apis'
@@ -136,7 +136,14 @@ export default function Topic() {
             code({ className, children, ...props }) {
               const match = /language-(\w+)/.exec(className || '')
               return match ? (
-                <SyntaxHighlighter style={okaidia} language={match[1]} PreTag="div" {...props}>
+                <SyntaxHighlighter
+                  style={oneLight}
+                  language={match[1]}
+                  PreTag="div"
+                  customStyle={{ background: 'transparent', margin: 0, padding: 0 }}
+                  codeTagProps={{ style: { background: 'transparent' } }}
+                  {...props}
+                >
                   {String(children).replace(/\n$/, '')}
                 </SyntaxHighlighter>
               ) : (
@@ -210,6 +217,10 @@ export default function Topic() {
       </div>
       <Affix className={`${affixNavbar} aside`} offsetTop={10}>
         <Card className={NavbarCard}>
+          <div className={Style.contentsHeading}>
+            <span>ON THIS PAGE</span>
+            <strong>文章目录</strong>
+          </div>
           <MarkdownNavbar className={`${Navbar} markdown-Navbar`} source={mdContent} ordered={false} />
         </Card>
       </Affix>

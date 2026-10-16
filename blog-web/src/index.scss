@@ -16,18 +16,6 @@ body {
   background: $paper;
 }
 
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: -1;
-  background-image: linear-gradient(rgba(24, 87, 217, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(24, 87, 217, 0.035) 1px, transparent 1px);
-  background-size: 32px 32px;
-  mask-image: linear-gradient(to bottom, black, transparent 72%);
-}
-
 a {
   color: inherit;
   text-decoration: none;
@@ -44,16 +32,18 @@ a,
 
 ::selection {
   color: #fff;
-  background: $accent;
+  background: $accent-deep;
 }
 
 .ant-btn-primary {
-  background: $accent;
+  background: #1d1c1b;
+  border-color: #1d1c1b;
   box-shadow: none;
 
   &:hover,
   &:focus {
-    background: $accent-deep !important;
+    background: #393632 !important;
+    border-color: #393632 !important;
   }
 }
 // 滚动条样式

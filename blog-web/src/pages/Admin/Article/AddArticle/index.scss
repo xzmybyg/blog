@@ -24,20 +24,20 @@
 
   .ant-form-item-label > label {
     width: 100%;
-    color: config.$ink;
+    color: var(--admin-ink);
     font-weight: 600;
     justify-content: flex-start;
   }
 
   .ant-upload-wrapper .ant-upload-drag {
     min-height: 176px;
-    background: #f8faff;
-    border-color: config.$line;
+    background: var(--admin-page);
+    border-color: var(--admin-border);
 
     &:hover,
     &:focus-within {
-      border-color: config.$accent;
-      background: #f3f7ff;
+      border-color: var(--admin-accent);
+      background: #f4f0ea;
     }
   }
 
@@ -45,28 +45,28 @@
     margin-bottom: 10px !important;
 
     .anticon {
-      color: config.$accent !important;
+      color: var(--admin-accent) !important;
       font-size: 36px !important;
     }
   }
 
   .ant-upload-text {
-    color: config.$ink !important;
+    color: var(--admin-ink) !important;
     font-weight: 600;
   }
 
   .ant-upload-hint {
-    color: config.$muted !important;
+    color: var(--admin-muted) !important;
   }
 }
 
 .add-article__heading {
   margin-bottom: 28px;
   padding-bottom: 22px;
-  border-bottom: 1px solid config.$line;
+  border-bottom: 1px solid var(--admin-border);
 
   span {
-    color: config.$accent;
+    color: var(--admin-accent);
     font-family: config.$font-mono;
     font-size: 12px;
     font-weight: 700;
@@ -75,13 +75,13 @@
 
   h1 {
     margin: 8px 0 6px;
-    color: config.$ink;
+    color: var(--admin-ink);
     font-size: 28px;
   }
 
   p {
     margin: 0;
-    color: config.$muted;
+    color: var(--admin-muted);
   }
 }
 
@@ -100,11 +100,11 @@
   flex: 0 0 auto;
   align-items: center;
   padding-inline: 11px;
-  border: 1px solid config.$line;
+  border: 1px solid var(--admin-border);
   border-left: 0;
   border-radius: 0 6px 6px 0;
-  background: config.$paper;
-  color: config.$muted;
+  background: var(--admin-page);
+  color: var(--admin-muted);
   font-family: config.$font-mono;
 }
 
@@ -151,11 +151,29 @@
 
 @media (max-width: 768px) {
   .add-article .ant-form {
-    min-width: 680px;
-    padding: 20px;
+    min-width: 0;
+    padding: 20px 16px;
+  }
+
+  .add-article .ant-form-item-row {
+    flex-wrap: wrap;
+  }
+
+  .add-article .ant-form-item-label {
+    flex-basis: 100%;
+    max-width: 100%;
   }
 
   .add-article__meta-grid {
     grid-template-columns: 1fr;
+  }
+
+  .add-article__switches {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .add-article__title-row {
+    flex-wrap: wrap;
   }
 }

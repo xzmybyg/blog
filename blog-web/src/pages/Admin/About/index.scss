@@ -11,10 +11,10 @@
   gap: 24px;
   margin-bottom: 24px;
   padding-bottom: 22px;
-  border-bottom: 1px solid config.$line;
+  border-bottom: 1px solid var(--admin-border);
 
   > div > span {
-    color: config.$accent;
+    color: var(--admin-accent);
     font-family: config.$font-mono;
     font-size: 12px;
     font-weight: 700;
@@ -23,13 +23,13 @@
 
   h1 {
     margin: 8px 0 6px;
-    color: config.$ink;
+    color: var(--admin-ink);
     font-size: 28px;
   }
 
   p {
     margin: 0;
-    color: config.$muted;
+    color: var(--admin-muted);
   }
 
   .about-admin__save-button {
@@ -54,9 +54,9 @@
 
     &:disabled,
     &.ant-btn-disabled {
-      color: config.$muted !important;
-      background: config.$paper-deep !important;
-      border-color: config.$line !important;
+      color: var(--admin-muted) !important;
+      background: var(--admin-page) !important;
+      border-color: var(--admin-border) !important;
       opacity: 1;
     }
   }
@@ -65,18 +65,18 @@
 .about-admin__upload-panel {
   .ant-upload-drag {
     min-height: 220px;
-    background: #f8faff;
-    border-color: config.$line;
+    background: var(--admin-page);
+    border-color: var(--admin-border);
 
     &:hover,
     &:focus-within {
-      background: #f3f7ff;
-      border-color: config.$accent;
+      background: #f4f0ea;
+      border-color: var(--admin-accent);
     }
   }
 
   .ant-upload-drag-icon .anticon {
-    color: config.$accent !important;
+    color: var(--admin-accent) !important;
   }
 
   .ant-alert {
@@ -86,7 +86,12 @@
 
 @media (max-width: 768px) {
   .about-admin {
-    min-width: 680px;
-    padding: 20px;
+    min-width: 0;
+    padding: 20px 16px;
+  }
+
+  .about-admin__heading {
+    align-items: stretch;
+    flex-direction: column;
   }
 }

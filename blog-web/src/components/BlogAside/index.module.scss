@@ -1,8 +1,9 @@
 .introduction {
   overflow: hidden;
-  border-color: $line;
-  border-radius: 16px;
-  box-shadow: 0 12px 30px rgba(18, 32, 51, .08);
+  border: 1px solid $line;
+  border-radius: $card-radius;
+  background: $surface;
+  box-shadow: none;
 
   :global(.ant-card-body) {
     padding: 22px 22px 0;
@@ -22,7 +23,7 @@
   gap: 2px;
 
   span {
-    color: $accent;
+    color: $accent-deep;
     font-family: $font-mono;
     font-size: .62rem;
     font-weight: 700;
@@ -89,24 +90,24 @@
   }
 
   > .githubAction {
-    color: #24292f;
+    color: $ink;
 
     &:hover,
-    &:focus-visible { color: #000; background: #f2f3f5; }
+    &:focus-visible { color: $accent-deep; background: $paper; }
   }
 
   > .wechatAction {
-    color: #07c160;
+    color: $ink;
 
     &:hover,
-    &:focus-visible { color: #059b4d; background: #effbf4; }
+    &:focus-visible { color: $accent-deep; background: $paper; }
   }
 
   > .giteeAction {
-    color: #c71d23;
+    color: $ink;
 
     &:hover,
-    &:focus-visible { color: #a9151b; background: #fff2f2; }
+    &:focus-visible { color: $accent-deep; background: $paper; }
 
     i { font-size: 1rem; }
   }
@@ -116,6 +117,14 @@
 }
 
 .jello {
-  border: 3px solid $surface;
-  box-shadow: 0 7px 18px rgba(18, 32, 51, .15) !important;
+  border: 2px solid $line;
+}
+
+.labelTag {
+  margin: 0;
+  padding: 3px 9px;
+  color: $accent-deep;
+  background: $paper;
+  border-color: $line;
+  border-radius: 20px;
 }

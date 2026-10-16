@@ -1,7 +1,7 @@
 @use '@/styleConfig/scssConfig.scss' as config;
 
 .rate-limit-admin {
-  color: config.$ink;
+  color: var(--admin-ink);
 }
 
 .rate-limit-admin__header {
@@ -12,14 +12,14 @@
   padding: 8px 4px 24px;
 
   span {
-    color: config.$accent;
+    color: var(--admin-accent);
     font-family: config.$font-mono;
     font-size: 12px;
     letter-spacing: .1em;
   }
 
   h1 { margin: 6px 0; font-family: config.$font-display; }
-  p { margin: 0; color: config.$muted; }
+  p { margin: 0; color: var(--admin-muted); }
 }
 
 .rate-limit-admin__notice {
@@ -28,19 +28,19 @@
   gap: 14px;
   margin-bottom: 20px;
   padding: 14px 18px;
-  border: 1px solid #bfd1ed;
+  border: 1px solid var(--admin-border);
   border-radius: 12px;
-  background: #edf4ff;
-  color: #174b91;
+  background: #f4f0ea;
+  color: var(--admin-ink);
 
   > svg { flex: 0 0 auto; font-size: 22px; }
   p { display: flex; gap: 10px; margin: 0; }
-  span { color: #526b8e; }
+  span { color: var(--admin-muted); }
 }
 
 .rate-limit-admin__loading {
   padding: 28px;
-  border: 1px solid #dbe3ef;
+  border: 1px solid var(--admin-border);
   border-radius: 14px;
   background: #fff;
 }
@@ -53,10 +53,10 @@
 
 .rate-limit-card {
   padding: 20px;
-  border: 1px solid #dbe3ef;
+  border: 1px solid var(--admin-border);
   border-radius: 14px;
   background: #fff;
-  box-shadow: 0 8px 24px rgb(22 48 82 / 6%);
+  box-shadow: 0 4px 16px rgb(31 30 28 / 4%);
 
   > header {
     display: flex;
@@ -65,7 +65,7 @@
     gap: 16px;
 
     span {
-      color: config.$accent;
+      color: var(--admin-accent);
       font-family: config.$font-mono;
       font-size: 11px;
       letter-spacing: .08em;
@@ -82,7 +82,7 @@
     gap: 12px;
     margin-top: 18px;
 
-    > span { color: config.$muted; font-size: 12px; }
+    > span { color: var(--admin-muted); font-size: 12px; }
     > div { display: flex; gap: 8px; }
   }
 }
@@ -90,7 +90,7 @@
 .rate-limit-card__description {
   min-height: 22px;
   margin: 10px 0 18px;
-  color: config.$muted;
+  color: var(--admin-muted);
 }
 
 .rate-limit-card__editor {
@@ -100,19 +100,19 @@
   gap: 10px;
   padding: 16px;
   border-radius: 12px;
-  background: #f4f7fb;
+  background: var(--admin-page);
 
   label {
     display: grid;
     gap: 7px;
 
-    > span { color: config.$muted; font-size: 12px; }
+    > span { color: var(--admin-muted); font-size: 12px; }
     .ant-input-number { width: 100%; }
   }
 
   > strong {
     padding-bottom: 5px;
-    color: #1857d9;
+    color: var(--admin-accent);
     font-family: config.$font-mono;
     font-size: 28px;
     font-weight: 500;

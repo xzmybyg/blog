@@ -1,8 +1,9 @@
 .websiteCard {
   overflow: hidden;
-  border-color: $line;
-  border-radius: 16px;
-  box-shadow: 0 12px 30px rgba(18, 32, 51, .08);
+  border: 1px solid $line;
+  border-radius: $card-radius;
+  background: $surface;
+  box-shadow: none;
 
   :global(.ant-card-body) { padding: 22px; }
 }
@@ -15,7 +16,7 @@
   border-bottom: 1px solid $line;
 
   > div { display: flex; align-items: center; gap: 6px; }
-  span { color: $success; font-family: $font-mono; font-size: .61rem; font-weight: 700; letter-spacing: .1em; }
+  span { color: $accent-deep; font-family: $font-mono; font-size: .61rem; font-weight: 700; letter-spacing: .1em; }
   h2 { margin: 0; color: $ink; font-size: 1rem; }
 }
 
@@ -35,6 +36,7 @@
   margin-top: 16px;
   padding: 15px;
   background: $paper;
+  border: 1px solid $line;
   border-radius: 10px;
 
   > span { grid-column: 1 / -1; color: $muted; font-size: .7rem; }
@@ -52,7 +54,7 @@
 
   > div { display: grid; padding: 12px; }
   > div + div { border-left: 1px solid $line; }
-  dt { color: $accent; font-family: $font-mono; font-size: .62rem; font-weight: 700; letter-spacing: .1em; }
+  dt { color: $accent-deep; font-family: $font-mono; font-size: .62rem; font-weight: 700; letter-spacing: .1em; }
   dd { margin: 3px 0 1px; color: $ink; font-family: $font-mono; font-size: 1.15rem; font-weight: 700; }
   span { color: $muted; font-size: .66rem; }
 }

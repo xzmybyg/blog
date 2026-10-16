@@ -35,6 +35,36 @@
         text-decoration: underline;
         text-underline-offset: 3px;
       }
+      :not(pre) > code {
+        padding: .18em .4em;
+        color: $accent-deep;
+        background: $paper-deep;
+        border: 1px solid $line;
+        border-radius: 5px;
+        font-family: $font-mono;
+        font-size: .88em;
+      }
+      pre {
+        overflow-x: auto;
+        padding: 20px 22px;
+        color: $ink;
+        background: $paper;
+        border: 1px solid $line;
+        border-radius: 12px;
+        font-family: $font-mono;
+        font-size: .88rem;
+        line-height: 1.7;
+        box-shadow: none;
+
+        code {
+          padding: 0;
+          background: transparent;
+          border: 0;
+          border-radius: 0;
+          font-family: inherit;
+          font-size: inherit;
+        }
+      }
     }
     .articleLike {
       display: flex;
@@ -114,21 +144,62 @@
         span { display: grid; min-width: 0; font-weight: 700; }
         small { margin-bottom: 3px; color: $muted; font-family: $font-mono; font-size: .72rem; font-weight: 400; }
       }
-      .chapterPrevious { grid-column: 1; }
-      .chapterNext { grid-column: 2; text-align: right; }
+      .chapterPrevious { grid-column: 1; justify-content: flex-start; }
+      .chapterNext { grid-column: 2; justify-content: flex-end; text-align: right; }
     }
   }
   .affixNavbar {
     width: 300px;
     margin-left: 0;
-    max-height: 50vh;
     .NavbarCard {
       width: 300px;
-      height: min(500px, calc(100vh - 120px));
+      max-height: min(560px, calc(100vh - 100px));
       overflow: auto;
       border-color: $line;
       border-radius: $card-radius;
       box-shadow: none;
+      scrollbar-width: thin;
+      scrollbar-color: #c8bcaf transparent;
+
+      :global(.ant-card-body) { padding: 22px 18px; }
+    }
+    .contentsHeading {
+      display: grid;
+      gap: 6px;
+      margin: 0 4px 14px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid $line;
+
+      span { color: $accent-deep; font-family: $font-mono; font-size: .7rem; letter-spacing: .1em; }
+      strong { color: $ink; font-size: 1rem; }
+    }
+    .Navbar {
+      font-family: $font-body;
+      font-size: .85rem;
+
+      :global(.title-anchor) {
+        margin: 2px 0;
+        padding: 9px 10px 9px 14px;
+        color: $muted;
+        border-left: 2px solid transparent;
+        border-radius: 0 8px 8px 0;
+        font-size: inherit;
+        font-weight: 400;
+        line-height: 1.5;
+        transition: color .18s ease, border-color .18s ease, background-color .18s ease;
+      }
+      :global(.title-level2) { color: $ink; font-weight: 600; }
+      :global(.title-level3) { padding-left: 26px; font-size: .8rem; }
+      :global(.title-level4),
+      :global(.title-level5),
+      :global(.title-level6) { padding-left: 38px; font-size: .78rem; }
+      :global(.title-anchor:hover) { color: $accent-deep; background: $paper; }
+      :global(.title-anchor.active) {
+        color: $accent-deep;
+        background: $paper-deep;
+        border-left-color: $accent;
+        font-weight: 600;
+      }
     }
   }
 }

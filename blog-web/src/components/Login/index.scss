@@ -6,7 +6,7 @@
     padding: 0;
     border: 1px solid config.$line;
     border-radius: 18px;
-    box-shadow: 0 24px 70px rgba(18, 32, 51, .2);
+    box-shadow: 0 24px 70px rgba(31, 30, 28, .2);
   }
 
   .ant-modal-close {
@@ -26,7 +26,7 @@
     gap: 8px;
     margin: 0;
     padding: 18px 34px 26px;
-    background: #f8faff;
+    background: config.$paper;
     border-top: 1px solid config.$line;
 
     .ant-btn {
@@ -51,7 +51,7 @@
   .ant-input-affix-wrapper {
     min-height: 44px;
     padding-inline: 13px;
-    background: #f8faff;
+    background: config.$paper;
     border-color: config.$line;
     border-radius: 9px;
     box-shadow: none;
@@ -63,7 +63,7 @@
     &-focused {
       background: config.$surface;
       border-color: config.$accent;
-      box-shadow: 0 0 0 3px rgba(24, 87, 217, .1);
+      box-shadow: 0 0 0 3px rgba(155, 120, 84, .14);
     }
   }
 }
@@ -101,7 +101,7 @@
   color: config.$accent;
   text-align: left;
   font-size: 13px;
-  background: rgba(24, 87, 217, .05);
+  background: config.$paper;
   border: 0;
   border-radius: 9px;
   cursor: pointer;
@@ -109,9 +109,9 @@
 
   span:last-child { transition: transform .18s ease; }
 
-  &:hover { color: config.$accent-deep; background: rgba(24, 87, 217, .09); }
+  &:hover { color: config.$accent-deep; background: #f0e9e0; }
   &:hover span:last-child { transform: translateX(3px); }
-  &:focus-visible { outline: 2px solid rgba(24, 87, 217, .25); outline-offset: 4px; }
+  &:focus-visible { outline: 2px solid config.$focus-ring; outline-offset: 4px; }
 
   &--recovery {
     color: config.$muted;

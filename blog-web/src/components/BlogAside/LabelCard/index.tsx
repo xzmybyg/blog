@@ -1,4 +1,5 @@
 import Meta from 'antd/es/card/Meta'
+import Style from '../index.module.scss'
 
 export default function LabelCard() {
   const [labelList, setLabelList] = useState<Label[]>([])
@@ -12,7 +13,7 @@ export default function LabelCard() {
       <Meta style={{ marginBottom: 20 }} title={'标签分类'} />
       <Space wrap={true}>
         {labelList.map((item) => (
-          <Tag key={item.label} color={item.color}>
+          <Tag key={item.label} className={Style.labelTag}>
             {item.label}
           </Tag>
         ))}
