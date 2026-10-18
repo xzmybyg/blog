@@ -5,18 +5,26 @@ const checkRole = require('@middleware/checkRole')
 
 const router = express.Router()
 const contentFile = path.join(process.cwd(), 'public', 'home-content.json')
+const defaultSectionOrder = ['eyebrow', 'title', 'authorName', 'typedTexts', 'description']
 const defaultContent = {
   eyebrow: 'FRONTEND FIELD NOTES · BEIJING',
   title: '把复杂的问题，\n写成清晰的答案。',
   authorName: '心中没有白月光',
   description: '这里记录前端工程、产品体验和持续学习中的真实解法。',
   typedTexts: ['一名前端开发工程师', 'A Web <Developer />'],
+  sectionOrder: defaultSectionOrder,
+}
+
+function validSectionOrder(order) {
+  return Array.isArray(order) && order.length === defaultSectionOrder.length &&
+    new Set(order).size === defaultSectionOrder.length &&
+    order.every((field) => defaultSectionOrder.includes(field))
 }
 
 async function readContent() {
   try {
     const content = JSON.parse(await fs.readFile(contentFile, 'utf8'))
-    return { ...defaultContent, ...content }
+    return { ...defaultContent, ...content, sectionOrder: validSectionOrder(content.sectionOrder) ? content.sectionOrder : defaultSectionOrder }
   } catch (error) {
     if (error.code === 'ENOENT') return defaultContent
     throw error
@@ -33,6 +41,8 @@ function validateContent(content) {
   if (hasInvalidText || typedTexts.length === 0 || typedTexts.length > 8) return null
   if (content.eyebrow.length > 80 || content.title.length > 120 || content.authorName.length > 40 || content.description.length > 300) return null
   if (typedTexts.some((text) => text.length > 80)) return null
+  const sectionOrder = content.sectionOrder === undefined ? defaultSectionOrder : content.sectionOrder
+  if (!validSectionOrder(sectionOrder)) return null
 
   return {
     eyebrow: content.eyebrow.trim(),
@@ -40,6 +50,7 @@ function validateContent(content) {
     authorName: content.authorName.trim(),
     description: content.description.trim(),
     typedTexts,
+    sectionOrder,
   }
 }
 

@@ -120,6 +120,13 @@
   border: 2px solid $line;
 }
 
+.labelCard {
+  border: 1px solid $line;
+  border-radius: $card-radius;
+  background: $surface;
+  box-shadow: none;
+}
+
 .labelTag {
   margin: 0;
   padding: 3px 9px;

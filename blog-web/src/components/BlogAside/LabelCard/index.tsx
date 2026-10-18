@@ -9,7 +9,7 @@ export default function LabelCard() {
     })
   }, [])
   return (
-    <Card style={{ width: 300 }}>
+    <Card className={Style.labelCard} style={{ width: 300 }}>
       <Meta style={{ marginBottom: 20 }} title={'标签分类'} />
       <Space wrap={true}>
         {labelList.map((item) => (

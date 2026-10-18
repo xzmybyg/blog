@@ -1,57 +1,54 @@
 import './index.scss'
-import { FileTextOutlined, InboxOutlined, NotificationOutlined, PictureOutlined, ReloadOutlined, SafetyCertificateOutlined } from '@ant-design/icons'
-import { Modal, Upload } from 'antd'
+import { ClockCircleOutlined, FileTextOutlined, InboxOutlined, NotificationOutlined, PictureOutlined, ReloadOutlined, SafetyCertificateOutlined } from '@ant-design/icons'
+import { InputNumber, Modal, Upload } from 'antd'
 import type { UploadProps } from 'antd'
 import {
   getCertificateStatus,
   getHomeContent,
   getSiteStatistics,
   getSiteNotice,
+  getThemeAnimation,
   getSiteBackgroundInfo,
   getSiteBackgroundUrl,
   triggerCertificateUpdate,
   updateHomeContent,
   updateSiteNotice,
+  updateThemeAnimation,
   uploadSiteBackground,
   type CertificateStatus,
-  type HomeContent,
   type SiteNotice,
+  type ThemeAnimationSettings,
   type SiteBackgroundInfo,
   type SiteBackgroundType,
 } from '@/apis'
 import useUserStore from '@/store/user'
+import useThemeStore, { DEFAULT_THEME_ANIMATION_MS, MAX_THEME_ANIMATION_MS, MIN_THEME_ANIMATION_MS } from '@/store/theme'
+import { formatHomeCopy, parseHomeCopy } from './homeCopyEditor'
 
 const MAX_BACKGROUND_SIZE = 8 * 1024 * 1024
 const ACCEPTED_IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp'])
 
-type HomeContentFormValues = Omit<HomeContent, 'typedTexts'> & {
-  typedTexts: string
-}
-
 function HomeContentManager() {
   const readOnly = useUserStore((state) => state.role === 'viewer')
-  const [form] = Form.useForm<HomeContentFormValues>()
+  const [form] = Form.useForm<{ content: string }>()
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
     getHomeContent()
       .then((response) => {
-        form.setFieldsValue({ ...response.data, typedTexts: response.data.typedTexts.join('\n') })
+        form.setFieldsValue({ content: formatHomeCopy(response.data) })
       })
       .catch(() => message.error('首页文案加载失败，请检查后端服务'))
       .finally(() => setLoading(false))
   }, [form])
 
-  const saveContent = async (values: HomeContentFormValues) => {
-    const content = {
-      ...values,
-      typedTexts: values.typedTexts.split('\n').map((text) => text.trim()).filter(Boolean),
-    }
+  const saveContent = async (values: { content: string }) => {
+    const content = parseHomeCopy(values.content)
     setSaving(true)
     try {
       const response = await updateHomeContent(content)
-      form.setFieldsValue({ ...response.data, typedTexts: response.data.typedTexts.join('\n') })
+      form.setFieldsValue({ content: formatHomeCopy(response.data) })
       message.success('首页文案已保存')
     } catch (error: any) {
       message.error(error.response?.data?.message || '首页文案保存失败')
@@ -67,31 +64,18 @@ function HomeContentManager() {
         <div>
           <span>HOME COPY / 首页文案</span>
           <h2 id="home-content-title">首屏内容</h2>
-          <p>编辑首页主视觉中的标题、简介与轮播身份。</p>
+          <p>在同一个输入框中编辑首页文案，用标记区分固定内容和轮播内容。</p>
         </div>
       </header>
       <Form form={form} layout="vertical" disabled={loading || readOnly} onFinish={saveContent}>
-        <div className="home-content-management__grid">
-          <Form.Item label="眉题" name="eyebrow" rules={[{ required: true, message: '请输入眉题' }, { max: 80 }]}>
-            <Input maxLength={80} showCount placeholder="例如：FRONTEND FIELD NOTES · BEIJING" />
-          </Form.Item>
-          <Form.Item label="作者名" name="authorName" rules={[{ required: true, message: '请输入作者名' }, { max: 40 }]}>
-            <Input maxLength={40} showCount />
-          </Form.Item>
-        </div>
-        <Form.Item label="主标题" name="title" rules={[{ required: true, message: '请输入主标题' }, { max: 120 }]}>
-          <Input.TextArea rows={2} maxLength={120} showCount placeholder="换行会保留在首页标题中" />
-        </Form.Item>
-        <Form.Item label="简介" name="description" rules={[{ required: true, message: '请输入简介' }, { max: 300 }]}>
-          <Input.TextArea rows={3} maxLength={300} showCount />
-        </Form.Item>
         <Form.Item
-          label="轮播身份"
-          name="typedTexts"
-          extra="每行一条，最多 8 条。"
-          rules={[{ required: true, message: '请至少填写一条轮播身份' }]}
+          label="首页文案"
+          name="content"
+          extra="首页按标记出现的顺序展示。[轮播] 写一次，下面每行一条，最多 8 条；空行会忽略。主标题可换行。"
+          validateTrigger="onBlur"
+          rules={[{ validator: async (_, value: string) => { parseHomeCopy(value || '') } }]}
         >
-          <Input.TextArea rows={4} placeholder={'一名前端开发工程师\nA Web <Developer />'} />
+          <Input.TextArea rows={16} className="home-content-management__editor" placeholder={'[眉题]\nFRONTEND FIELD NOTES · BEIJING\n\n[主标题]\n把复杂的问题，\n写成清晰的答案。\n\n[作者名]\n心中没有白月光\n\n[轮播]\n一名前端开发工程师\nA Web <Developer />\n\n[简介]\n这里记录前端工程、产品体验和持续学习中的真实解法。'} />
         </Form.Item>
         <Button type="primary" htmlType="submit" loading={saving}>保存首页文案</Button>
       </Form>
@@ -140,6 +124,62 @@ function SiteNoticeManager() {
           <Input.TextArea rows={5} maxLength={500} showCount placeholder="输入要在侧栏展示的公告文字" />
         </Form.Item>
         <Button type="primary" htmlType="submit" loading={saving}>保存站点公告</Button>
+      </Form>
+    </section>
+  )
+}
+
+function ThemeAnimationManager() {
+  const readOnly = useUserStore((state) => state.role === 'viewer')
+  const setDurationMs = useThemeStore((state) => state.setDurationMs)
+  const [form] = Form.useForm<ThemeAnimationSettings>()
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+
+  useEffect(() => {
+    getThemeAnimation()
+      .then((response) => form.setFieldsValue(response.data))
+      .catch(() => {
+        form.setFieldsValue({ durationMs: DEFAULT_THEME_ANIMATION_MS })
+        message.error('动画设置加载失败，当前显示默认值')
+      })
+      .finally(() => setLoading(false))
+  }, [form])
+
+  const saveAnimation = async (values: ThemeAnimationSettings) => {
+    setSaving(true)
+    try {
+      const response = await updateThemeAnimation(values)
+      form.setFieldsValue(response.data)
+      setDurationMs(response.data.durationMs)
+      message.success('主题动画速度已保存')
+    } catch (error: any) {
+      message.error(error.response?.data?.message || '主题动画速度保存失败')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <section id="theme-animation" className="theme-animation-management" aria-labelledby="theme-animation-title" aria-busy={loading || saving}>
+      <header>
+        <ClockCircleOutlined aria-hidden="true" />
+        <div>
+          <span>THEME MOTION / 主题动效</span>
+          <h2 id="theme-animation-title">切换动画速度</h2>
+          <p>调整从页面左下角扩散的主题切换动画，保存后点击右上角主题按钮即可预览。</p>
+        </div>
+      </header>
+      <Form form={form} layout="vertical" disabled={loading || readOnly} onFinish={saveAnimation}>
+        <Form.Item
+          label="扩散时长"
+          name="durationMs"
+          extra="200–1500 毫秒；数值越小，扩散越快。开启系统“减少动态效果”时仍会直接切换。"
+          rules={[{ required: true, type: 'number', min: MIN_THEME_ANIMATION_MS, max: MAX_THEME_ANIMATION_MS, message: '请输入 200–1500 毫秒' }]}
+        >
+          <InputNumber min={MIN_THEME_ANIMATION_MS} max={MAX_THEME_ANIMATION_MS} step={50} addonAfter="毫秒" />
+        </Form.Item>
+        <Button type="primary" htmlType="submit" loading={saving}>保存动画速度</Button>
       </Form>
     </section>
   )
@@ -325,6 +365,7 @@ export default function Home() {
         <a href="#certificate-status">证书状态</a>
         <a href="#home-content">首页文案</a>
         <a href="#site-notice">站点公告</a>
+        <a href="#theme-animation">主题动画</a>
         <a href="#background-management">背景图</a>
       </nav>
       <section id="traffic-overview" className="traffic-overview" aria-labelledby="traffic-overview-title" aria-live="polite">
@@ -380,6 +421,7 @@ export default function Home() {
       </section>
       <HomeContentManager />
       <SiteNoticeManager />
+      <ThemeAnimationManager />
       <section id="background-management" className="background-management" aria-labelledby="background-management-title">
         <header>
           <span>VISUAL ASSETS / 页面背景</span>

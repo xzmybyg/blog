@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-function mockSystemTheme(dark: boolean) {
-  vi.stubGlobal('matchMedia', vi.fn(() => ({
-    matches: dark,
+function mockSystemTheme(dark: boolean, reducedMotion = false) {
+  vi.stubGlobal('matchMedia', vi.fn((query: string) => ({
+    matches: query.includes('prefers-reduced-motion') ? reducedMotion : dark,
     addEventListener: vi.fn(),
   })))
 }
@@ -12,6 +12,7 @@ describe('theme preference', () => {
     vi.resetModules()
     window.localStorage.clear()
     delete document.documentElement.dataset.theme
+    Object.defineProperty(document, 'startViewTransition', { configurable: true, value: undefined })
   })
 
   it('uses the system preference on the first visit', async () => {
@@ -40,5 +41,48 @@ describe('theme preference', () => {
 
     expect(useThemeStore.getState().theme).toBe('light')
     expect(document.documentElement.dataset.theme).toBe('light')
+  })
+
+  it('reveals the new theme from the bottom-left when view transitions are available', async () => {
+    mockSystemTheme(false)
+    const finished = Promise.resolve()
+    const startViewTransition = vi.fn((update: () => void) => {
+      update()
+      return { finished, skipTransition: vi.fn() }
+    })
+    Object.defineProperty(document, 'startViewTransition', { configurable: true, value: startViewTransition })
+    const { default: useThemeStore } = await import('./theme')
+    useThemeStore.getState().setDurationMs(900)
+
+    useThemeStore.getState().toggleTheme()
+
+    expect(startViewTransition).toHaveBeenCalledOnce()
+    expect(document.documentElement.dataset.theme).toBe('dark')
+    expect(document.documentElement.style.getPropertyValue('--theme-reveal-radius')).toBe(`${Math.hypot(window.innerWidth, window.innerHeight)}px`)
+    expect(document.documentElement.style.getPropertyValue('--theme-reveal-duration')).toBe('900ms')
+    await finished
+    expect(document.documentElement.classList.contains('theme-reveal')).toBe(false)
+  })
+
+  it('switches immediately when reduced motion is preferred', async () => {
+    mockSystemTheme(false, true)
+    const startViewTransition = vi.fn()
+    Object.defineProperty(document, 'startViewTransition', { configurable: true, value: startViewTransition })
+    const { default: useThemeStore } = await import('./theme')
+
+    useThemeStore.getState().toggleTheme()
+
+    expect(startViewTransition).not.toHaveBeenCalled()
+    expect(document.documentElement.dataset.theme).toBe('dark')
+  })
+
+  it('ignores animation durations outside the supported range', async () => {
+    mockSystemTheme(false)
+    const { default: useThemeStore } = await import('./theme')
+
+    useThemeStore.getState().setDurationMs(100)
+    expect(useThemeStore.getState().durationMs).toBe(600)
+    useThemeStore.getState().setDurationMs(1200)
+    expect(useThemeStore.getState().durationMs).toBe(1200)
   })
 })

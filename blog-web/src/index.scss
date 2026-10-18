@@ -42,6 +42,28 @@
   --theme-primary-text: #201a15;
 }
 
+html.theme-reveal,
+html.theme-reveal *,
+html.theme-reveal *::before,
+html.theme-reveal *::after {
+  transition: none !important;
+}
+
+html.theme-reveal::view-transition-old(root),
+html.theme-reveal::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+html.theme-reveal::view-transition-new(root) {
+  animation: theme-reveal var(--theme-reveal-duration, 600ms) ease-out both;
+}
+
+@keyframes theme-reveal {
+  from { clip-path: circle(0 at 0% 100%); }
+  to { clip-path: circle(var(--theme-reveal-radius) at 0% 100%); }
+}
+
 html {
   scroll-behavior: smooth;
   scrollbar-color: $accent $paper-deep;

@@ -1,5 +1,6 @@
 //api引入
-import { DEFAULT_HOME_CONTENT, getHomeContent, getPageArticleList } from '@/apis'
+import { DEFAULT_HOME_CONTENT, DEFAULT_HOME_CONTENT_ORDER, getHomeContent, getPageArticleList, type HomeContentSection } from '@/apis'
+import type { ReactNode } from 'react'
 
 import { default as ArticleCard } from '@/components/ArticleCard'
 //样式引入
@@ -32,6 +33,33 @@ function Home() {
       .catch(() => setHomeContent(DEFAULT_HOME_CONTENT))
   }, [])
 
+  const heroSections: ReactNode[] = []
+  let introFields: HomeContentSection[] = []
+  const flushIntro = () => {
+    if (!introFields.length) return
+    heroSections.push(
+      <p className={Style.intro} key={`intro-${heroSections.length}`}>
+        {introFields.map((field) => {
+          if (field === 'authorName') return <span key={field}>我是<em>{homeContent.authorName}</em>，</span>
+          if (field === 'typedTexts') return <span key={field}><span className={typed} ref={el}></span>。</span>
+          return <span key={field}>{homeContent.description}</span>
+        })}
+      </p>,
+    )
+    introFields = []
+  }
+  for (const field of homeContent.sectionOrder || DEFAULT_HOME_CONTENT_ORDER) {
+    if (field === 'eyebrow' || field === 'title') {
+      flushIntro()
+      heroSections.push(field === 'eyebrow'
+        ? <span className={Style.eyebrow} key={field}>{homeContent.eyebrow}</span>
+        : <h1 id="home-title" style={{ whiteSpace: 'pre-line' }} key={field}>{homeContent.title}</h1>)
+    } else {
+      introFields.push(field)
+    }
+  }
+  flushIntro()
+
   return (
     <div className={`${homePage} home-page`}>
       <section
@@ -40,12 +68,7 @@ function Home() {
         style={{ '--site-background': `url("${backgroundUrl}")` } as React.CSSProperties}
       >
         <div className={`${slogan}`}>
-          <span className={Style.eyebrow}>{homeContent.eyebrow}</span>
-          <h1 id="home-title" style={{ whiteSpace: 'pre-line' }}>{homeContent.title}</h1>
-          <p className={Style.intro}>
-            我是<em>{homeContent.authorName}</em>，<span className={`${typed}`} ref={el}></span>。
-            {homeContent.description}
-          </p>
+          {heroSections}
           <div className={`${Social_links}`}>
             <Button href="#articles" type="primary" icon={<ReadOutlined />}>阅读最新文章</Button>
             <Button href="https://github.com/xzmybyg" target="_blank" rel="noreferrer" aria-label="在新标签页打开 GitHub" icon={<GithubOutlined />}>GitHub</Button>

@@ -399,6 +399,38 @@ test('site notice update removes its temporary file after a write failure', asyn
   assert.equal(removed, true)
 })
 
+test('theme animation settings use the default when not configured', async () => {
+  const fs = { readFile: async () => { throw missingFileError() } }
+  const { response, body } = await requestRoute({ routeName: 'themeAnimation', modules: { fs } })
+
+  assert.equal(response.status, 200)
+  assert.deepEqual(body, { durationMs: 600 })
+  assert.equal(response.headers.get('cache-control'), 'no-store')
+})
+
+test('theme animation settings validate and save the configured duration', async () => {
+  const calls = []
+  const fs = {
+    mkdir: async (...args) => calls.push(['mkdir', ...args]),
+    writeFile: async (...args) => calls.push(['writeFile', ...args]),
+    rename: async (...args) => calls.push(['rename', ...args]),
+    rm: async () => {},
+    readFile: async () => JSON.stringify({ durationMs: 900 }),
+  }
+
+  const invalid = await requestRoute({ routeName: 'themeAnimation', method: 'PUT', body: { durationMs: 100 }, modules: { fs } })
+  assert.equal(invalid.response.status, 400)
+
+  const saved = await requestRoute({ routeName: 'themeAnimation', method: 'PUT', body: { durationMs: 900 }, modules: { fs } })
+  assert.equal(saved.response.status, 200)
+  assert.deepEqual(saved.body, { durationMs: 900 })
+  assert.match(calls[1][2], /900/)
+  assert.equal(calls[2][0], 'rename')
+
+  const loaded = await requestRoute({ routeName: 'themeAnimation', modules: { fs } })
+  assert.deepEqual(loaded.body, { durationMs: 900 })
+})
+
 test('home content merges stored values with defaults', async () => {
   const fs = { readFile: async () => JSON.stringify({ title: 'Custom title' }) }
 
@@ -407,6 +439,7 @@ test('home content merges stored values with defaults', async () => {
   assert.equal(response.status, 200)
   assert.equal(body.title, 'Custom title')
   assert.equal(body.authorName, '心中没有白月光')
+  assert.deepEqual(body.sectionOrder, ['eyebrow', 'title', 'authorName', 'typedTexts', 'description'])
 })
 
 test('home content update validates fields and writes normalized content', async () => {
@@ -433,14 +466,23 @@ test('home content update validates fields and writes normalized content', async
   })
   assert.equal(invalid.response.status, 400)
 
+  const invalidOrder = await requestRoute({
+    routeName: 'homeContent',
+    method: 'PUT',
+    body: { ...validContent, sectionOrder: ['title', 'title'] },
+    modules: { fs },
+  })
+  assert.equal(invalidOrder.response.status, 400)
+
   const updated = await requestRoute({
     routeName: 'homeContent',
     method: 'PUT',
-    body: validContent,
+    body: { ...validContent, sectionOrder: ['description', 'title', 'eyebrow', 'typedTexts', 'authorName'] },
     modules: { fs },
   })
   assert.equal(updated.response.status, 200)
   assert.deepEqual(updated.body.typedTexts, ['Developer', 'Writer'])
+  assert.deepEqual(updated.body.sectionOrder, ['description', 'title', 'eyebrow', 'typedTexts', 'authorName'])
   assert.match(written, /Clear answers/)
 })
 

@@ -63,6 +63,7 @@ html[data-theme='dark'] .admin-dashboard {
 .certificate-status__heading span,
 .home-content-management > header span,
 .site-notice-management > header span,
+.theme-animation-management > header span,
 .background-management > header span,
 .background-manager__heading span {
   color: var(--dashboard-accent);
@@ -117,12 +118,14 @@ html[data-theme='dark'] .admin-dashboard {
 #certificate-status,
 #home-content,
 #site-notice,
+#theme-animation,
 #background-management { scroll-margin-top: 88px; }
 
 .traffic-overview,
 .certificate-status,
 .home-content-management,
 .site-notice-management,
+.theme-animation-management,
 .background-manager {
   background: var(--dashboard-surface);
   border: 1px solid var(--dashboard-line);
@@ -175,19 +178,26 @@ html[data-theme='dark'] .admin-dashboard {
 .certificate-update-confirm { margin: 8px 0 0; line-height: 1.8; }
 
 .home-content-management,
-.site-notice-management { margin-top: 24px; padding: 28px; }
+.site-notice-management,
+.theme-animation-management { margin-top: 24px; padding: 28px; }
 
 .home-content-management > header,
-.site-notice-management > header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 25px; }
+.site-notice-management > header,
+.theme-animation-management > header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 25px; }
 .home-content-management > header > .anticon,
-.site-notice-management > header > .anticon { display: grid; flex: none; width: 38px; height: 38px; place-items: center; color: var(--dashboard-accent); font-size: 18px; background: var(--dashboard-soft); border: 1px solid var(--dashboard-line); border-radius: 10px; }
+.site-notice-management > header > .anticon,
+.theme-animation-management > header > .anticon { display: grid; flex: none; width: 38px; height: 38px; place-items: center; color: var(--dashboard-accent); font-size: 18px; background: var(--dashboard-soft); border: 1px solid var(--dashboard-line); border-radius: 10px; }
 .home-content-management > header h2,
-.site-notice-management > header h2 { margin: 3px 0 4px; font-size: 20px; }
+.site-notice-management > header h2,
+.theme-animation-management > header h2 { margin: 3px 0 4px; font-size: 20px; }
 .home-content-management > header p,
-.site-notice-management > header p { margin: 0; color: var(--dashboard-muted); font-size: 13px; line-height: 1.6; }
+.site-notice-management > header p,
+.theme-animation-management > header p { margin: 0; color: var(--dashboard-muted); font-size: 13px; line-height: 1.6; }
 .home-content-management form,
-.site-notice-management form { max-width: 900px; }
-.home-content-management__grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(180px, .6fr); gap: 18px; }
+.site-notice-management form,
+.theme-animation-management form { max-width: 900px; }
+.theme-animation-management .ant-input-number-group-wrapper { width: min(100%, 240px); }
+.home-content-management__editor { line-height: 1.65; }
 
 .background-management { margin-top: 28px; }
 .background-management > header { margin-bottom: 17px; }
@@ -226,11 +236,10 @@ html[data-theme='dark'] .admin-dashboard {
   .traffic-overview,
   .certificate-status,
   .home-content-management,
-  .site-notice-management { padding: 20px; }
-  .home-content-management__grid,
+  .site-notice-management,
+  .theme-animation-management { padding: 20px; }
   .traffic-overview dl,
   .certificate-status__details { grid-template-columns: 1fr; }
-  .home-content-management__grid { gap: 0; }
   .certificate-status__details { gap: 17px; }
 }
 
