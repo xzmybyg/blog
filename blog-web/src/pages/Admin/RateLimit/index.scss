@@ -30,7 +30,7 @@
   padding: 14px 18px;
   border: 1px solid var(--admin-border);
   border-radius: 12px;
-  background: #f4f0ea;
+  background: var(--admin-notice);
   color: var(--admin-ink);
 
   > svg { flex: 0 0 auto; font-size: 22px; }
@@ -42,7 +42,7 @@
   padding: 28px;
   border: 1px solid var(--admin-border);
   border-radius: 14px;
-  background: #fff;
+  background: var(--admin-surface);
 }
 
 .rate-limit-grid {
@@ -55,7 +55,7 @@
   padding: 20px;
   border: 1px solid var(--admin-border);
   border-radius: 14px;
-  background: #fff;
+  background: var(--admin-surface);
   box-shadow: 0 4px 16px rgb(31 30 28 / 4%);
 
   > header {

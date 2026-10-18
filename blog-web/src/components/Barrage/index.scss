@@ -28,6 +28,11 @@
   }
 }
 
+html[data-theme='dark'] .barrage {
+  color: $ink;
+  background-color: $paper-deep;
+}
+
 @media screen and (max-width: $hiddenSomeSize) {
   .barrage {
     display: none;

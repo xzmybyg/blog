@@ -25,3 +25,5 @@
     &:focus-visible { outline: 3px solid config.$focus-ring; outline-offset: 2px; }
   }
 }
+
+html[data-theme='dark'] .error-fallback button { color: config.$paper; }

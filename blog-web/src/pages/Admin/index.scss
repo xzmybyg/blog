@@ -7,6 +7,10 @@
   --dashboard-muted: #756f68;
   --dashboard-accent: #846544;
   --dashboard-primary: #1d1c1b;
+  --dashboard-primary-ink: #fff;
+  --dashboard-primary-hover: #37332f;
+  --dashboard-disabled: #eeeae5;
+  --dashboard-disabled-ink: #a6a09a;
 
   min-height: 100%;
   padding: 0;
@@ -25,18 +29,33 @@
   .ant-btn:focus-visible,
   .ant-input:focus-visible,
   .ant-upload:focus-visible { outline: 2px solid var(--dashboard-accent); outline-offset: 2px; }
-  .ant-btn-primary { color: #fff; background: var(--dashboard-primary); border-color: var(--dashboard-primary); }
-  .ant-btn-primary:hover { color: #fff; background: #37332f; border-color: #37332f; }
-  .ant-btn-primary:disabled { color: #a6a09a; background: #eeeae5; border-color: var(--dashboard-line); }
+  .ant-btn-primary { color: var(--dashboard-primary-ink); background: var(--dashboard-primary); border-color: var(--dashboard-primary); }
+  .ant-btn-primary:hover { color: var(--dashboard-primary-ink); background: var(--dashboard-primary-hover); border-color: var(--dashboard-primary-hover); }
+  .ant-btn-primary:disabled { color: var(--dashboard-disabled-ink); background: var(--dashboard-disabled); border-color: var(--dashboard-line); }
 
   .ant-form-item-label > label { color: var(--dashboard-ink); font-weight: 600; }
   .ant-form-item-extra { color: var(--dashboard-muted); }
   .ant-input,
-  .ant-input-affix-wrapper { color: var(--dashboard-ink); background: #fff; border-color: var(--dashboard-line); border-radius: 9px; }
+  .ant-input-affix-wrapper { color: var(--dashboard-ink); background: var(--dashboard-surface); border-color: var(--dashboard-line); border-radius: 9px; }
   .ant-input:hover,
   .ant-input:focus,
   .ant-input-affix-wrapper:hover,
   .ant-input-affix-wrapper:focus-within { border-color: var(--dashboard-accent); }
+}
+
+html[data-theme='dark'] .admin-dashboard {
+  --dashboard-bg: #1b1d1e;
+  --dashboard-surface: #252728;
+  --dashboard-soft: #222425;
+  --dashboard-line: #46443f;
+  --dashboard-ink: #eee9e1;
+  --dashboard-muted: #b9afa4;
+  --dashboard-accent: #c8a47a;
+  --dashboard-primary: #c8a47a;
+  --dashboard-primary-ink: #1b1d1e;
+  --dashboard-primary-hover: #e0bf99;
+  --dashboard-disabled: #303130;
+  --dashboard-disabled-ink: #968f86;
 }
 
 .admin-dashboard__eyebrow,
@@ -89,7 +108,7 @@
     transition: color .18s ease, border-color .18s ease, background-color .18s ease;
 
     &:hover,
-    &:focus-visible { color: var(--dashboard-ink); background: var(--dashboard-soft); border-color: #c9bbae; }
+    &:focus-visible { color: var(--dashboard-ink); background: var(--dashboard-soft); border-color: var(--dashboard-accent); }
     &:focus-visible { outline: 2px solid var(--dashboard-accent); outline-offset: 2px; }
   }
 }
@@ -182,8 +201,8 @@
 .background-manager__heading p { margin: 0; color: var(--dashboard-muted); font-size: 13px; }
 .background-manager__preview { position: relative; display: grid; min-height: 180px; place-items: center; overflow: hidden; color: var(--dashboard-muted); background: var(--dashboard-soft); border: 1px solid var(--dashboard-line); border-radius: 10px; }
 .background-manager__preview img { display: block; width: 100%; height: 180px; object-fit: cover; }
-.background-manager__preview strong { position: absolute; top: 10px; right: 10px; padding: 5px 9px; color: #fff; font-size: 12px; background: var(--dashboard-primary); border-radius: 6px; }
-.background-manager .ant-upload-drag { min-height: 140px; background: var(--dashboard-bg); border-color: #cfc5b9; border-radius: 10px; }
+.background-manager__preview strong { position: absolute; top: 10px; right: 10px; padding: 5px 9px; color: var(--dashboard-primary-ink); font-size: 12px; background: var(--dashboard-primary); border-radius: 6px; }
+.background-manager .ant-upload-drag { min-height: 140px; background: var(--dashboard-bg); border-color: var(--dashboard-line); border-radius: 10px; }
 .background-manager .ant-upload-drag:hover,
 .background-manager .ant-upload-drag:focus-within { background: var(--dashboard-soft); border-color: var(--dashboard-accent); }
 .background-manager .ant-upload-drag-icon { margin-bottom: 6px; }

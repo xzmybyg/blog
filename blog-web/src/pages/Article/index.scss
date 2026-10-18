@@ -45,7 +45,7 @@
     p { margin: 5px 0 0; }
   }
   .articleArrow { display: grid; width: 40px; height: 40px; place-items: center; border: 1px solid $line; border-radius: 10px; color: $accent; font-family: $font-mono; transition: .18s ease;
-    &:hover { color: #fff; border-color: $accent; background: $accent; }
+    &:hover { color: $surface; border-color: $accent; background: $accent; }
   }
 }
 @media screen and (max-width: 620px) {

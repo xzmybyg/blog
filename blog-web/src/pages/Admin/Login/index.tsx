@@ -1,5 +1,6 @@
 import { setUserInfo } from '@/store/user'
-import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons'
+import { EyeInvisibleOutlined, EyeTwoTone, MoonOutlined, SunOutlined } from '@ant-design/icons'
+import useThemeStore from '@/store/theme'
 import { Alert } from 'antd'
 import { getSafeAdminRedirect } from '@/utils/auth'
 import { canAccessAdmin } from '@/utils/adminPermission'
@@ -8,6 +9,8 @@ import PasswordResetForm from '@/components/PasswordResetForm'
 import './index.scss'
 
 export default function Login() {
+  const theme = useThemeStore((state) => state.theme)
+  const toggleTheme = useThemeStore((state) => state.toggleTheme)
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const sessionExpired = searchParams.get('reason') === 'expired'
@@ -45,6 +48,15 @@ export default function Login() {
 
   return (
     <div className="loginPage">
+      <button
+        className="loginPage__theme"
+        type="button"
+        onClick={toggleTheme}
+        aria-label={theme === 'dark' ? '切换到浅色主题' : '切换到深色主题'}
+        title={theme === 'dark' ? '切换到浅色主题' : '切换到深色主题'}
+      >
+        {theme === 'dark' ? <SunOutlined aria-hidden="true" /> : <MoonOutlined aria-hidden="true" />}
+      </button>
       <div className="loginPage__intro">
         <span className="loginPage__mark">&lt;/&gt;</span>
         <p>BLOG CONSOLE</p>

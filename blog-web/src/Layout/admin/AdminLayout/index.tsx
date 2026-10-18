@@ -1,7 +1,8 @@
 import adminroutes from '@/router/adminroutes'
-import { Alert, ConfigProvider, FloatButton, Layout, Menu } from 'antd'
+import { Alert, ConfigProvider, FloatButton, Layout, Menu, theme as antTheme } from 'antd'
 import './index.scss'
 import useUserStore from '@/store/user'
+import useThemeStore from '@/store/theme'
 import { canEditAdmin } from '@/utils/adminPermission'
 
 const { Content, Sider } = Layout
@@ -12,6 +13,8 @@ export default function AdminLayout({ children }) {
   const navigate = useNavigate()
   const location = useLocation()
   const role = useUserStore((state) => state.role)
+  const theme = useThemeStore((state) => state.theme)
+  const isDark = theme === 'dark'
   const readOnly = !canEditAdmin(role)
   const menuItems = adminroutes.map((item) => {
     if (item.meta?.showOnMenu === false) return null
@@ -47,38 +50,40 @@ export default function AdminLayout({ children }) {
     <>
       <ConfigProvider
         theme={{
+          algorithm: isDark ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm,
           token: {
-            colorPrimary: '#1d1c1b',
-            colorInfo: '#9b7854',
+            colorPrimary: isDark ? '#c8a47a' : '#1d1c1b',
+            colorInfo: isDark ? '#c8a47a' : '#9b7854',
             colorSuccess: '#387451',
             colorError: '#b44039',
-            colorText: '#1f1e1c',
-            colorTextSecondary: '#756f68',
-            colorBorder: '#e5dfd7',
-            colorBgLayout: '#faf9f7',
+            colorText: isDark ? '#eee9e1' : '#1f1e1c',
+            colorTextSecondary: isDark ? '#b9afa4' : '#756f68',
+            colorBorder: isDark ? '#46443f' : '#e5dfd7',
+            colorBgLayout: isDark ? '#1b1d1e' : '#faf9f7',
+            colorBgContainer: isDark ? '#252728' : '#fff',
             borderRadius: 12,
             fontFamily: "'Microsoft YaHei', 'PingFang SC', system-ui, sans-serif",
           },
           components: {
             Layout: {
-              siderBg: '#f6f4f0',
-              triggerBg: '#f6f4f0',
+              siderBg: isDark ? '#222425' : '#f6f4f0',
+              triggerBg: isDark ? '#222425' : '#f6f4f0',
             },
             Menu: {
               itemBg: 'transparent',
               subMenuItemBg: 'transparent',
-              itemColor: '#625d56',
-              itemHoverBg: '#eeebe6',
-              itemHoverColor: '#1f1e1c',
-              itemSelectedBg: '#fff',
-              itemSelectedColor: '#1f1e1c',
+              itemColor: isDark ? '#b9afa4' : '#625d56',
+              itemHoverBg: isDark ? '#303130' : '#eeebe6',
+              itemHoverColor: isDark ? '#eee9e1' : '#1f1e1c',
+              itemSelectedBg: isDark ? '#343432' : '#fff',
+              itemSelectedColor: isDark ? '#eee9e1' : '#1f1e1c',
               itemBorderRadius: 12,
             },
             Pagination: {
-              itemBg: '#fff',
-              itemLinkBg: '#fff',
-              itemActiveBg: '#fff',
-              itemActiveColor: '#1d1c1b',
+              itemBg: isDark ? '#252728' : '#fff',
+              itemLinkBg: isDark ? '#252728' : '#fff',
+              itemActiveBg: isDark ? '#343432' : '#fff',
+              itemActiveColor: isDark ? '#c8a47a' : '#1d1c1b',
             },
           },
         }}
@@ -109,7 +114,7 @@ export default function AdminLayout({ children }) {
             )}
             <Menu
               className="admin-menu"
-              theme="light"
+              theme={theme}
               selectedKeys={[location.pathname]}
               mode="inline"
               items={menuItems}

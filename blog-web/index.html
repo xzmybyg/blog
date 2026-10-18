@@ -8,7 +8,19 @@
     <meta name="keywords" content="前端开发,React,TypeScript,Vite,Node.js,个人博客" />
     <meta name="author" content="心中没有白月光" />
     <meta name="robots" content="index, follow" />
-    <meta name="theme-color" content="#091a33" />
+    <meta name="theme-color" content="#faf9f7" />
+    <script>
+      try {
+        const savedTheme = localStorage.getItem('blog-theme')
+        const theme = savedTheme === 'light' || savedTheme === 'dark'
+          ? savedTheme
+          : matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        document.documentElement.dataset.theme = theme
+        document.querySelector('meta[name="theme-color"]').content = theme === 'dark' ? '#1b1d1e' : '#faf9f7'
+      } catch {
+        document.documentElement.dataset.theme = 'light'
+      }
+    </script>
     <link rel="canonical" href="https://www.xzmybyg.cn/" />
     <link rel="preload" href="/banner.webp" as="image" fetchpriority="high" />
     <meta property="og:type" content="website" />

@@ -1,4 +1,4 @@
-import { MenuOutlined, CloseOutlined } from '@ant-design/icons'
+import { MenuOutlined, CloseOutlined, MoonOutlined, SunOutlined } from '@ant-design/icons'
 import { Link, NavLink } from 'react-router-dom'
 import Style from './index.module.scss'
 import Login from '@/components/Login'
@@ -6,11 +6,27 @@ import useUserStore, { logoutInfo } from '@/store/user'
 import { Avatar, Popover } from 'antd'
 import routes from '@/router/routes'
 import { DEFAULT_USER_AVATAR } from '@/utils/avatar'
+import useThemeStore from '@/store/theme'
 
 function Nav({ navlist = routes }) {
   const { navDesktop, navMobile, itemWrap, navItem, authorName, MobileMenu } = Style
   const { id, username, nickname, avatar } = useUserStore()
+  const theme = useThemeStore((state) => state.theme)
+  const toggleTheme = useThemeStore((state) => state.toggleTheme)
   const [MobileMenuVisible, setMobileMenuVisible] = useState(false)
+
+  const themeButton = (
+    <button
+      type="button"
+      className={Style.themeButton}
+      onClick={toggleTheme}
+      aria-label={theme === 'dark' ? '切换到浅色主题' : '切换到深色主题'}
+      aria-pressed={theme === 'dark'}
+      title={theme === 'dark' ? '切换到浅色主题' : '切换到深色主题'}
+    >
+      {theme === 'dark' ? <SunOutlined aria-hidden="true" /> : <MoonOutlined aria-hidden="true" />}
+    </button>
+  )
 
   const loginRef = useRef<{ openModal: () => void } | null>(null)
   const callChildMethod = () => {
@@ -42,6 +58,7 @@ function Nav({ navlist = routes }) {
               )
             )
           })}
+          {themeButton}
           {id ? (
             <div className={navItem}>
               <Popover placement="bottomRight" content={(
@@ -66,16 +83,19 @@ function Nav({ navlist = routes }) {
         <NavLink className={authorName} to="/">
           <span aria-hidden="true">&lt;/&gt;</span> 心中没有白月光
         </NavLink>
-        <button
-          type="button"
-          className={Style.menuButton}
-          aria-label={MobileMenuVisible ? '关闭导航菜单' : '打开导航菜单'}
-          aria-expanded={MobileMenuVisible}
-          aria-controls="mobile-navigation"
-          onClick={() => setMobileMenuVisible(!MobileMenuVisible)}
-        >
-          {MobileMenuVisible ? <CloseOutlined /> : <MenuOutlined />}
-        </button>
+        <div className={Style.mobileActions}>
+          {themeButton}
+          <button
+            type="button"
+            className={Style.menuButton}
+            aria-label={MobileMenuVisible ? '关闭导航菜单' : '打开导航菜单'}
+            aria-expanded={MobileMenuVisible}
+            aria-controls="mobile-navigation"
+            onClick={() => setMobileMenuVisible(!MobileMenuVisible)}
+          >
+            {MobileMenuVisible ? <CloseOutlined /> : <MenuOutlined />}
+          </button>
+        </div>
         {MobileMenuVisible && (
           <div id="mobile-navigation" className={MobileMenu}>
             {id ? (

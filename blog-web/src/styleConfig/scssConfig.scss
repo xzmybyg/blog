@@ -9,19 +9,19 @@ $mediaSize: (
 $hiddenSomeSize: 896px;
 
 // 博客与后台共用的暖灰色语义令牌
-$paper: #faf9f7;
-$paper-deep: #f1eee9;
-$surface: #ffffff;
-$ink: #1f1e1c;
-$muted: #756f68;
-$accent: #9b7854;
-$accent-deep: #765735;
-$signal: #9b7854;
-$line: #e5dfd7;
-$success: #18794e;
-$danger: #c83b31;
-$focus-ring: rgba(155, 120, 84, 0.42);
-$card-shadow: 0 8px 28px rgba(31, 30, 28, 0.045);
+$paper: var(--theme-paper);
+$paper-deep: var(--theme-paper-deep);
+$surface: var(--theme-surface);
+$ink: var(--theme-ink);
+$muted: var(--theme-muted);
+$accent: var(--theme-accent);
+$accent-deep: var(--theme-accent-deep);
+$signal: var(--theme-accent);
+$line: var(--theme-line);
+$success: var(--theme-success);
+$danger: var(--theme-danger);
+$focus-ring: var(--theme-focus-ring);
+$card-shadow: var(--theme-card-shadow);
 $card-radius: 16px;
 $content-max-width: 1220px;
 $font-display: Arial, 'Microsoft YaHei', 'PingFang SC', sans-serif;
@@ -33,7 +33,7 @@ $rootFontSize: 16px;
 
 //主题变量
 $nav: (
-  bcColor: rgba(250, 249, 247, 0.94),
+  bcColor: var(--theme-nav-bg),
   color: $ink,
   height: 76px,
   fontSize: 1rem
@@ -50,7 +50,7 @@ $articleCard: (
 
 //滚动条变量
 $thumb: (
-  color: #c8bcaf,
+  color: var(--theme-thumb),
   width: 8px,
 );
 

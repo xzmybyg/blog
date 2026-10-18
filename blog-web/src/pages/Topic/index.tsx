@@ -5,7 +5,7 @@ import { Affix, Button, Card } from 'antd'
 import { ArrowLeftOutlined, ArrowRightOutlined, DownloadOutlined, HeartFilled, HeartOutlined } from '@ant-design/icons'
 const { TextArea } = Input
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { oneDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
 //api引入
 import { getArticleLikes, getArticleNavigation, getTopic, likeArticle } from '@/apis'
@@ -19,6 +19,7 @@ import 'github-markdown-css'
 import 'markdown-navbar/dist/navbar.css'
 import Style from './index.module.scss'
 import useUserStore from '@/store/user'
+import useThemeStore from '@/store/theme'
 
 type TopicProps = {
   id: string
@@ -46,6 +47,7 @@ export default function Topic() {
   const article_id = parseInt(id as string, 10)
 
   const { id: user_id } = useUserStore()
+  const theme = useThemeStore((state) => state.theme)
 
   const [mdContent, setMdContent] = useState('')
   const [commentList, setCommentList] = useState<any[]>([])
@@ -137,7 +139,7 @@ export default function Topic() {
               const match = /language-(\w+)/.exec(className || '')
               return match ? (
                 <SyntaxHighlighter
-                  style={oneLight}
+                  style={theme === 'dark' ? oneDark : oneLight}
                   language={match[1]}
                   PreTag="div"
                   customStyle={{ background: 'transparent', margin: 0, padding: 0 }}

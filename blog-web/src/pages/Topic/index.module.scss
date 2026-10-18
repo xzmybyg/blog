@@ -8,6 +8,13 @@
     border-radius: $card-radius;
     box-shadow: none;
     .markdownBody {
+      --bgColor-default: transparent;
+      --bgColor-muted: #{$paper};
+      --bgColor-neutral-muted: #{$paper-deep};
+      --fgColor-default: #{$ink};
+      --fgColor-accent: #{$accent};
+      --borderColor-default: #{$line};
+      --borderColor-muted: #{$line};
       width: 100%;
       color: $ink;
       font-family: $font-body;
@@ -65,6 +72,7 @@
           font-size: inherit;
         }
       }
+      blockquote { color: $muted; }
     }
     .articleLike {
       display: flex;
@@ -201,6 +209,18 @@
         font-weight: 600;
       }
     }
+  }
+}
+
+:global(html[data-theme='dark']) #topic .topicWrap {
+  .articleLike :global(.ant-btn:hover),
+  .articleLike :global(.ant-btn:focus-visible),
+  .articleLikeActive :global(.ant-btn),
+  .articleLikeActive :global(.ant-btn:hover),
+  .articleLikeActive :global(.ant-btn:focus-visible) {
+    color: #f6b5bf;
+    background: #3b282e;
+    border-color: #86525c;
   }
 }
 

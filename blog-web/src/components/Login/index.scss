@@ -122,6 +122,10 @@
   }
 }
 
+html[data-theme='dark'] .changeLogin:hover { background: config.$paper-deep; }
+html[data-theme='dark'] .loginWrap .ant-modal-footer .ant-btn-primary { color: config.$paper; }
+html[data-theme='dark'] .loginWrap input::placeholder { color: config.$muted; opacity: 1; }
+
 .loginPanel__actions {
   display: grid;
   gap: 6px;

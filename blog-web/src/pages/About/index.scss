@@ -46,6 +46,13 @@
   }
 
   .about-markdown {
+    --bgColor-default: transparent;
+    --bgColor-muted: #{$paper};
+    --bgColor-neutral-muted: #{$paper-deep};
+    --fgColor-default: #{$ink};
+    --fgColor-accent: #{$accent};
+    --borderColor-default: #{$line};
+    --borderColor-muted: #{$line};
     color: $ink;
     font-family: $font-body;
     font-size: 1rem;
@@ -73,6 +80,8 @@
     a {
       color: $accent;
     }
+
+    blockquote { color: $muted; }
   }
 }
 

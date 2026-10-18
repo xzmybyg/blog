@@ -1,3 +1,47 @@
+// Shared semantic colors for the public site and admin interface.
+:root,
+:root[data-theme='light'] {
+  color-scheme: light;
+  --theme-paper: #faf9f7;
+  --theme-paper-deep: #f1eee9;
+  --theme-surface: #fff;
+  --theme-ink: #1f1e1c;
+  --theme-muted: #756f68;
+  --theme-accent: #9b7854;
+  --theme-accent-deep: #765735;
+  --theme-line: #e5dfd7;
+  --theme-success: #18794e;
+  --theme-danger: #c83b31;
+  --theme-card-shadow: 0 8px 28px rgba(31, 30, 28, 0.045);
+  --theme-focus-ring: rgba(155, 120, 84, 0.42);
+  --theme-nav-bg: rgba(250, 249, 247, 0.94);
+  --theme-thumb: #c8bcaf;
+  --theme-primary-bg: #1d1c1b;
+  --theme-primary-hover: #393632;
+  --theme-primary-text: #fff;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --theme-paper: #1b1d1e;
+  --theme-paper-deep: #222425;
+  --theme-surface: #252728;
+  --theme-ink: #eee9e1;
+  --theme-muted: #b9afa4;
+  --theme-accent: #c8a47a;
+  --theme-accent-deep: #e0bf99;
+  --theme-line: #46443f;
+  --theme-success: #79cda0;
+  --theme-danger: #f18b80;
+  --theme-card-shadow: 0 8px 28px rgba(0, 0, 0, 0.16);
+  --theme-focus-ring: rgba(224, 191, 153, 0.65);
+  --theme-nav-bg: rgba(27, 29, 30, 0.94);
+  --theme-thumb: #847260;
+  --theme-primary-bg: #e0bf99;
+  --theme-primary-hover: #edcfad;
+  --theme-primary-text: #201a15;
+}
+
 html {
   scroll-behavior: smooth;
   scrollbar-color: $accent $paper-deep;
@@ -31,19 +75,21 @@ a,
 }
 
 ::selection {
-  color: #fff;
+  color: var(--theme-surface);
   background: $accent-deep;
 }
 
 .ant-btn-primary {
-  background: #1d1c1b;
-  border-color: #1d1c1b;
+  color: var(--theme-primary-text);
+  background: var(--theme-primary-bg);
+  border-color: var(--theme-primary-bg);
   box-shadow: none;
 
   &:hover,
   &:focus {
-    background: #393632 !important;
-    border-color: #393632 !important;
+    color: var(--theme-primary-text) !important;
+    background: var(--theme-primary-hover) !important;
+    border-color: var(--theme-primary-hover) !important;
   }
 }
 // 滚动条样式

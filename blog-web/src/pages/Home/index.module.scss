@@ -58,12 +58,11 @@
     }
 
     :global(.ant-btn-primary) {
-      color: #fff;
       border-color: #fff;
       background: #fff;
-      color: $ink;
+      color: #1f1e1c;
 
-      &:hover { color: $ink !important; border-color: #ece9e4 !important; background: #ece9e4 !important; }
+      &:hover { color: #1f1e1c !important; border-color: #ece9e4 !important; background: #ece9e4 !important; }
     }
   }
 

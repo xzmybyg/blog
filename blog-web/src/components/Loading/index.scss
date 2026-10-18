@@ -20,6 +20,9 @@
   animation: loading-next-animation 1.2s infinite ease;
   border-radius: 1px;
 }
+html[data-theme='dark'] .loading-next .loading-next-box-warp .loading-next-box-item {
+  background: $ink;
+}
 .loading-next .loading-next-box-warp .loading-next-box-item:nth-child(7) {
   animation-delay: 0s;
 }

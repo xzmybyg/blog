@@ -230,7 +230,7 @@
     :global(.ant-input) { min-height: 42px; border-color: $line; }
     :global(.ant-input:hover),
     :global(.ant-input:focus) { border-color: $accent; }
-    :global(.ant-btn-primary) { min-width: 128px; color: #fff; background: $ink; border-color: $ink; font-weight: 700; }
+    :global(.ant-btn-primary) { min-width: 128px; color: $surface; background: $ink; border-color: $ink; font-weight: 700; }
     :global(.ant-btn-primary:hover) { background: $accent-deep; border-color: $accent-deep; }
   }
 }

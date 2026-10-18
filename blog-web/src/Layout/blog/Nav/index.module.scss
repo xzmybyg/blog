@@ -12,6 +12,33 @@
   font-size: 0.92rem;
   transition: border-color 0.2s ease;
 }
+
+.themeButton {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  border: 1px solid $line;
+  border-radius: 12px;
+  color: $ink;
+  background: $surface;
+  cursor: pointer;
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+
+  &:hover {
+    color: $accent-deep;
+    background: $paper-deep;
+  }
+}
+
+.mobileActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
 .navDesktop {
   @extend .nav;
   padding: 0 max(24px, calc((100vw - $content-max-width) / 2));

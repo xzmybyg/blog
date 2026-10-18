@@ -70,7 +70,7 @@
 
     &:hover,
     &:focus-within {
-      background: #f4f0ea;
+      background: var(--admin-notice);
       border-color: var(--admin-accent);
     }
   }

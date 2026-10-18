@@ -102,6 +102,8 @@
   }
 }
 
+:global(html[data-theme='dark']) .articleCard:hover { border-color: $accent; }
+
 @media screen and (max-width: $hiddenSomeSize) {
   .articleCard {
     flex-direction: column;
